@@ -81,9 +81,9 @@ int main(int argc, char *argv[])
         else
         {
             cout << "Teste: grafo -c -l entrou" << "\n";
-            GrafoLista g;
-            g.novo_grafo(arquivoDescricao);
-            g.salvaGrafoLista(arquivoGrafo);
+            //GrafoLista g;
+            //g.novo_grafo(arquivoDescricao);
+            //g.salvaGrafoLista(arquivoGrafo);
             // carrega grafo como lista
             // imprime a descrição no fromato desejado
         }
