@@ -8,5 +8,6 @@ Trabalho de Teoria dos Grafos - UFJF - 2024.3
 
 ## Acesso
 - g++ -o main.exe main.cpp Grafo.cpp GrafoLista.cpp Grafo_Lista.cpp GrafoMatriz.cpp Vertice.cpp Aresta.cpp -std=c++17 -Wall
+- g++ -o main.exe *.cpp -std=c++2a -Wall
 - ./main.exe -d -l Grafo.txt
 - ./main.exe -c -l Descricao.txt Grafo.txt

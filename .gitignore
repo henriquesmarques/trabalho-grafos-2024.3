@@ -1,5 +1,6 @@
-./idea
-./cmake-build-debug
+/.idea
+/cmake-build-debug
 Grafo.txt
 Descricao.txt
 CMakelists.txt
+main.exe
