@@ -1,38 +1,40 @@
 #ifndef GRAFOMATRIZ_H
 #define GRAFOMATRIZ_H
-
 #include "Grafo.h"
 #include <string>
 
+using namespace std;
+
 class GrafoMatriz : public Grafo {
+public:
+    GrafoMatriz();
+    GrafoMatriz(int vertices, bool dir);
+    ~GrafoMatriz() override;
+    void carrega_grafo(string nomeArquivo) override;
+    bool eh_bipartido() override;
+    int n_conexo() override;
+    int get_grau() override;
+    int get_ordem() override;
+    bool eh_direcionado() override;
+    bool eh_completo() override;
+    bool eh_arvore() override;
+    bool vertice_ponderado() override;
+    bool aresta_ponderada() override;
+    bool possui_articulacao() override;
+    bool possui_ponte() override;
+    void novo_grafo(string nomeArquivo) override;
+    void salvaGrafoMatriz(string nomeArquivo);
+    void imprimeGrafo(string nomeArquivo);
 private:
     static const int MAX_VERTICES = 100;
-    int matriz[MAX_VERTICES][MAX_VERTICES];
+    int matriz[MAX_VERTICES][MAX_VERTICES]{};
     int numVertices;
-    bool direcionado;
+    //bool direcionado;
 
-public:
-    GrafoMatriz(int vertices, bool dir);
     void imprimir_descricao();
     int contarArestas();
     void buscaProfundidade(int u, bool visitado[]);
     void adicionaAresta(int u, int v, int peso);
-    void carrega_grafo(std::string nomeArquivo) override;
-    virtual bool eh_bipartido() override;
-    virtual int n_conexo() override;
-    virtual int get_grau() override;
-    virtual int get_ordem() override;
-    virtual bool eh_direcionado() override;
-    virtual bool eh_completo() override;
-    virtual bool eh_arvore() override;
-    virtual bool vertice_ponderado() override;
-    virtual bool aresta_ponderada() override;
-    virtual bool possui_articulacao() override;
-    virtual bool possui_ponte() override;
-    virtual void novo_grafo(std::string nomeArquivo) override;
-    void salvaGrafoMatriz(std::string entrada, std::string nomeArquivo);
-    //bool GrafoMatriz::possui_ponte() override;
-    //bool GrafoMatriz::possui_articulacao() override;
 };
 
 #endif

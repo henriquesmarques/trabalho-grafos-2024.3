@@ -17,9 +17,9 @@ int main(int argc, char *argv[])
     }
 
     string opcao = argv[1];
-    cout << "Valor armazenado em opcao: " << opcao << endl;
+    //cout << "Valor armazenado em opcao: " << opcao << endl;
     string estrutura = argv[2];
-    cout << "Valor armazenado em estrutura: " << estrutura << endl;
+    //cout << "Valor armazenado em estrutura: " << estrutura << endl;
     string arquivoDescricao, arquivoGrafo;
 
     // Validação dos argumentos
@@ -46,11 +46,11 @@ int main(int argc, char *argv[])
         if (estrutura == "-m")
         {
             cout << "Teste: grafo -d -m entrou" << "\n";
-            GrafoMatriz g(0, false);
+            GrafoMatriz g;
             g.carrega_grafo(arquivoGrafo);
-            g.imprimir_descricao();
+            g.imprimeGrafo(arquivoGrafo);
             // carrega grafo como matriz
-            //  passar pra depois desse pedaço // imprime a descrição no fromato desejado
+            //  passar pra depois desse pedaço // imprime a descrição no formato desejado
         }
         else
         {
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
             g.carrega_grafo(arquivoGrafo);
             g.imprimeGrafo(arquivoGrafo);
             // carrega grafo como lista
-            //  passar pra depois desse pedaço // imprime a descrição no fromato desejado
+            //  passar pra depois desse pedaço // imprime a descrição no formato desejado
         }
     }
     else if (opcao == "-c")
@@ -75,17 +75,20 @@ int main(int argc, char *argv[])
         if (estrutura == "-m")
         {
             cout << "Teste: grafo -c -m entrou" << "\n";
+            GrafoMatriz g;
+            g.novo_grafo(arquivoDescricao);
+            g.carrega_grafo(arquivoGrafo);
             // carrega grafo como matriz
-            //  passar pra depois desse pedaço // imprime a descrição no fromato desejado
+            // imprime a descrição no formato desejado
         }
         else
         {
             cout << "Teste: grafo -c -l entrou" << "\n";
-            //GrafoLista g;
-            //g.novo_grafo(arquivoDescricao);
-            //g.salvaGrafoLista(arquivoGrafo);
+            GrafoLista g;
+            g.novo_grafo(arquivoDescricao);
+            g.salvaGrafoLista(arquivoGrafo);
             // carrega grafo como lista
-            // imprime a descrição no fromato desejado
+            // imprime a descrição no formato desejado
         }
     }
     else

@@ -1,10 +1,10 @@
 #ifndef GRAFO_LISTA_H
 #define GRAFO_LISTA_H
-
-#include <fstream>
-
 #include "Grafo.h"
 #include "Aresta.h"
+#include <iostream>
+
+using namespace std;
 
 class Vertice;
 
@@ -12,9 +12,9 @@ class GrafoLista : public Grafo {
 public:
     // Henrique
     GrafoLista();
-    ~GrafoLista();
-    void carrega_grafo(std::string nomeArquivo) override; /// Função que lê um arquivo txt com um grafo e carrega ele
-    void novo_grafo(std::string nomeArquivo) override; /// Função que lê um arquivo txt de configuração e gera um grafo aleatório
+    ~GrafoLista() override;
+    void carrega_grafo(string nomeArquivo) override; /// Função que lê um arquivo txt com um grafo e carrega ele
+    void novo_grafo(string nomeArquivo) override; /// Função que lê um arquivo txt de configuração e gera um grafo aleatório
     bool aresta_ponderada() override; /// Função que informa se as arestas do grafo tem peso
     int get_ordem() override; /// Função que retorna a ordem do grafo
     bool eh_direcionado() override; /// Função que retorna se o grafo é direcionado ou não
@@ -28,13 +28,13 @@ public:
     bool possui_ponte() override; /// Função que diz se possui aresta ponte
     bool vertice_ponderado() override; /// Função que diz se o no possui peso
     // Gabriel
-    void salvaGrafoLista(std::string nomeArquivo);
-    void imprimeGrafo(std::string nomeArquivo);
+    void salvaGrafoLista(string nomeArquivo);
+    void imprimeGrafo(string nomeArquivo);
 private:
     // Henrique
     Vertice* raizVertice;
     Aresta* raizAresta;
-    bool direcionado;
+    //bool direcionado;
     void inserirVertice(int id, int peso);
     void inserirAresta(Vertice* inicio, Vertice* fim, int peso);
     void inserirPonteiroAresta(Aresta *a);

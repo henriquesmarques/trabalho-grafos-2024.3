@@ -1,21 +1,43 @@
 #include "GrafoMatriz.h"
-#include <queue>
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+
+using namespace std;
+
 using std::ifstream;
 using std::string;
 using std::cout;
 using std::endl;
 using std::ios;
 
-GrafoMatriz::GrafoMatriz(int vertices, bool dir) : numVertices(vertices), direcionado(dir) {
+GrafoMatriz::GrafoMatriz() : Grafo() {
     for (int i = 0; i < MAX_VERTICES; i++) {
         for (int j = 0; j < MAX_VERTICES; j++) {
             matriz[i][j] = 0; //inicializa a matriz de adjacência
         }
     }
+    numVertices = 0;
+    direcionado = false;
 }
+
+GrafoMatriz::GrafoMatriz(int vertices, bool dir) : Grafo() {
+    for (int i = 0; i < MAX_VERTICES; i++) {
+        for (int j = 0; j < MAX_VERTICES; j++) {
+            matriz[i][j] = 0; //inicializa a matriz de adjacência
+        }
+        numVertices = vertices;
+        direcionado = dir;
+    }
+}
+
+GrafoMatriz::~GrafoMatriz() {
+    for (int i = 0; i < MAX_VERTICES; i++) {
+        delete matriz[i];
+    }
+    delete matriz;
+}
+
 bool GrafoMatriz::eh_bipartido() {
     int cores[MAX_VERTICES];
     for (int i = 0; i < numVertices; i++) {
@@ -152,7 +174,7 @@ bool GrafoMatriz::aresta_ponderada() {
     return true;  // Implementação fictícia; ajuste conforme necessário
 }
 
-void GrafoMatriz::carrega_grafo(std::string nomeArquivo) {
+void GrafoMatriz::carrega_grafo(string nomeArquivo) {
     ifstream arquivo;
     //cout << "Carregando grafo do arquivo " << arquivo << "..." << endl;
     arquivo.open("Grafo.txt", ios::in);
@@ -246,45 +268,8 @@ void GrafoMatriz::imprimir_descricao() {
     cout << "Vertice de Articulação: " << (possui_articulacao() ? "Sim" : "Não") << endl;
 }
 
-void GrafoMatriz::novo_grafo(std::string nomeArquivo){
+void GrafoMatriz::novo_grafo(string nomeArquivo){
     //sem erro
-}
-void GrafoMatriz::salvaGrafoMatriz(string entrada, string nomeArquivo) {
-
-    //ifstream entrada;
-    ofstream arquivoGrafo;
-    arquivoGrafo.open(entrada, ios::in);
-    arquivoGrafo.open(nomeArquivo, ios::out);
-
-    if (!arquivoGrafo.is_open()) {
-        cout << "Erro ao abrir o arquivo!" << endl;
-        exit(1);
-    } else {
-        
-        arquivoGrafo << nomeArquivo << "\n\n";
-        arquivoGrafo << numVertices << " " << direcionado << " "<< vertice_ponderado() << " " << aresta_ponderada() << "\n";
-
-        if (vertice_ponderado()) {
-            int pesosVertices[numVertices];
-            for (int i = 0; i < numVertices; i++) {
-                arquivoGrafo << pesosVertices[i] <<" ";
-        }
-            }
-        }
-
-        for (int i = 0; i < numVertices; i++) {
-            for (int j = 0; j < numVertices; j++) {
-                if (matriz[i][j] != 0) {
-                    if (aresta_ponderada()) {
-                        arquivoGrafo << i << " " << j << " " << matriz[i][j] << "\n";
-                    } else {
-                        arquivoGrafo << i << " " << j << "\n";
-                    }
-                }
-            }
-        }
-    
-    arquivoGrafo.close();
 }
 
 bool GrafoMatriz::possui_ponte() {
@@ -364,4 +349,82 @@ bool GrafoMatriz::possui_articulacao() {
     }
 
     return false; // Não possui vértices de articulação
+}
+
+void GrafoMatriz::salvaGrafoMatriz(string nomeArquivo)
+{
+    ofstream arquivoGrafo;
+    arquivoGrafo.open(nomeArquivo, ios::out);
+
+    if (!arquivoGrafo.is_open()) {
+        cout << "Erro ao abrir o arquivo!" << endl;
+        exit(1);
+    } else {
+
+        arquivoGrafo << nomeArquivo << "\n\n";
+        arquivoGrafo << numVertices << " " << direcionado << " "<< vertice_ponderado() << " " << aresta_ponderada() << "\n";
+
+        if (vertice_ponderado()) {
+            int pesosVertices[numVertices];
+            for (int i = 0; i < numVertices; i++) {
+                arquivoGrafo << pesosVertices[i] <<" ";
+            }
+        }
+    }
+
+    for (int i = 0; i < numVertices; i++) {
+        for (int j = 0; j < numVertices; j++) {
+            if (matriz[i][j] != 0) {
+                if (aresta_ponderada()) {
+                    arquivoGrafo << i << " " << j << " " << matriz[i][j] << "\n";
+                } else {
+                    arquivoGrafo << i << " " << j << "\n";
+                }
+            }
+        }
+    }
+
+    arquivoGrafo.close();
+}
+
+void GrafoMatriz::imprimeGrafo(string nomeArquivo) {
+    cout<<nomeArquivo<<"\n";
+
+    cout<<"Grau: "<<get_grau()<<"\n";
+
+    cout<<"Ordem: "<<get_ordem()<<"\n";
+
+    if(eh_direcionado())
+    {cout<<"Direcionado: "<<"Sim"<<"\n";}
+    else{cout<<"Direcionado: "<<"Nao"<<"\n";}
+
+    cout<<"Componentes conexas: "<<n_conexo()<<"\n";
+
+    if(vertice_ponderado())
+    {cout<<"Vertices ponderados: "<<"Sim"<<"\n";}
+    else{cout<<"Vertices ponderados: "<<"Nao"<<"\n";}
+
+    if(aresta_ponderada())
+    {cout<<"Arestas ponderadas: "<<"Sim"<<"\n";}
+    else{cout<<"Arestas ponderadas: "<<"Nao"<<"\n";}
+
+    if(eh_completo())
+    {cout<<"Completo: "<<"Sim"<<"\n";}
+    else{cout<<"Completo: "<<"Nao"<<"\n";}
+
+    if(eh_bipartido())
+    {cout<<"Bipartido: "<<"Sim"<<"\n";}
+    else{cout<<"Bipartido: "<<"Nao"<<"\n";}
+
+    if(eh_arvore())
+    {cout<<"Arvore: "<<"Sim"<<"\n";}
+    else{cout<<"Arvore: "<<"Nao"<<"\n";}
+
+    if(possui_ponte())
+    {cout<<"Aresta Ponte: "<<"Sim"<<"\n";}
+    else{cout<<"Aresta Ponte: "<<"Nao"<<"\n";}
+
+    if(possui_articulacao())
+    {cout<<"Vertide de Articulacao: "<<"Sim"<<"\n";}
+    else{cout<<"Vertide de Articulacao: "<<"Nao"<<"\n";}
 }

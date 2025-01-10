@@ -25,8 +25,8 @@ int GrafoLista::get_grau() {
         int grauGrafo =0;
         int grau = 0;
         while (v != nullptr) {
-            cout<<v->getId()<<endl;
-            cout<<v->totalArestas()<<endl;
+            //cout<<v->getId()<<endl;
+            //cout<<v->totalArestas()<<endl;
             grau = v->totalArestas();
             if (grau > grauGrafo) {
                 grauGrafo = grau;

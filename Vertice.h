@@ -1,7 +1,3 @@
-//
-// Created by gomes on 25/12/2024.
-//
-
 #ifndef VERTICE_H
 #define VERTICE_H
 #include "Aresta.h"
@@ -25,7 +21,6 @@ public:
     Aresta* getArestaPara(Vertice* v);
     Aresta** getVetorArestas();
     int totalArestasSaida();
-
 
 private:
     int id;

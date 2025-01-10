@@ -7,13 +7,10 @@
 
 using namespace std;
 
-GrafoLista::GrafoLista() {
+GrafoLista::GrafoLista() : Grafo() {
     raizVertice = nullptr;
     raizAresta = nullptr;
     direcionado = false;
-    // ordem = 0;
-    // vertice_ponderado = false;
-    // aresta_ponderada = false;
 }
 
 GrafoLista::~GrafoLista() {
@@ -506,8 +503,6 @@ void GrafoLista::novo_grafo(string nomeArquivo) {
 
 void GrafoLista::salvaGrafoLista(string nomeArquivo) // para os casos de comando -l
 {
-    //verificação do arquivo
-
     ofstream arquivoGrafo;
     arquivoGrafo.open(nomeArquivo, ios::out);
 

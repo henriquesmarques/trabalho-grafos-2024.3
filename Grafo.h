@@ -4,7 +4,6 @@
 
 using namespace std;
 
-// Classe abstrata Grafo
 class Grafo {
 protected:
     bool direcionado;
@@ -13,8 +12,8 @@ protected:
     // int numVertices;
 
 public:
-    //Grafo();
-    //Grafo(int numVertices, bool direcionado = false, bool verticesPonderados = false, bool arestasPonderadas = false);
+    Grafo();
+    virtual ~Grafo();
     //função força bruta que indica se o grafo é bipartido ou não
     virtual bool eh_bipartido() = 0;
     //- função que indica a quantidade de componentes conexas
