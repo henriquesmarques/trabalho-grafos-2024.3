@@ -6,7 +6,7 @@ Trabalho de Teoria dos Grafos - UFJF - 2024.3
 - Karine Gomes - 202465053A
 - Luana Lauschner - 202265062AC
 
-# Acesso
-- $ g++ -o main.exe main.cpp Grafo.cpp GrafoLista.cpp Grafo_Lista.cpp GrafoMatriz.cpp Vertice.cpp Aresta.cpp -std=c++17 -Wall
+## Acesso
+- g++ -o main.exe main.cpp Grafo.cpp GrafoLista.cpp Grafo_Lista.cpp GrafoMatriz.cpp Vertice.cpp Aresta.cpp -std=c++17 -Wall
 - ./main.exe -d -l Grafo.txt
 - ./main.exe -c -l Descricao.txt Grafo.txt
