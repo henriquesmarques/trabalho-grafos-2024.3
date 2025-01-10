@@ -8,7 +8,7 @@ using namespace std;
 class GrafoMatriz : public Grafo {
 public:
     GrafoMatriz();
-    GrafoMatriz(int vertices, bool dir);
+    GrafoMatriz(int vert, bool dir);
     ~GrafoMatriz() override;
     void carrega_grafo(string nomeArquivo) override;
     bool eh_bipartido() override;
@@ -23,18 +23,21 @@ public:
     bool possui_articulacao() override;
     bool possui_ponte() override;
     void novo_grafo(string nomeArquivo) override;
+    // Métodos de comunicação com terminal
     void salvaGrafoMatriz(string nomeArquivo);
     void imprimeGrafo(string nomeArquivo);
 private:
-    static const int MAX_VERTICES = 100;
-    int matriz[MAX_VERTICES][MAX_VERTICES]{};
+    int MAX_VERTICES;
+    int **matriz; // Matriz de adjacência de arestas
     int numVertices;
-    //bool direcionado;
-
+    int *vertices; // Vetor que armazena o peso dos vértices
+    //bool direcionado; // Declarado na classe abstrata
+    void aumentarMatriz(); // Aumenta a matriz de adjacência quando ultrapassado MAX_VERTICES
     void imprimir_descricao();
     int contarArestas();
     void buscaProfundidade(int u, bool visitado[]);
     void adicionaAresta(int u, int v, int peso);
+    void adicionarVertice(int peso);
 };
 
 #endif

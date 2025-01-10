@@ -27,7 +27,7 @@ public:
     bool possui_articulacao() override; /// Função que diz se possui vertice de articulação
     bool possui_ponte() override; /// Função que diz se possui aresta ponte
     bool vertice_ponderado() override; /// Função que diz se o no possui peso
-    // Gabriel
+    // Métodos de comunicação com terminal
     void salvaGrafoLista(string nomeArquivo);
     void imprimeGrafo(string nomeArquivo);
 private:

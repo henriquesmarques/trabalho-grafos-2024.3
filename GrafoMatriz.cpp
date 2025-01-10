@@ -12,30 +12,114 @@ using std::endl;
 using std::ios;
 
 GrafoMatriz::GrafoMatriz() : Grafo() {
+    // Alocando matriz dinamicamente
+    MAX_VERTICES = 100;
+    matriz = new int*[MAX_VERTICES];
+    for (int i = 0; i < MAX_VERTICES; i++) {
+        matriz[i] = new int[MAX_VERTICES];
+    }
+    // Preenchendo a matriz com zeros
     for (int i = 0; i < MAX_VERTICES; i++) {
         for (int j = 0; j < MAX_VERTICES; j++) {
             matriz[i][j] = 0; //inicializa a matriz de adjacência
         }
     }
+    // Alocando vetor de vértices
+    vertices = new int[MAX_VERTICES];
+    // Inicializando vetor de pesos dos vértices
+    for (int i = 0; i < MAX_VERTICES; i++) {
+        vertices[i] = 1;
+    }
+    // Inicializando outras variáveis
     numVertices = 0;
     direcionado = false;
 }
 
-GrafoMatriz::GrafoMatriz(int vertices, bool dir) : Grafo() {
+GrafoMatriz::GrafoMatriz(int vert, bool dir) : Grafo() {
+    // Alocando matriz dinamicamente
+    MAX_VERTICES = 100;
+    matriz = new int*[MAX_VERTICES];
+    for (int i = 0; i < MAX_VERTICES; i++) {
+        matriz[i] = new int[MAX_VERTICES];
+    }
+    // Preenchendo a matriz com zeros
     for (int i = 0; i < MAX_VERTICES; i++) {
         for (int j = 0; j < MAX_VERTICES; j++) {
             matriz[i][j] = 0; //inicializa a matriz de adjacência
         }
-        numVertices = vertices;
-        direcionado = dir;
     }
+    // Alocando vetor de vértices
+    vertices = new int[MAX_VERTICES];
+    // Inicializando vetor de pesos dos vértices
+    for (int i = 0; i < MAX_VERTICES; i++) {
+        vertices[i] = 1;
+    }
+    // Inicializando outras variáveis
+    numVertices = vert;
+    direcionado = dir;
 }
 
 GrafoMatriz::~GrafoMatriz() {
     for (int i = 0; i < MAX_VERTICES; i++) {
-        delete matriz[i];
+        delete [] matriz[i];
     }
-    delete matriz;
+    delete [] matriz;
+    delete [] vertices;
+}
+
+void GrafoMatriz::aumentarMatriz() {
+    // Alocando uma nova matriz com mais 100 vértices
+    int **novaMatriz = new int *[MAX_VERTICES + 100];
+    for (int i = 0; i < MAX_VERTICES + 100; i++) {
+        novaMatriz[i] = new int[MAX_VERTICES + 100];
+    }
+    // Inicializando nova matriz com zeros e copiando valores da antiga matriz
+    for (int i = 0; i < MAX_VERTICES + 100; i ++) {
+        for (int j = 0; j < MAX_VERTICES + 100; j++) {
+            if (i < MAX_VERTICES && j < MAX_VERTICES) {
+                novaMatriz[i][j] = matriz[i][j];
+            } else {
+                novaMatriz[i][j] = 0;
+            }
+        }
+    }
+    // Alocando novo vetor de vértices
+    int *novosVertices = new int [MAX_VERTICES + 100];
+    // Inicializando novo vetor de pesos de vértices e copiando valores do antigo vetor
+    for (int i = 0; i < MAX_VERTICES + 100; i++) {
+        if (i < MAX_VERTICES) {
+            novosVertices[i] = vertices [i];
+        } else {
+            novosVertices[i] = 1;
+        }
+    }
+    // Desalocando memória
+    for (int i = 0; i < MAX_VERTICES; i++) {
+        delete [] matriz[i];
+    }
+    delete [] matriz;
+    delete [] vertices;
+    // Atualizando variáveis
+    matriz = novaMatriz;
+    vertices = novosVertices;
+    MAX_VERTICES = MAX_VERTICES + 100;
+}
+
+void GrafoMatriz::adicionaAresta(int origem, int destino, int peso) {
+    matriz[origem - 1][destino - 1] = peso;
+    if (!direcionado) {
+        matriz[destino - 1][origem - 1] = 1;
+    }
+}
+
+void GrafoMatriz::adicionarVertice(int peso) {
+    if (numVertices + 1 > MAX_VERTICES) {
+        aumentarMatriz();
+    }
+    numVertices++;
+    if (peso != 1) {
+        vertices[numVertices] = peso;
+    }
 }
 
 bool GrafoMatriz::eh_bipartido() {
@@ -70,12 +154,6 @@ bool GrafoMatriz::eh_bipartido() {
     return true;
 }
 
-void GrafoMatriz::adicionaAresta(int origem, int destino, int peso) {
-    matriz[origem - 1][destino - 1] = peso;
-    if (!direcionado) {
-        matriz[destino - 1][origem - 1] = 1;
-    }
-}
 void GrafoMatriz::buscaProfundidade(int u, bool visitado[]) {
     visitado[u] = true;
     for (int v = 0; v < numVertices; v++) {
@@ -84,9 +162,7 @@ void GrafoMatriz::buscaProfundidade(int u, bool visitado[]) {
         }
     }
 }
-/*int GrafoMatriz::AdicionarVertice(){
-    return numVertices+1;
-}*/
+
 int GrafoMatriz::n_conexo() {
     bool visitado[MAX_VERTICES] = {false};
     int componentes = 0;
@@ -167,11 +243,34 @@ bool GrafoMatriz::eh_arvore() {
 }
 
 bool GrafoMatriz::vertice_ponderado() {
-    return false;  // Implementação fictícia; ajuste conforme necessário
+    for (int i = 0; i < numVertices; i++) {
+        if (vertices[i] != 1) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool GrafoMatriz::aresta_ponderada() {
-    return true;  // Implementação fictícia; ajuste conforme necessário
+    if (eh_direcionado()) {
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                if (matriz[i][j] != 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    } else {
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = i+1; j < numVertices; j++) {
+                if (matriz[i][j] != 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
 
 void GrafoMatriz::carrega_grafo(string nomeArquivo) {
@@ -254,6 +353,7 @@ void GrafoMatriz::carrega_grafo(string nomeArquivo) {
         }
     }*/
 }
+
 void GrafoMatriz::imprimir_descricao() {
     cout << "Grau: " << get_grau() << endl;
     cout << "Ordem: " << get_ordem() << endl;
