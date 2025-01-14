@@ -156,11 +156,14 @@ bool GrafoMatriz::eh_bipartido() {
 
 void GrafoMatriz::buscaProfundidade(int u, bool visitado[]) {
     visitado[u] = true;
-    for (int v = 0; v < numVertices; v++) {
-        if (matriz[u][v] && !visitado[v]) {
-            buscaProfundidade(v, visitado);
-        }
-    }
+   // if(direcionado){
+        for (int v = 0; v < numVertices; v++) {
+                //se o grafo é diferecionado considera apenas uma matriz se não considera a outra
+                if ((matriz[u][v] || (!direcionado && matriz[v][u])) && !visitado[v]) {
+                    buscaProfundidade(v, visitado);
+                }
+            }
+   // }
 }
 
 int GrafoMatriz::n_conexo() {
@@ -216,10 +219,20 @@ bool GrafoMatriz::eh_direcionado() {
 }
 
 bool GrafoMatriz::eh_completo() {
-    for (int i = 0; i < numVertices; i++) {
-        for (int j = 0; j < numVertices; j++) {
-            if (i != j && !matriz[i][j]) {
-                return false;
+    if(direcionado){
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                if (i != j && !matriz[i][j]) {
+                    return false;
+                }
+            }
+        }
+    }else{
+        for (int i = 0; i < numVertices; i++){
+            for (int j = i+1; j < numVertices; j++){
+                if (i != j && !matriz[i][j]) {
+                    return false;
+                }
             }
         }
     }
@@ -230,12 +243,12 @@ int GrafoMatriz::contarArestas() {
     int arestas = 0;
     for (int i = 0; i < numVertices; i++) {
         for (int j = 0; j < numVertices; j++) {
-            if (matriz[i][j] != 0) {
+            if (matriz[i][j]) {
                 arestas++;
             }
         }
     }
-    return direcionado ? arestas : arestas / 2;
+    return arestas;
 }
 
 bool GrafoMatriz::eh_arvore() {

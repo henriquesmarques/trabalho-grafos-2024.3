@@ -26,6 +26,7 @@ public:
     // Métodos de comunicação com terminal
     void salvaGrafoMatriz(string nomeArquivo);
     void imprimeGrafo(string nomeArquivo);
+    void imprimir_descricao();
 private:
     int MAX_VERTICES;
     int **matriz; // Matriz de adjacência de arestas
@@ -33,7 +34,6 @@ private:
     int *vertices; // Vetor que armazena o peso dos vértices
     //bool direcionado; // Declarado na classe abstrata
     void aumentarMatriz(); // Aumenta a matriz de adjacência quando ultrapassado MAX_VERTICES
-    void imprimir_descricao();
     int contarArestas();
     void buscaProfundidade(int u, bool visitado[]);
     void adicionaAresta(int u, int v, int peso);

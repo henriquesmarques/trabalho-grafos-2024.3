@@ -6,7 +6,13 @@
 
 using namespace std;
 
-int main(int argc, char *argv[])
+int main(){
+    GrafoMatriz g(0, false);
+    g.carrega_grafo("Grafo.txt");
+    g.imprimir_descricao();
+    return 0;
+}
+/*int main(int argc, char *argv[])
 {
 
     // comando inválido fornecido no terminal
@@ -97,4 +103,4 @@ int main(int argc, char *argv[])
         return 1;
     }
     return 0;
-}
+}*/
