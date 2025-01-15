@@ -156,14 +156,12 @@ bool GrafoMatriz::eh_bipartido() {
 
 void GrafoMatriz::buscaProfundidade(int u, bool visitado[]) {
     visitado[u] = true;
-   // if(direcionado){
-        for (int v = 0; v < numVertices; v++) {
-                //se o grafo é diferecionado considera apenas uma matriz se não considera a outra
-                if ((matriz[u][v] || (!direcionado && matriz[v][u])) && !visitado[v]) {
-                    buscaProfundidade(v, visitado);
-                }
+    for (int v = 0; v < numVertices; v++) {
+            //se o grafo é diferecionado considera apenas uma matriz se não considera a outra
+            if ((matriz[u][v] || (!direcionado && matriz[v][u])) && !visitado[v]) {
+                buscaProfundidade(v, visitado);
             }
-   // }
+        }
 }
 
 int GrafoMatriz::n_conexo() {
