@@ -11,8 +11,6 @@ class Vertice;
 class GrafoLista : public Grafo {
 public:
     // Henrique
-    GrafoLista();
-    ~GrafoLista() override;
     void carrega_grafo(string nomeArquivo) override; /// Função que lê um arquivo txt com um grafo e carrega ele
     void novo_grafo(string nomeArquivo) override; /// Função que lê um arquivo txt de configuração e gera um grafo aleatório
     bool aresta_ponderada() override; /// Função que informa se as arestas do grafo tem peso
@@ -30,14 +28,22 @@ public:
     // Métodos de comunicação com terminal
     void salvaGrafoLista(string nomeArquivo);
     void imprimeGrafo(string nomeArquivo);
+
+    /// 2ª Parte do Trabalho
+    GrafoLista();
+    ~GrafoLista() override;
+    void inserirVertice(int id, float peso);
+    void inserirAresta(int id_inicio, int id_fim, float peso);
+    void removerVertice(Vertice* v);
+    void removerAresta(Aresta* aresta);
+    Vertice* getVertice(int id);
+    Aresta* getAresta(int id_inicio, int id_fim);
+    Aresta** getVizinhos(int id);
+
 private:
-    // Henrique
     Vertice* raizVertice;
     Aresta* raizAresta;
     //bool direcionado;
-    void inserirVertice(int id, int peso);
-    void inserirAresta(Vertice* inicio, Vertice* fim, int peso);
-    void inserirPonteiroAresta(Aresta *a);
     void imprimirVertices();
     void imprimirArestas();
     bool ehCiclico();
@@ -45,14 +51,11 @@ private:
     void auxNConexo(bool *visitados, Vertice *v);
     int sortearVertice(int n);
     int sortearPeso(int n);
-    Aresta* inserirArestaAleatoria(int ordem, int peso);
-    void dividirVertices(Vertice **grupo1, Vertice **grupo2);
-    // Karine
+    Aresta* inserirArestaAleatoria(int ordem, float peso);
+    void dividirVertices(int* grupo1, int* grupo2, int ordem);
     Aresta* buscaAresta(int id, int peso);
     Vertice* buscaVertice(int id);
     GrafoLista* copiarGrafo();
-    void removerVertice(Vertice* v);
-    void removerAresta(Aresta* aresta);
 };
 
 #endif //GRAFO_LISTA_H

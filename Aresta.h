@@ -7,10 +7,10 @@ class Vertice;
 class Aresta {
 public:
     Aresta();
-    Aresta(Vertice* _inicio, Vertice* _fim, int _peso);
+    Aresta(Vertice* _inicio, Vertice* _fim, float _peso);
     ~Aresta();
-    void setPeso(int val);
-    int getPeso();
+    void setPeso(float val);
+    float getPeso();
     void setInicio(Vertice* v);
     Vertice* getInicio();
     void setFim(Vertice* v);
@@ -18,7 +18,7 @@ public:
     void setProx(Aresta* a);
     Aresta* getProx();
 private:
-    int peso;
+    float peso;
     Vertice* inicio;
     Vertice* fim;
     Aresta* prox;

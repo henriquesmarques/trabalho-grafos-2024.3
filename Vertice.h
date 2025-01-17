@@ -7,26 +7,27 @@ class Aresta;
 class Vertice {
 public:
     Vertice(int _id);
+    Vertice(int _id, float _peso);
     ~Vertice();
-    void setPeso(int val);
-    int getPeso();
+    void setPeso(float val);
+    float getPeso();
     void setProx(Vertice* v);
     Vertice* getProx();
     int getId();
-    void inserirAresta(Aresta* a);
-    Aresta* getAresta(int i);
-    int totalArestas();
-    void removerAresta(Aresta* a);
+    void inserirVizinho(Aresta* a);
+    void removerVizinho(Aresta* a);
+    Aresta* getVizinho(int id);
+    Aresta** getVetorVizinhos();
+    int getTotalVizinhos();
+
     Aresta **copiarVetorArestas();
     Aresta* getArestaPara(Vertice* v);
-    Aresta** getVetorArestas();
     int totalArestasSaida();
-
 private:
     int id;
-    int peso;
+    float peso;
     Vertice* prox;
-    Aresta** arestas; /// Vetor de ponteiros de Arestas
+    Aresta** vizinhos; /// Vetor de ponteiros de Arestas
     int n; /// Total de arestas
     int tam; /// Tamanho do vetor
     void aumentarVetor();

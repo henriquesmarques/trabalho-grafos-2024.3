@@ -26,8 +26,8 @@ int GrafoLista::get_grau() {
         int grau = 0;
         while (v != nullptr) {
             //cout<<v->getId()<<endl;
-            //cout<<v->totalArestas()<<endl;
-            grau = v->totalArestas();
+            //cout<<v->getTotalVizinhos()<<endl;
+            grau = v->getTotalVizinhos();
             if (grau > grauGrafo) {
                 grauGrafo = grau;
             }
@@ -58,7 +58,7 @@ bool GrafoLista::eh_completo() {
     if (!eh_direcionado()) {
         while (v != nullptr) {
             aux++;
-            grau = v->totalArestas();
+            grau = v->getTotalVizinhos();
             if (aux == 1)
                 grauGrafo = grau;
             if (grau != grauGrafo) {
@@ -127,9 +127,9 @@ bool GrafoLista::eh_bipartido() {
                     Vertice* v2 = buscaVertice(k + 1);
 
                     // Verifica se os vértices são adjacentes
-                    int tam = v1->totalArestas();
+                    int tam = v1->getTotalVizinhos();
                     for (int l = 0; l < tam; l++) {
-                        if (v1->getAresta(l)->getFim() == v2) {
+                        if (v1->getVizinho(l)->getFim() == v2) {
                             // Aresta entre vértices do mesmo conjunto; não é bipartido
                             ehBipartido = false;
                             break;
@@ -165,7 +165,7 @@ bool GrafoLista::possui_articulacao() {
     ///laco para realizar a remoção de um no por vez no grafo
     GrafoLista* grafo = copiarGrafo();
     for (Vertice* v = raizVertice; v != nullptr; v = v->getProx()) {
-        int tam = v->totalArestas();
+        int tam = v->getTotalVizinhos();
         Aresta** arestas = v->copiarVetorArestas();
         ///retira um vertice
         grafo->removerVertice(grafo->buscaVertice(v->getId()));
@@ -180,7 +180,7 @@ bool GrafoLista::possui_articulacao() {
         grafo->inserirVertice(v->getId(), v->getPeso());
         ///reinsere as arestas
         for (int i = 0; i < tam; i++)
-            grafo->inserirAresta(grafo->buscaVertice(arestas[i]->getInicio()->getId()), grafo->buscaVertice(arestas[i]->getFim()->getId()), arestas[i]->getPeso());
+            grafo->inserirAresta(arestas[i]->getInicio()->getId(), arestas[i]->getFim()->getId(), arestas[i]->getPeso());
         delete [] arestas;
     }
     delete grafo;
@@ -210,7 +210,7 @@ bool GrafoLista::possui_ponte() {
             return true;
         }
         // Reinsere aresta no grafo
-        grafo->inserirAresta(grafo->buscaVertice(inicio), grafo->buscaVertice(fim), peso);
+        grafo->inserirAresta(inicio, fim, peso);
     }
 
     delete grafo;
@@ -219,8 +219,8 @@ bool GrafoLista::possui_ponte() {
 
 void GrafoLista::removerVertice(Vertice* v) {
     /// Remover arestas do vetor de arestas do vértice
-    for (int i = v->totalArestas()-1; i >= 0; i--) {
-        removerAresta(v->getAresta(i));
+    for (int i = v->getTotalVizinhos()-1; i >= 0; i--) {
+        removerAresta(v->getVizinho(i));
     }
 
     /// Remover vértice da lista de vértices do Grafo
@@ -239,9 +239,9 @@ void GrafoLista::removerVertice(Vertice* v) {
 void GrafoLista::removerAresta(Aresta* a) {
     /// Remove aresta dos Vetores
     Vertice* v = a->getInicio();
-    v->removerAresta(a);
+    v->removerVizinho(a);
     v = a->getFim();
-    v->removerAresta(a);
+    v->removerVizinho(a);
 
     /// Remove aresta da lista de arestas do Grafo
     if (raizAresta == a) {
@@ -284,7 +284,7 @@ GrafoLista* GrafoLista::copiarGrafo() {
     Aresta* a = raizAresta;
 
     while (a != nullptr) {///insere cada aresta
-        grafo->inserirAresta(grafo->buscaVertice(a->getInicio()->getId()), grafo->buscaVertice(a->getFim()->getId()), a->getPeso());
+        grafo->inserirAresta(a->getInicio()->getId(), a->getFim()->getId(), a->getPeso());
         a = a->getProx();
     }
     return grafo;

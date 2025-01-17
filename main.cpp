@@ -6,9 +6,8 @@
 
 using namespace std;
 
-int main(int argc, char *argv[])
-{
-
+// Comunicação com terminal
+int main(int argc, char *argv[]) {
     // comando inválido fornecido no terminal
     if (argc < 4 || argc > 5)
     {

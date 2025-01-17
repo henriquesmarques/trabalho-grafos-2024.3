@@ -7,22 +7,29 @@ Vertice::Vertice(int _id) {
     id = _id;
     peso = 1;
     prox = nullptr;
-    arestas = nullptr;
     n = 0;
     tam = 10;
-    arestas = new Aresta*[tam];
+    vizinhos = new Aresta*[tam];
 }
 
+Vertice::Vertice(int _id, float _peso) {
+    id = _id;
+    peso = _peso;
+    prox = nullptr;
+    n = 0;
+    tam = 10;
+    vizinhos = new Aresta*[tam];
+}
 
 Vertice::~Vertice() {
-    delete [] arestas;
+    delete [] vizinhos;
 }
 
-void Vertice::setPeso(int val) {
+void Vertice::setPeso(float val) {
     peso = val;
 }
 
-int Vertice::getPeso() {
+float Vertice::getPeso() {
     return peso;
 }
 
@@ -38,48 +45,46 @@ int Vertice::getId() {
     return id;
 }
 
-Aresta* Vertice::getAresta(int i) {
-    if (i >= 0 && i < n) {
-        return arestas[i];
+Aresta* Vertice::getVizinho(int id) {
+    if (id >= 0 && id < n) {
+        return vizinhos[id];
     }
-    else {
-        cout << "Erro get: indice invalido." << endl;
-        exit(1);
-    }
+    cout << "Erro get: indice invalido." << endl;
+    exit(1);
 }
 
-Aresta ** Vertice::getVetorArestas() {
-    return arestas;
+Aresta ** Vertice::getVetorVizinhos() {
+    return vizinhos;
 }
 
-void Vertice::inserirAresta(Aresta *a) {
+void Vertice::inserirVizinho(Aresta *a) {
     if (n >= tam) {
         aumentarVetor();
     }
-    arestas[n] = a;
+    vizinhos[n] = a;
     n++;
 }
 
 void Vertice::aumentarVetor() {
     Aresta **a = new Aresta*[tam+10];
     for (int i = 0; i < tam; i++) {
-        a[i] = arestas[i];
+        a[i] = vizinhos[i];
     }
-    delete [] arestas;
-    arestas = a;
+    delete [] vizinhos;
+    vizinhos = a;
     tam += 10;
 }
 
-int Vertice::totalArestas() {
+int Vertice::getTotalVizinhos() {
     return n;
 }
 
-void Vertice::removerAresta(Aresta* a)
+void Vertice::removerVizinho(Aresta* a)
 {
     // Encontrar posição da aresta no vetor
     int i = 0;
     for (i = 0; i < n; i++) {
-        if (arestas[i] == a) {
+        if (vizinhos[i] == a) {
             break;
         }
     }
@@ -91,7 +96,7 @@ void Vertice::removerAresta(Aresta* a)
 
     // Reorganizando vetor
     for (int j = i; j < n-1; j++) {
-        arestas[j] = arestas[j+1];
+        vizinhos[j] = vizinhos[j+1];
     }
     n--;
 
@@ -101,14 +106,14 @@ void Vertice::removerAresta(Aresta* a)
 Aresta** Vertice::copiarVetorArestas() {
     Aresta** a = new Aresta*[n];
     for (int i = 0; i < n; i++) {
-        a[i] = getAresta(i);
+        a[i] = getVizinho(i);
     }
     return a;
 }
 
 Aresta* Vertice::getArestaPara(Vertice* destino) {
-    for (int i = 0; i < totalArestas(); ++i) {
-        Aresta* a = getAresta(i);
+    for (int i = 0; i < getTotalVizinhos(); ++i) {
+        Aresta* a = getVizinho(i);
         if (a->getFim() == destino) {
             return a;
         }
@@ -119,7 +124,7 @@ Aresta* Vertice::getArestaPara(Vertice* destino) {
 int Vertice::totalArestasSaida() {
     int total = 0;
     for (int i = 0; i < n; i++) {
-        if (arestas[i]->getInicio() == this) {
+        if (vizinhos[i]->getInicio() == this) {
             total++;
         }
     }

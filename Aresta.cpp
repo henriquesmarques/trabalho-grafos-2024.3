@@ -10,7 +10,7 @@ Aresta::Aresta() {
     prox = nullptr;
 }
 
-Aresta::Aresta(Vertice *_inicio, Vertice *_fim, int _peso) {
+Aresta::Aresta(Vertice *_inicio, Vertice *_fim, float _peso) {
     peso = _peso;
     fim = _fim;
     inicio = _inicio;
@@ -20,11 +20,11 @@ Aresta::Aresta(Vertice *_inicio, Vertice *_fim, int _peso) {
 Aresta::~Aresta() {
 }
 
-void Aresta::setPeso(int val) {
+void Aresta::setPeso(float val) {
     peso = val;
 }
 
-int Aresta::getPeso() {
+float Aresta::getPeso() {
     return peso;
 }
 

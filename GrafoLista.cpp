@@ -7,7 +7,7 @@
 
 using namespace std;
 
-GrafoLista::GrafoLista() : Grafo() {
+GrafoLista::GrafoLista() {
     raizVertice = nullptr;
     raizAresta = nullptr;
     direcionado = false;
@@ -27,6 +27,77 @@ GrafoLista::~GrafoLista() {
     }
 }
 
+Vertice* GrafoLista::getVertice(int id) {
+    Vertice* v = raizVertice;
+    while (v != nullptr) {
+        if (v->getId() == id) {
+            return v;
+        }
+        v = v->getProx();
+    }
+    return nullptr;
+}
+
+Aresta* GrafoLista::getAresta(int id_inicio, int id_fim) {
+    Vertice* v = getVertice(id_inicio);
+    Aresta** a = v->getVetorVizinhos();
+    for (int i = 0; i < v->getTotalVizinhos(); i++) {
+        if (v->getVizinho(i)->getFim()->getId() == id_fim) {
+            return v->getVizinho(i);
+        }
+    }
+    return nullptr;
+}
+
+Aresta ** GrafoLista::getVizinhos(int id) {
+    Vertice* v = getVertice(id);
+    if (v != nullptr) {
+        return v->getVetorVizinhos();
+    }
+    cout << "Erro: indice invalido no getVizinhos()." << endl;
+    exit(1);
+}
+
+void GrafoLista::inserirVertice(int id, float peso) {
+    if (getVertice(id) == nullptr) {
+        auto* v = new Vertice(id, peso);
+        if (raizVertice != nullptr) {
+            v->setProx(raizVertice);
+        }
+        raizVertice = v;
+    }
+    cout << "Erro: existe um vertice com o mesmo indice." << endl;
+}
+
+void GrafoLista::inserirAresta(int id_inicio, int id_fim, float peso) {
+    if (id_inicio == id_fim) {
+        cout << "Erro: não e possivel inserir laco." << endl;
+    } else if (getAresta(id_inicio, id_fim) != nullptr) {
+        cout << "Erro: não e possivel inserir aresta multipla." << endl;
+    } else {
+        Vertice* inicio = getVertice(id_inicio);
+        Vertice* fim = getVertice(id_fim);
+        if (inicio == nullptr || fim == nullptr) {
+            cout << "Erro: o vertice nao foi encontrado." << endl;
+        } else {
+            // Criando aresta
+            auto* a = new Aresta(inicio, fim, peso);
+
+            // Adiciona aresta no vetor de vizinhos do vértice
+            inicio->inserirVizinho(a);
+            fim->inserirVizinho(a);
+
+            // Adicionando aresta na lista de arestas
+            if (raizAresta != nullptr) {
+                a->setProx(raizAresta);
+            }
+            raizAresta = a;
+
+            //cout << "Aresta inserida: " << a->getInicio()->getId() << " -> " << a->getFim()->getId() << endl;
+        }
+    }
+}
+
 void GrafoLista::carrega_grafo(string nomeArquivo) {
     ifstream arquivo;
     arquivo.open(nomeArquivo, ios::in);
@@ -43,7 +114,7 @@ void GrafoLista::carrega_grafo(string nomeArquivo) {
 
     // Criar vértices
     if (ponderado_nos == 1) {
-        int peso;
+        float peso;
         for (int i = 0; i < numVertices; ++i) {
             arquivo >> peso;
             inserirVertice(i+1, peso);
@@ -54,83 +125,21 @@ void GrafoLista::carrega_grafo(string nomeArquivo) {
         }
     }
 
-    //imprimirVertices();
-
     // Criar arestas
-    int origem, destino, peso;
+    int origem, destino;
+    float peso;
     while (arquivo >> origem >> destino) {
-        Vertice *v = raizVertice;
-        Vertice *inicio = nullptr;
-        Vertice *fim = nullptr;
-        while (v != nullptr) {
-            if (v->getId() == origem) {
-                inicio = v;
-            }
-            if (v->getId() == destino) {
-                fim = v;
-            }
-            v = v->getProx();
-        }
-
-        if (inicio != nullptr && fim != nullptr) {
-            if (ponderado_arestas == 1) {
-                arquivo >> peso;
-                inserirAresta(inicio, fim, peso);
-            } else {
-                inserirAresta(inicio, fim, 1);
-            }
+        if (ponderado_arestas == 1) {
+            arquivo >> peso;
+            inserirAresta(origem, destino, peso);
         } else {
-            cout << "Erro ao inserir arquivo" << endl;
+            inserirAresta(origem, destino, 1);
         }
     }
 
+    //imprimirVertices();
     //imprimirArestas();
     arquivo.close();
-}
-
-void GrafoLista::inserirVertice(int id, int peso) {
-    Vertice* v = new Vertice(id);
-    v->setPeso(peso);
-    if (raizVertice != nullptr) {
-        v->setProx(raizVertice);
-    }
-    raizVertice = v;
-}
-
-void GrafoLista::inserirAresta(Vertice *inicio, Vertice *fim, int peso) {
-    if (inicio == fim) {
-        cout << "Erro: o grafo não permite inserir laço." << endl;
-    } else {
-        // Criando aresta
-        Aresta* a = new Aresta();
-        a->setPeso(peso);
-        a->setInicio(inicio);
-        a->setFim(fim);
-
-        // Adiciona aresta nos Vértices
-        inicio->inserirAresta(a);
-        fim->inserirAresta(a);
-
-        // Adicionando aresta na lista
-        if (raizAresta != nullptr) {
-            a->setProx(raizAresta);
-        }
-        raizAresta = a;
-
-        //cout << "Aresta inserida: " << a->getInicio()->getId() << " -> " << a->getFim()->getId() << endl;
-    }
-}
-
-void GrafoLista::inserirPonteiroAresta(Aresta* a) {
-    // Adicionando ponteiro da aresta no vértice
-    a->getInicio()->inserirAresta(a);
-    a->getFim()->inserirAresta(a);
-
-    // Adicionando aresta na lista
-    if (raizAresta != nullptr) {
-        a->setProx(raizAresta);
-    }
-    raizAresta = a;
 }
 
 void GrafoLista::imprimirVertices() {
@@ -200,8 +209,8 @@ int GrafoLista::n_conexo() {
 
 void GrafoLista::auxNConexo(bool *visitados, Vertice *v) {
     visitados[v->getId() - 1] = true;
-    for (int i = 0; i < v->totalArestas(); ++i) {
-        Aresta* a = v->getAresta(i);
+    for (int i = 0; i < v->getTotalVizinhos(); ++i) {
+        Aresta* a = v->getVizinho(i);
         Vertice* adj = a->getFim();
         if (!visitados[adj->getId() - 1]) {
             auxNConexo(visitados, adj);
@@ -237,8 +246,8 @@ bool GrafoLista::ehCiclico() {
 
 bool GrafoLista::auxEhCiclico(Vertice* v, bool* visitados, Vertice* pai) {
     visitados[v->getId() - 1] = true;
-    for (int i = 0; i < v->totalArestas(); ++i) {
-        Aresta* a = v->getAresta(i);
+    for (int i = 0; i < v->getTotalVizinhos(); ++i) {
+        Aresta* a = v->getVizinho(i);
         Vertice* adj = a->getFim();
         if (adj == v) {
             adj = a->getInicio();
@@ -270,30 +279,29 @@ int GrafoLista::sortearPeso(int n) {
     return rand() % (2 * n + 1) - n;
 }
 
-Aresta* GrafoLista::inserirArestaAleatoria(int ordem, int peso) {
-    Aresta* a = new Aresta(buscaVertice(sortearVertice(ordem)),buscaVertice(sortearVertice(ordem)),peso);
-    while (a->getInicio() == a->getFim()) {
-        a->setInicio(buscaVertice(sortearVertice(ordem)));
-        a->setFim(buscaVertice(sortearVertice(ordem)));
+Aresta* GrafoLista::inserirArestaAleatoria(int ordem, float peso) {
+    int inicio = sortearVertice(ordem);
+    int fim = sortearVertice(ordem);
+    while (inicio == fim) {
+        inicio = sortearVertice(ordem);
+        fim = sortearVertice(ordem);
     }
-    inserirPonteiroAresta(a);
-    return a;
+    inserirAresta(inicio, fim, peso);
+    return getAresta(inicio, fim);
 }
 
-void GrafoLista::dividirVertices(Vertice** grupo1, Vertice** grupo2) {
-    Vertice* v = raizVertice;
+void GrafoLista::dividirVertices(int* grupo1, int* grupo2, int ordem) {
     bool alternar = false;
     int i = 0, j = 0;
-    while (v != nullptr) {
+    for (int k = 1; k <= ordem; k++) {
         if (alternar) {
-            grupo1[i] = v;
+            grupo1[i] = k;
             i++;
         } else {
-            grupo2[j] = v;
+            grupo2[j] = k;
             j++;
         }
         alternar = !alternar;
-        v = v->getProx();
     }
 }
 
@@ -335,11 +343,11 @@ void GrafoLista::novo_grafo(string nomeArquivo) {
             for (int j = 1; j <= ordem; j++) {
                 if (direcionado) {
                     if (i != j) {
-                        arestasPonderadas ? inserirAresta(buscaVertice(i), buscaVertice(j), sortearPeso(20)) : inserirAresta(buscaVertice(i), buscaVertice(j), 1);
+                        arestasPonderadas ? inserirAresta(i, j, sortearPeso(20)) : inserirAresta(i, j, 1);
                     }
                 } else {
                     if (i > j) {
-                        arestasPonderadas ? inserirAresta(buscaVertice(i), buscaVertice(j), sortearPeso(20)) : inserirAresta(buscaVertice(i), buscaVertice(j), 1);
+                        arestasPonderadas ? inserirAresta(i, j, sortearPeso(20)) : inserirAresta(i, j, 1);
                     }
                 }
             }
@@ -348,9 +356,9 @@ void GrafoLista::novo_grafo(string nomeArquivo) {
     } else if (bipartido) {
         // Dividindo vértices em dois grupos
         int tam1 = ordem / 2, tam2 = ordem - tam1;
-        Vertice** vetor1 = new Vertice*[tam1];
-        Vertice** vetor2 = new Vertice*[tam2];
-        dividirVertices(vetor1, vetor2);
+        int* vetor1 = new int[tam1];
+        int* vetor2 = new int[tam2];
+        dividirVertices(vetor1, vetor2, ordem);
 
         // Criando arestas entre os dois grupos
         int componentes = ordem, grau = 0;
@@ -449,7 +457,7 @@ void GrafoLista::novo_grafo(string nomeArquivo) {
 
             while (articulacao != _articulacao || componentes != _componentes || grau != _grau) {
                 int peso = arestasPonderadas ? sortearPeso(20) : 1;
-                inserirAresta(buscaVertice(ordem), buscaVertice(sortearVertice(ordem - 1)), peso);
+                inserirAresta(ordem, sortearVertice(ordem - 1), peso);
                 componentes = n_conexo();
                 grau = get_grau();
                 articulacao = possui_articulacao();
