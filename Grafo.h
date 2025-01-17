@@ -1,6 +1,8 @@
 #ifndef GRAFO_H
 #define GRAFO_H
 #include <iostream>
+#include "Aresta.h"
+#include "Vertice.h"
 
 using namespace std;
 
@@ -10,36 +12,35 @@ protected:
     // bool verticesPonderados;
     // bool arestasPonderadas;
     // int numVertices;
-
+    void auxNConexo(bool *visitados, Vertice *v);
 public:
     Grafo();
     virtual ~Grafo();
-    //função força bruta que indica se o grafo é bipartido ou não
     virtual bool eh_bipartido() = 0;
-    //- função que indica a quantidade de componentes conexas
-    virtual int n_conexo() = 0;
-    //- função que retorna o grau do grafo
+    int n_conexo(); /// Função que indica a quantidade de componentes conexas
     virtual int get_grau() = 0;
-    //função que retorna a ordem do grafo
     virtual int get_ordem() = 0;
-    //função que retorna se o grafo é direcionado ou não
     virtual bool eh_direcionado() = 0;
-    //função que informa se os vertices do grafo tem peso
     virtual bool vertice_ponderado() = 0;
-    //função que informa se as arestas do grafo tem peso
     virtual bool aresta_ponderada() = 0;
-    //- função que diz se um grafo é completo ou não
-    virtual bool eh_completo() = 0;
-    //função que diz se o grafo é uma árvore
+    bool eh_completo(); /// Função que diz se o grafo é completo ou não
     virtual bool eh_arvore() = 0;
-    //- função que diz se existe ao menos um vertice de articulação
     virtual bool possui_articulacao() = 0;
-    //função que diz se existe ao menos uma aresta ponte
     virtual bool possui_ponte() = 0;
-    //- função que lê um arquivo txt com um grafo e carrega ele
-    virtual void carrega_grafo(string nomeArquivo) = 0;
-    //- função que lê um arquivo txt de configuracao e gera um grafo aleatorio
+    void carrega_grafo(string nomeArquivo); /// Função que lê um arquivo txt com um grafo e carrega ele
     virtual void novo_grafo(string nomeArquivo) = 0;
+
+    // Comunicação com terminal
+    virtual void salvaGrafo(string nomeArquivo) = 0;
+    void imprimeGrafo(string nomeArquivo);
+    // Funções para manipulação de grafos das classes filhas
+    virtual void inserirVertice(int id, float peso) = 0;
+    virtual void inserirAresta(int id_inicio, int id_fim, float peso) = 0;
+    virtual void removerVertice(int id) = 0;
+    virtual void removerAresta(int id_inicio, int id_fim) = 0;
+    virtual Vertice* getVertice(int id) = 0;
+    // virtual Aresta* getAresta(int id_inicio, int id_fim) = 0;
+    // virtual Aresta** getVizinhos(int id) = 0;
 };
 
 #endif

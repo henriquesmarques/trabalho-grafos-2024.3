@@ -98,49 +98,90 @@ void GrafoLista::inserirAresta(int id_inicio, int id_fim, float peso) {
     }
 }
 
-void GrafoLista::carrega_grafo(string nomeArquivo) {
-    ifstream arquivo;
-    arquivo.open(nomeArquivo, ios::in);
-
-    if (!arquivo.is_open()) {
-        cout << "Erro ao abrir o arquivo!" << endl;
-        exit(1);
+void GrafoLista::removerVertice(int id) {
+    Vertice *v = getVertice(id);
+    /// Remover arestas do vetor de arestas do vértice
+    for (int i = v->getTotalVizinhos()-1; i >= 0; i--) {
+        removerAresta(v->getVizinho(i)->getInicio()->getId(), v->getVizinho(i)->getFim()->getId());
     }
 
-    int numVertices, direcionado, ponderado_nos, ponderado_arestas;
-    arquivo >> numVertices >> direcionado >> ponderado_nos >> ponderado_arestas;
-
-    this->direcionado = direcionado;
-
-    // Criar vértices
-    if (ponderado_nos == 1) {
-        float peso;
-        for (int i = 0; i < numVertices; ++i) {
-            arquivo >> peso;
-            inserirVertice(i+1, peso);
-        }
+    /// Remover vértice da lista de vértices do Grafo
+    if (raizVertice == v) {
+        raizVertice = v->getProx();
     } else {
-        for (int i = 0; i < numVertices; ++i) {
-            inserirVertice(i+1, 1);
+        Vertice* ant = raizVertice;
+        while (ant->getProx() != v) {
+            ant = ant->getProx();
         }
+        ant->setProx(v->getProx());
     }
-
-    // Criar arestas
-    int origem, destino;
-    float peso;
-    while (arquivo >> origem >> destino) {
-        if (ponderado_arestas == 1) {
-            arquivo >> peso;
-            inserirAresta(origem, destino, peso);
-        } else {
-            inserirAresta(origem, destino, 1);
-        }
-    }
-
-    //imprimirVertices();
-    //imprimirArestas();
-    arquivo.close();
+    delete v;
 }
+
+void GrafoLista::removerAresta(int id_inicio, int id_fim) {
+    Aresta *a = getAresta(id_inicio, id_fim);
+    /// Remove aresta dos Vetores
+    Vertice* v = a->getInicio();
+    v->removerVizinho(a);
+    v = a->getFim();
+    v->removerVizinho(a);
+
+    /// Remove aresta da lista de arestas do Grafo
+    if (raizAresta == a) {
+        raizAresta = a->getProx();
+    } else {
+        Aresta* ant = raizAresta;
+        while (ant->getProx() != a) {
+            ant = ant->getProx();
+        }
+        ant->setProx(a->getProx());
+    }
+    delete a;
+}
+
+// void GrafoLista::carrega_grafo(string nomeArquivo) {
+//     ifstream arquivo;
+//     arquivo.open(nomeArquivo, ios::in);
+//
+//     if (!arquivo.is_open()) {
+//         cout << "Erro ao abrir o arquivo!" << endl;
+//         exit(1);
+//     }
+//
+//     int numVertices, direcionado, ponderado_nos, ponderado_arestas;
+//     arquivo >> numVertices >> direcionado >> ponderado_nos >> ponderado_arestas;
+//
+//     this->direcionado = direcionado;
+//
+//     // Criar vértices
+//     if (ponderado_nos == 1) {
+//         float peso;
+//         for (int i = 0; i < numVertices; ++i) {
+//             arquivo >> peso;
+//             inserirVertice(i+1, peso);
+//         }
+//     } else {
+//         for (int i = 0; i < numVertices; ++i) {
+//             inserirVertice(i+1, 1);
+//         }
+//     }
+//
+//     // Criar arestas
+//     int origem, destino;
+//     float peso;
+//     while (arquivo >> origem >> destino) {
+//         if (ponderado_arestas == 1) {
+//             arquivo >> peso;
+//             inserirAresta(origem, destino, peso);
+//         } else {
+//             inserirAresta(origem, destino, 1);
+//         }
+//     }
+//
+//     //imprimirVertices();
+//     //imprimirArestas();
+//     arquivo.close();
+// }
 
 void GrafoLista::imprimirVertices() {
     cout << "Lista de vertices: " << endl;
@@ -186,41 +227,41 @@ bool GrafoLista::eh_direcionado() {
     return direcionado;
 }
 
-int GrafoLista::n_conexo() {
-    int numVertices = get_ordem();
-    if (numVertices == 0) return 0;
-
-    bool *visitados = new bool[numVertices];
-    for (int i = 0; i < numVertices; ++i) {
-        visitados[i] = false;
-    }
-
-    int componentesConexas = 0;
-    for (Vertice* v = raizVertice; v != nullptr; v = v->getProx()) {
-        if (!visitados[v->getId() - 1]) {
-            auxNConexo(visitados, v);
-            componentesConexas++;
-        }
-    }
-
-    delete[] visitados;
-    return componentesConexas;
-}
-
-void GrafoLista::auxNConexo(bool *visitados, Vertice *v) {
-    visitados[v->getId() - 1] = true;
-    for (int i = 0; i < v->getTotalVizinhos(); ++i) {
-        Aresta* a = v->getVizinho(i);
-        Vertice* adj = a->getFim();
-        if (!visitados[adj->getId() - 1]) {
-            auxNConexo(visitados, adj);
-        }
-        adj = a->getInicio();
-        if (!visitados[adj->getId() - 1]) {
-            auxNConexo(visitados, adj);
-        }
-    }
-}
+// int GrafoLista::n_conexo() {
+//     int numVertices = get_ordem();
+//     if (numVertices == 0) return 0;
+//
+//     bool *visitados = new bool[numVertices];
+//     for (int i = 0; i < numVertices; ++i) {
+//         visitados[i] = false;
+//     }
+//
+//     int componentesConexas = 0;
+//     for (Vertice* v = raizVertice; v != nullptr; v = v->getProx()) {
+//         if (!visitados[v->getId() - 1]) {
+//             auxNConexo(visitados, v);
+//             componentesConexas++;
+//         }
+//     }
+//
+//     delete[] visitados;
+//     return componentesConexas;
+// }
+//
+// void GrafoLista::auxNConexo(bool *visitados, Vertice *v) {
+//     visitados[v->getId() - 1] = true;
+//     for (int i = 0; i < v->getTotalVizinhos(); ++i) {
+//         Aresta* a = v->getVizinho(i);
+//         Vertice* adj = a->getFim();
+//         if (!visitados[adj->getId() - 1]) {
+//             auxNConexo(visitados, adj);
+//         }
+//         adj = a->getInicio();
+//         if (!visitados[adj->getId() - 1]) {
+//             auxNConexo(visitados, adj);
+//         }
+//     }
+// }
 
 bool GrafoLista::ehCiclico() {
     int numVertices = get_ordem();
@@ -367,7 +408,7 @@ void GrafoLista::novo_grafo(string nomeArquivo) {
             componentes = n_conexo();
             grau = get_grau();
             if (componentes < _componentes || grau > _grau) {
-                removerAresta(raizAresta);
+                removerAresta(raizAresta->getInicio()->getId(), raizAresta->getFim()->getId());
             }
         }
 
@@ -380,7 +421,7 @@ void GrafoLista::novo_grafo(string nomeArquivo) {
                 grau = get_grau();
                 articulacao = possui_articulacao();
                 if (componentes < _componentes || grau > _grau) {
-                    removerAresta(raizAresta);
+                    removerAresta(raizAresta->getInicio()->getId(), raizAresta->getFim()->getId());
                 }
             }
         }
@@ -398,7 +439,7 @@ void GrafoLista::novo_grafo(string nomeArquivo) {
             grau = get_grau();
             ciclico = ehCiclico();
             if (componentes < 1 || grau > _grau || ciclico) {
-                removerAresta(a);
+                removerAresta(a->getInicio()->getId(), a->getFim()->getId());
             }
         }
 
@@ -412,7 +453,7 @@ void GrafoLista::novo_grafo(string nomeArquivo) {
                 articulacao = possui_articulacao();
                 ciclico = ehCiclico();
                 if (componentes < 1 || grau > _grau || ciclico) {
-                    removerAresta(a);
+                    removerAresta(a->getInicio()->getId(), a->getFim()->getId());
                 }
             }
         }
@@ -430,7 +471,7 @@ void GrafoLista::novo_grafo(string nomeArquivo) {
             componentes = n_conexo();
             grau = get_grau();
             if (componentes < _componentes || grau > _grau) {
-                removerAresta(a);
+                removerAresta(a->getInicio()->getId(), a->getFim()->getId());
             }
         }
 
@@ -443,7 +484,7 @@ void GrafoLista::novo_grafo(string nomeArquivo) {
                 grau = get_grau();
                 articulacao = possui_articulacao();
                 if (componentes < _componentes || grau > _grau) {
-                    removerAresta(a);
+                    removerAresta(a->getInicio()->getId(), a->getFim()->getId());
                 }
             }
         }
@@ -462,7 +503,7 @@ void GrafoLista::novo_grafo(string nomeArquivo) {
                 grau = get_grau();
                 articulacao = possui_articulacao();
                 if (componentes < _componentes || grau > _grau) {
-                    removerAresta(raizAresta);
+                    removerAresta(raizAresta->getInicio()->getId(), raizAresta->getFim()->getId());
                 }
             }
         }
@@ -476,7 +517,7 @@ void GrafoLista::novo_grafo(string nomeArquivo) {
                 componentes = n_conexo();
                 grau = get_grau();
                 if (componentes < _componentes || grau > _grau) {
-                    removerAresta(a);
+                    removerAresta(a->getInicio()->getId(), a->getFim()->getId());
                 }
             }
 
@@ -492,7 +533,7 @@ void GrafoLista::novo_grafo(string nomeArquivo) {
                     ponte = possui_ponte();
                     imprimirArestas();
                     if (componentes < _componentes || grau > _grau || !ponte) {
-                        removerAresta(a);
+                        removerAresta(a->getInicio()->getId(), a->getFim()->getId());
                     }
                 }
             }
@@ -509,7 +550,7 @@ void GrafoLista::novo_grafo(string nomeArquivo) {
 //         possui_ponte() << endl << "Vertice de Articulacao: " << possui_articulacao() << endl;
 }
 
-void GrafoLista::salvaGrafoLista(string nomeArquivo) // para os casos de comando -l
+void GrafoLista::salvaGrafo(string nomeArquivo) // para os casos de comando -l
 {
     ofstream arquivoGrafo;
     arquivoGrafo.open(nomeArquivo, ios::out);
@@ -553,47 +594,4 @@ void GrafoLista::salvaGrafoLista(string nomeArquivo) // para os casos de comando
         }
     }
     arquivoGrafo.close();
-}
-
-void GrafoLista::imprimeGrafo(string nomeArquivo)
-{
-    cout<<nomeArquivo<<"\n";
-
-    cout<<"Grau: "<<get_grau()<<"\n";
-
-    cout<<"Ordem: "<<get_ordem()<<"\n";
-
-    if(eh_direcionado())
-    {cout<<"Direcionado: "<<"Sim"<<"\n";}
-    else{cout<<"Direcionado: "<<"Nao"<<"\n";}
-
-    cout<<"Componentes conexas: "<<n_conexo()<<"\n";
-
-    if(vertice_ponderado())
-    {cout<<"Vertices ponderados: "<<"Sim"<<"\n";}
-    else{cout<<"Vertices ponderados: "<<"Nao"<<"\n";}
-
-    if(aresta_ponderada())
-    {cout<<"Arestas ponderadas: "<<"Sim"<<"\n";}
-    else{cout<<"Arestas ponderadas: "<<"Nao"<<"\n";}
-
-    if(eh_completo())
-    {cout<<"Completo: "<<"Sim"<<"\n";}
-    else{cout<<"Completo: "<<"Nao"<<"\n";}
-
-    if(eh_bipartido())
-    {cout<<"Bipartido: "<<"Sim"<<"\n";}
-    else{cout<<"Bipartido: "<<"Nao"<<"\n";}
-
-    if(eh_arvore())
-    {cout<<"Arvore: "<<"Sim"<<"\n";}
-    else{cout<<"Arvore: "<<"Nao"<<"\n";}
-
-    if(possui_ponte())
-    {cout<<"Aresta Ponte: "<<"Sim"<<"\n";}
-    else{cout<<"Aresta Ponte: "<<"Nao"<<"\n";}
-
-    if(possui_articulacao())
-    {cout<<"Vertide de Articulacao: "<<"Sim"<<"\n";}
-    else{cout<<"Vertide de Articulacao: "<<"Nao"<<"\n";}
 }

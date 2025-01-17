@@ -48,8 +48,6 @@ int main(int argc, char *argv[]) {
             GrafoMatriz g;
             g.carrega_grafo(arquivoGrafo);
             g.imprimeGrafo(arquivoGrafo);
-            // carrega grafo como matriz
-            //  passar pra depois desse pedaço // imprime a descrição no formato desejado
         }
         else
         {
@@ -57,8 +55,6 @@ int main(int argc, char *argv[]) {
             GrafoLista g;
             g.carrega_grafo(arquivoGrafo);
             g.imprimeGrafo(arquivoGrafo);
-            // carrega grafo como lista
-            //  passar pra depois desse pedaço // imprime a descrição no formato desejado
         }
     }
     else if (opcao == "-c")
@@ -77,17 +73,13 @@ int main(int argc, char *argv[]) {
             GrafoMatriz g;
             g.novo_grafo(arquivoDescricao);
             g.carrega_grafo(arquivoGrafo);
-            // carrega grafo como matriz
-            // imprime a descrição no formato desejado
         }
         else
         {
             cout << "Teste: grafo -c -l entrou" << "\n";
             GrafoLista g;
             g.novo_grafo(arquivoDescricao);
-            g.salvaGrafoLista(arquivoGrafo);
-            // carrega grafo como lista
-            // imprime a descrição no formato desejado
+            g.salvaGrafo(arquivoGrafo);
         }
     }
     else

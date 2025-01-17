@@ -163,18 +163,18 @@ void GrafoMatriz::buscaProfundidade(int u, bool visitado[]) {
     }
 }
 
-int GrafoMatriz::n_conexo() {
-    bool visitado[MAX_VERTICES] = {false};
-    int componentes = 0;
-
-    for (int i = 0; i < numVertices; i++) {
-        if (!visitado[i]) {
-            componentes++;
-            buscaProfundidade(i, visitado);
-        }
-    }
-    return componentes;
-}
+// int GrafoMatriz::n_conexo() {
+//     bool visitado[MAX_VERTICES] = {false};
+//     int componentes = 0;
+//
+//     for (int i = 0; i < numVertices; i++) {
+//         if (!visitado[i]) {
+//             componentes++;
+//             buscaProfundidade(i, visitado);
+//         }
+//     }
+//     return componentes;
+// }
 
 int GrafoMatriz::get_grau(){
     int maior=0;
@@ -215,16 +215,16 @@ bool GrafoMatriz::eh_direcionado() {
     return direcionado;
 }
 
-bool GrafoMatriz::eh_completo() {
-    for (int i = 0; i < numVertices; i++) {
-        for (int j = 0; j < numVertices; j++) {
-            if (i != j && !matriz[i][j]) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
+// bool GrafoMatriz::eh_completo() {
+//     for (int i = 0; i < numVertices; i++) {
+//         for (int j = 0; j < numVertices; j++) {
+//             if (i != j && !matriz[i][j]) {
+//                 return false;
+//             }
+//         }
+//     }
+//     return true;
+// }
 
 int GrafoMatriz::contarArestas() {
     int arestas = 0;
@@ -273,86 +273,69 @@ bool GrafoMatriz::aresta_ponderada() {
     }
 }
 
-void GrafoMatriz::carrega_grafo(string nomeArquivo) {
-    ifstream arquivo;
-    //cout << "Carregando grafo do arquivo " << arquivo << "..." << endl;
-    arquivo.open("Grafo.txt", ios::in);
-
-    if (!arquivo.is_open()) {
-        std::cout << "Erro ao abrir o arquivo!" << endl;
-        exit(1);
-    }
-
-    cout << "Arquivo aberto com sucesso!" << endl;
-
-    
-    int numVertices, direcionado, ponderado_nos, ponderado_arestas;
-    arquivo >> numVertices >> direcionado >> ponderado_nos >> ponderado_arestas;
-    /*std::cout<< "numVertices: "<<numVertices<<endl;
-    std::cout<< "direcionado: "<<direcionado<<endl;
-    std::cout<< "ponderado_nos: "<<ponderado_nos<<endl;
-    std::cout<< "ponderado_arestas: "<<ponderado_arestas<<endl;*/
-
-    this->numVertices = numVertices;
-    this->direcionado = direcionado;
-
-    //peso dos vertices
-    int pesosVertices[numVertices];
-    if (ponderado_nos == 1) {
-        //cout << "Peso dos vértices:" << endl;
-        for (int i = 0; i < numVertices; ++i) {
-            arquivo >> pesosVertices[i];
-        }
-    } else {
-        //cout<< "Não há pesos nos vértices"<<endl;
-        for (int i = 0; i < numVertices; ++i) {
-            pesosVertices[i] = 1;
-        }
-    }
-
-    //ler arestas
-    int origem, destino, pesoAresta, pesoNada;
-    while (arquivo >> origem >> destino) {
-        
-        if (ponderado_arestas == 1) {
-            arquivo >> pesoAresta;
-        } else {
-            arquivo >> pesoNada;
-            pesoAresta = 1;
-        }
-
-        if(direcionado){
-            matriz[origem - 1][destino - 1] = pesoAresta;
-        }
-        else{
-            if(origem<destino){
-                matriz[origem - 1][destino - 1] = pesoAresta;
-            }
-            else{
-                matriz[destino-1][origem-1] = pesoAresta;
-            }
-        }
-    }
-
-    arquivo.close();
-    //cout<< "Arquivo fechado com sucesso"<<endl;
-    // Exibir o grafo carregado
-    //cout << "Grafo carregado com sucesso!" << endl;
-    /*cout << "Matriz de adjacência:" << endl;
-    for (int i = 0; i < numVertices; ++i) {
-        for (int j = 0; j < numVertices; ++j) {
-            std::cout << matriz[i][j] << " ";
-        }
-        std::cout << endl;
-    }
-
-    if (ponderado_nos == 1) {
-        //std::cout << "Pesos dos vértices:" << endl;
-        for (int i = 0; i < numVertices; ++i) {
-            //std::cout << "Vértice " << (i + 1) << ": " << pesosVertices[i] << endl;
-        }
-    }*/
-}
+// void GrafoMatriz::carrega_grafo(string nomeArquivo) {
+//     ifstream arquivo;
+//     //cout << "Carregando grafo do arquivo " << arquivo << "..." << endl;
+//     arquivo.open("Grafo.txt", ios::in);
+//
+//     if (!arquivo.is_open()) {
+//         std::cout << "Erro ao abrir o arquivo!" << endl;
+//         exit(1);
+//     }
+//
+//     cout << "Arquivo aberto com sucesso!" << endl;
+//
+//
+//     int numVertices, direcionado, ponderado_nos, ponderado_arestas;
+//     arquivo >> numVertices >> direcionado >> ponderado_nos >> ponderado_arestas;
+//     /*std::cout<< "numVertices: "<<numVertices<<endl;
+//     std::cout<< "direcionado: "<<direcionado<<endl;
+//     std::cout<< "ponderado_nos: "<<ponderado_nos<<endl;
+//     std::cout<< "ponderado_arestas: "<<ponderado_arestas<<endl;*/
+//
+//     this->numVertices = numVertices;
+//     this->direcionado = direcionado;
+//
+//     //peso dos vertices
+//     int pesosVertices[numVertices];
+//     if (ponderado_nos == 1) {
+//         //cout << "Peso dos vértices:" << endl;
+//         for (int i = 0; i < numVertices; ++i) {
+//             arquivo >> pesosVertices[i];
+//         }
+//     } else {
+//         //cout<< "Não há pesos nos vértices"<<endl;
+//         for (int i = 0; i < numVertices; ++i) {
+//             pesosVertices[i] = 1;
+//         }
+//     }
+//
+//     //ler arestas
+//     int origem, destino, pesoAresta, pesoNada;
+//     while (arquivo >> origem >> destino) {
+//
+//         if (ponderado_arestas == 1) {
+//             arquivo >> pesoAresta;
+//         } else {
+//             arquivo >> pesoNada;
+//             pesoAresta = 1;
+//         }
+//
+//         if(direcionado){
+//             matriz[origem - 1][destino - 1] = pesoAresta;
+//         }
+//         else{
+//             if(origem<destino){
+//                 matriz[origem - 1][destino - 1] = pesoAresta;
+//             }
+//             else{
+//                 matriz[destino-1][origem-1] = pesoAresta;
+//             }
+//         }
+//     }
+//
+//     arquivo.close();
+// }
 
 void GrafoMatriz::imprimir_descricao() {
     cout << "Grau: " << get_grau() << endl;
@@ -451,7 +434,7 @@ bool GrafoMatriz::possui_articulacao() {
     return false; // Não possui vértices de articulação
 }
 
-void GrafoMatriz::salvaGrafoMatriz(string nomeArquivo)
+void GrafoMatriz::salvaGrafo(string nomeArquivo)
 {
     ofstream arquivoGrafo;
     arquivoGrafo.open(nomeArquivo, ios::out);
@@ -487,44 +470,56 @@ void GrafoMatriz::salvaGrafoMatriz(string nomeArquivo)
     arquivoGrafo.close();
 }
 
-void GrafoMatriz::imprimeGrafo(string nomeArquivo) {
-    cout<<nomeArquivo<<"\n";
+// void GrafoMatriz::imprimeGrafo(string nomeArquivo) {
+//     cout<<nomeArquivo<<"\n";
+//
+//     cout<<"Grau: "<<get_grau()<<"\n";
+//
+//     cout<<"Ordem: "<<get_ordem()<<"\n";
+//
+//     if(eh_direcionado())
+//     {cout<<"Direcionado: "<<"Sim"<<"\n";}
+//     else{cout<<"Direcionado: "<<"Nao"<<"\n";}
+//
+//     cout<<"Componentes conexas: "<<n_conexo()<<"\n";
+//
+//     if(vertice_ponderado())
+//     {cout<<"Vertices ponderados: "<<"Sim"<<"\n";}
+//     else{cout<<"Vertices ponderados: "<<"Nao"<<"\n";}
+//
+//     if(aresta_ponderada())
+//     {cout<<"Arestas ponderadas: "<<"Sim"<<"\n";}
+//     else{cout<<"Arestas ponderadas: "<<"Nao"<<"\n";}
+//
+//     if(eh_completo())
+//     {cout<<"Completo: "<<"Sim"<<"\n";}
+//     else{cout<<"Completo: "<<"Nao"<<"\n";}
+//
+//     if(eh_bipartido())
+//     {cout<<"Bipartido: "<<"Sim"<<"\n";}
+//     else{cout<<"Bipartido: "<<"Nao"<<"\n";}
+//
+//     if(eh_arvore())
+//     {cout<<"Arvore: "<<"Sim"<<"\n";}
+//     else{cout<<"Arvore: "<<"Nao"<<"\n";}
+//
+//     if(possui_ponte())
+//     {cout<<"Aresta Ponte: "<<"Sim"<<"\n";}
+//     else{cout<<"Aresta Ponte: "<<"Nao"<<"\n";}
+//
+//     if(possui_articulacao())
+//     {cout<<"Vertide de Articulacao: "<<"Sim"<<"\n";}
+//     else{cout<<"Vertide de Articulacao: "<<"Nao"<<"\n";}
+// }
 
-    cout<<"Grau: "<<get_grau()<<"\n";
+void GrafoMatriz::inserirVertice(int id, float peso) {
+}
 
-    cout<<"Ordem: "<<get_ordem()<<"\n";
+void GrafoMatriz::inserirAresta(int id_inicio, int id_fim, float peso) {
+}
 
-    if(eh_direcionado())
-    {cout<<"Direcionado: "<<"Sim"<<"\n";}
-    else{cout<<"Direcionado: "<<"Nao"<<"\n";}
+void GrafoMatriz::removerVertice(int id) {
+}
 
-    cout<<"Componentes conexas: "<<n_conexo()<<"\n";
-
-    if(vertice_ponderado())
-    {cout<<"Vertices ponderados: "<<"Sim"<<"\n";}
-    else{cout<<"Vertices ponderados: "<<"Nao"<<"\n";}
-
-    if(aresta_ponderada())
-    {cout<<"Arestas ponderadas: "<<"Sim"<<"\n";}
-    else{cout<<"Arestas ponderadas: "<<"Nao"<<"\n";}
-
-    if(eh_completo())
-    {cout<<"Completo: "<<"Sim"<<"\n";}
-    else{cout<<"Completo: "<<"Nao"<<"\n";}
-
-    if(eh_bipartido())
-    {cout<<"Bipartido: "<<"Sim"<<"\n";}
-    else{cout<<"Bipartido: "<<"Nao"<<"\n";}
-
-    if(eh_arvore())
-    {cout<<"Arvore: "<<"Sim"<<"\n";}
-    else{cout<<"Arvore: "<<"Nao"<<"\n";}
-
-    if(possui_ponte())
-    {cout<<"Aresta Ponte: "<<"Sim"<<"\n";}
-    else{cout<<"Aresta Ponte: "<<"Nao"<<"\n";}
-
-    if(possui_articulacao())
-    {cout<<"Vertide de Articulacao: "<<"Sim"<<"\n";}
-    else{cout<<"Vertide de Articulacao: "<<"Nao"<<"\n";}
+void GrafoMatriz::removerAresta(int id_inicio, int id_fim) {
 }

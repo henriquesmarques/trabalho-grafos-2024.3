@@ -50,43 +50,43 @@ int GrafoLista::get_grau() {
     }
 }
 
-bool GrafoLista::eh_completo() {
-    ///verifica se todos os nos possuem mesmo grau
-    int grau = 0, grauGrafo = 0, aux = 0;
-    Vertice *v = raizVertice;
-    ///para grafos não direcionados
-    if (!eh_direcionado()) {
-        while (v != nullptr) {
-            aux++;
-            grau = v->getTotalVizinhos();
-            if (aux == 1)
-                grauGrafo = grau;
-            if (grau != grauGrafo) {
-                return false;
-            }
-            v = v->getProx();
-        }
-        if (grauGrafo == get_ordem()-1)
-            return true;
-    }
-    ///para grafos direcionados
-    else {
-        while (v != nullptr) {
-            aux++;
-            grau = v->totalArestasSaida();
-            if (aux == 1)
-                grauGrafo = grau;
-            if (grau != grauGrafo) {
-                return false;
-            }
-            v = v->getProx();
-        }
-        if (grauGrafo == get_ordem()-1)
-            return true;
-    }
-
-    return false;
-}
+// bool GrafoLista::eh_completo() {
+//     ///verifica se todos os nos possuem mesmo grau
+//     int grau = 0, grauGrafo = 0, aux = 0;
+//     Vertice *v = raizVertice;
+//     ///para grafos não direcionados
+//     if (!eh_direcionado()) {
+//         while (v != nullptr) {
+//             aux++;
+//             grau = v->getTotalVizinhos();
+//             if (aux == 1)
+//                 grauGrafo = grau;
+//             if (grau != grauGrafo) {
+//                 return false;
+//             }
+//             v = v->getProx();
+//         }
+//         if (grauGrafo == get_ordem()-1)
+//             return true;
+//     }
+//     ///para grafos direcionados
+//     else {
+//         while (v != nullptr) {
+//             aux++;
+//             grau = v->totalArestasSaida();
+//             if (aux == 1)
+//                 grauGrafo = grau;
+//             if (grau != grauGrafo) {
+//                 return false;
+//             }
+//             v = v->getProx();
+//         }
+//         if (grauGrafo == get_ordem()-1)
+//             return true;
+//     }
+//
+//     return false;
+// }
 
 bool GrafoLista::eh_bipartido() {
     // Verifica se o grafo é completo; grafos completos não podem ser bipartidos
@@ -119,12 +119,12 @@ bool GrafoLista::eh_bipartido() {
 
         // Verifica a combinação binária atual
         for (int j = 0; j < num; j++) {
-            Vertice* v1 = buscaVertice(j + 1); // Obtém o vértice
+            Vertice* v1 = getVertice(j + 1); // Obtém o vértice
 
             for (int k = j + 1; k < num; k++) {
                 // Verifica se os vértices estão no mesmo conjunto na partição atual
                 if (binario[j] == binario[k]) {
-                    Vertice* v2 = buscaVertice(k + 1);
+                    Vertice* v2 = getVertice(k + 1);
 
                     // Verifica se os vértices são adjacentes
                     int tam = v1->getTotalVizinhos();
@@ -168,7 +168,7 @@ bool GrafoLista::possui_articulacao() {
         int tam = v->getTotalVizinhos();
         Aresta** arestas = v->copiarVetorArestas();
         ///retira um vertice
-        grafo->removerVertice(grafo->buscaVertice(v->getId()));
+        grafo->removerVertice(v->getId());
         ///verifica se o numero de componentes aumentou
         int componentes = grafo->n_conexo();
         if (componentes > componentesConexas) {
@@ -202,7 +202,7 @@ bool GrafoLista::possui_ponte() {
         int fim = a->getFim()->getId();
         int peso = a->getPeso();
         // Remove Aresta
-        grafo->removerAresta(grafo->buscaAresta(inicio, fim));
+        grafo->removerAresta(inicio, fim);
         // Verifica se o numero de componentes aumentou
         int componentes = grafo->n_conexo();
         if (componentes > componentesConexas) {
@@ -217,59 +217,59 @@ bool GrafoLista::possui_ponte() {
     return false;
 }
 
-void GrafoLista::removerVertice(Vertice* v) {
-    /// Remover arestas do vetor de arestas do vértice
-    for (int i = v->getTotalVizinhos()-1; i >= 0; i--) {
-        removerAresta(v->getVizinho(i));
-    }
+// void GrafoLista::removerVertice(Vertice* v) {
+//     /// Remover arestas do vetor de arestas do vértice
+//     for (int i = v->getTotalVizinhos()-1; i >= 0; i--) {
+//         removerAresta(v->getVizinho(i));
+//     }
+//
+//     /// Remover vértice da lista de vértices do Grafo
+//     if (raizVertice == v) {
+//         raizVertice = v->getProx();
+//     } else {
+//         Vertice* ant = raizVertice;
+//         while (ant->getProx() != v) {
+//             ant = ant->getProx();
+//         }
+//         ant->setProx(v->getProx());
+//     }
+//     delete v;
+// }
+//
+// void GrafoLista::removerAresta(Aresta* a) {
+//     /// Remove aresta dos Vetores
+//     Vertice* v = a->getInicio();
+//     v->removerVizinho(a);
+//     v = a->getFim();
+//     v->removerVizinho(a);
+//
+//     /// Remove aresta da lista de arestas do Grafo
+//     if (raizAresta == a) {
+//         raizAresta = a->getProx();
+//     } else {
+//         Aresta* ant = raizAresta;
+//         while (ant->getProx() != a) {
+//             ant = ant->getProx();
+//         }
+//         ant->setProx(a->getProx());
+//     }
+//     delete a;
+// }
 
-    /// Remover vértice da lista de vértices do Grafo
-    if (raizVertice == v) {
-        raizVertice = v->getProx();
-    } else {
-        Vertice* ant = raizVertice;
-        while (ant->getProx() != v) {
-            ant = ant->getProx();
-        }
-        ant->setProx(v->getProx());
-    }
-    delete v;
-}
-
-void GrafoLista::removerAresta(Aresta* a) {
-    /// Remove aresta dos Vetores
-    Vertice* v = a->getInicio();
-    v->removerVizinho(a);
-    v = a->getFim();
-    v->removerVizinho(a);
-
-    /// Remove aresta da lista de arestas do Grafo
-    if (raizAresta == a) {
-        raizAresta = a->getProx();
-    } else {
-        Aresta* ant = raizAresta;
-        while (ant->getProx() != a) {
-            ant = ant->getProx();
-        }
-        ant->setProx(a->getProx());
-    }
-    delete a;
-}
-
-Aresta* GrafoLista::buscaAresta(int id_inicio, int id_fim){
-    Vertice* p = buscaVertice(id_inicio);
-    return p->getArestaPara(buscaVertice(id_fim));
-}
-
-Vertice* GrafoLista::buscaVertice(int id){
-    Vertice* p = raizVertice;
-    while(p != nullptr){
-        if( p->getId() == id)
-            return p;
-        p = p->getProx();
-    }
-    return p;
-}
+// Aresta* GrafoLista::buscaAresta(int id_inicio, int id_fim){
+//     Vertice* p = getVertice(id_inicio);
+//     return p->getArestaPara(getVertice(id_fim));
+// }
+//
+// Vertice* GrafoLista::buscaVertice(int id){
+//     Vertice* p = raizVertice;
+//     while(p != nullptr){
+//         if( p->getId() == id)
+//             return p;
+//         p = p->getProx();
+//     }
+//     return p;
+// }
 
 GrafoLista* GrafoLista::copiarGrafo() {
     GrafoLista* grafo = new GrafoLista();
