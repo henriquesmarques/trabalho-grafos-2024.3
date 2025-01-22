@@ -122,39 +122,3 @@ Vertice* GrafoMatriz::getVertice(int id) {
 Aresta* GrafoMatriz::getAresta(int id_inicio, int id_fim) {
     return nullptr;
 }
-
-void GrafoMatriz::salvaGrafo(string nomeArquivo)
-{
-    ofstream arquivoGrafo;
-    arquivoGrafo.open(nomeArquivo, ios::out);
-
-    if (!arquivoGrafo.is_open()) {
-        cout << "Erro ao abrir o arquivo!" << endl;
-        exit(1);
-    } else {
-
-        arquivoGrafo << nomeArquivo << "\n\n";
-        arquivoGrafo << ordem << " " << direcionado << " "<< vertice_ponderado() << " " << aresta_ponderada() << "\n";
-
-        if (vertice_ponderado()) {
-            int pesosVertices[ordem];
-            for (int i = 0; i < ordem; i++) {
-                arquivoGrafo << pesosVertices[i] <<" ";
-            }
-        }
-    }
-
-    for (int i = 0; i <  ordem; i++) {
-        for (int j = 0; j < ordem; j++) {
-            if (matriz[i][j] != 0) {
-                if (aresta_ponderada()) {
-                    arquivoGrafo << i << " " << j << " " << matriz[i][j] << "\n";
-                } else {
-                    arquivoGrafo << i << " " << j << "\n";
-                }
-            }
-        }
-    }
-
-    arquivoGrafo.close();
-}

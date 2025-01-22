@@ -57,6 +57,43 @@ void Grafo::carrega_grafo(string nomeArquivo) {
     arquivo.close();
 }
 
+void Grafo::salvaGrafo(string nomeArquivo) // para os casos de comando -l
+{
+    ofstream arquivoGrafo;
+    arquivoGrafo.open(nomeArquivo, ios::out);
+
+    if (!arquivoGrafo.is_open()) {
+        cout << "Erro ao abrir o arquivo!" << endl;
+        exit(1);
+    }
+    else{
+
+        arquivoGrafo << nomeArquivo << "\n\n";
+        arquivoGrafo << get_ordem() << " "<< eh_direcionado()<< " "<< vertice_ponderado()<<" "<< aresta_ponderada()<< "\n";
+
+        if(vertice_ponderado()){
+
+            for (int i = 0; i < ordem; i++) {
+                arquivoGrafo << getVertice(i+1)->getPeso() << " ";
+            }
+
+        }
+
+        for (int i = 0; i < ordem; i++) {
+            for (int j = 0; j < ordem; j++) {
+                if (getAresta(i+1,j+1) != nullptr) {
+                    if (aresta_ponderada()) {
+                        arquivoGrafo <<  getAresta(i+1,j+1)->getInicio()->getId() << " " <<  getAresta(i+1,j+1)->getFim()->getId() << " " <<  getAresta(i+1,j+1)->getPeso() << "\n";
+                    } else {
+                        arquivoGrafo <<  getAresta(i+1,j+1)->getInicio()->getId() << " " <<  getAresta(i+1,j+1)->getFim()->getId() << "\n";
+                    }
+                }
+            }
+        }
+    }
+    arquivoGrafo.close();
+}
+
 void Grafo::imprimeGrafo(string nomeArquivo) {
     cout<<nomeArquivo<<"\n";
 

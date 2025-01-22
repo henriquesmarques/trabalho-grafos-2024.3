@@ -21,8 +21,6 @@ public:
     Vertice* getVertice(int id) override;
     Aresta* getAresta(int id_inicio, int id_fim) override;
     Aresta** getVizinhos(int id);
-    /// Comunicação com terminal
-    void salvaGrafo(string nomeArquivo) override;
 private:
     Vertice* raizVertice;
     Aresta* raizAresta;

@@ -22,6 +22,9 @@ public:
     bool aresta_ponderada() const;
     int get_ordem() const;
     void carrega_grafo(string nomeArquivo);
+    /// Comunicação com terminal
+    void salvaGrafo(string nomeArquivo);
+    void imprimeGrafo(string nomeArquivo);
     /// Funções das classes filhas
     virtual void inserirVertice(int id, float peso) = 0;
     virtual void inserirAresta(int id_inicio, int id_fim, float peso) = 0;
@@ -30,9 +33,6 @@ public:
     virtual Vertice* getVertice(int id) = 0;
     virtual Aresta* getAresta(int id_inicio, int id_fim) = 0;
     // virtual Aresta** getVizinhos(int id) = 0;
-    /// Comunicação com terminal
-    virtual void salvaGrafo(string nomeArquivo) = 0;
-    void imprimeGrafo(string nomeArquivo);
 };
 
 #endif

@@ -19,8 +19,6 @@ public:
     void removerAresta(int id_inicio, int id_fim) override;
     Vertice* getVertice(int id) override;
     Aresta* getAresta(int id_inicio, int id_fim) override;
-    /// Comunicação com terminal
-    void salvaGrafo(string nomeArquivo) override;
 private:
     int MAX_VERTICES;
     int **matriz; // Matriz de adjacência de arestas
