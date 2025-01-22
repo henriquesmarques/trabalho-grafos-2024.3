@@ -6,6 +6,9 @@ using namespace std;
 
 Grafo::Grafo() {
     direcionado = false;
+    verticesPonderados = false;
+    arestasPonderadas = false;
+    ordem = 0;
 }
 
 Grafo::~Grafo() = default;
@@ -23,6 +26,8 @@ void Grafo::carrega_grafo(string nomeArquivo) {
     arquivo >> numVertices >> direcionado >> ponderado_nos >> ponderado_arestas;
 
     this->direcionado = direcionado;
+    this->verticesPonderados = ponderado_nos;
+    this->arestasPonderadas = ponderado_arestas;
 
     // Criar vértices
     if (ponderado_nos == 1) {
@@ -49,23 +54,17 @@ void Grafo::carrega_grafo(string nomeArquivo) {
         }
     }
 
-    //imprimirVertices();
-    //imprimirArestas();
     arquivo.close();
 }
 
 void Grafo::imprimeGrafo(string nomeArquivo) {
     cout<<nomeArquivo<<"\n";
 
-    cout<<"Grau: "<<get_grau()<<"\n";
-
     cout<<"Ordem: "<<get_ordem()<<"\n";
 
     if(eh_direcionado())
     {cout<<"Direcionado: "<<"Sim"<<"\n";}
     else{cout<<"Direcionado: "<<"Nao"<<"\n";}
-
-    cout<<"Componentes conexas: "<<n_conexo()<<"\n";
 
     if(vertice_ponderado())
     {cout<<"Vertices ponderados: "<<"Sim"<<"\n";}
@@ -78,22 +77,6 @@ void Grafo::imprimeGrafo(string nomeArquivo) {
     if(eh_completo())
     {cout<<"Completo: "<<"Sim"<<"\n";}
     else{cout<<"Completo: "<<"Nao"<<"\n";}
-
-    if(eh_bipartido())
-    {cout<<"Bipartido: "<<"Sim"<<"\n";}
-    else{cout<<"Bipartido: "<<"Nao"<<"\n";}
-
-    if(eh_arvore())
-    {cout<<"Arvore: "<<"Sim"<<"\n";}
-    else{cout<<"Arvore: "<<"Nao"<<"\n";}
-
-    if(possui_ponte())
-    {cout<<"Aresta Ponte: "<<"Sim"<<"\n";}
-    else{cout<<"Aresta Ponte: "<<"Nao"<<"\n";}
-
-    if(possui_articulacao())
-    {cout<<"Vertide de Articulacao: "<<"Sim"<<"\n";}
-    else{cout<<"Vertide de Articulacao: "<<"Nao"<<"\n";}
 }
 
 bool Grafo::eh_completo() {
@@ -113,38 +96,18 @@ bool Grafo::eh_completo() {
     return false;
 }
 
-int Grafo::n_conexo() {
-    int numVertices = get_ordem();
-    if (numVertices == 0) return 0;
-
-    bool *visitados = new bool[numVertices];
-    for (int i = 0; i < numVertices; ++i) {
-        visitados[i] = false;
-    }
-
-    int componentesConexas = 0;
-    for (int i = 1; i <= get_ordem(); i++) {
-        if (!visitados[getVertice(i)->getId() - 1]) {
-            auxNConexo(visitados, getVertice(i));
-            componentesConexas++;
-        }
-    }
-
-    delete[] visitados;
-    return componentesConexas;
+bool Grafo::eh_direcionado() const {
+    return direcionado;
 }
 
-void Grafo::auxNConexo(bool *visitados, Vertice *v) {
-    visitados[v->getId() - 1] = true;
-    for (int i = 0; i < v->getTotalVizinhos(); ++i) {
-        Aresta* a = v->getVizinho(i);
-        Vertice* adj = a->getFim();
-        if (!visitados[adj->getId() - 1]) {
-            auxNConexo(visitados, adj);
-        }
-        adj = a->getInicio();
-        if (!visitados[adj->getId() - 1]) {
-            auxNConexo(visitados, adj);
-        }
-    }
+bool Grafo::vertice_ponderado() const {
+    return verticesPonderados;
+}
+
+bool Grafo::aresta_ponderada() const {
+    return arestasPonderadas;
+}
+
+int Grafo::get_ordem() const {
+    return ordem;
 }
