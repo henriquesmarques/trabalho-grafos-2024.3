@@ -5,47 +5,44 @@
 using namespace std;
 
 GrafoMatriz::GrafoMatriz() {
-    // Alocando matriz dinamicamente
+    // Alocando matriz de arestas
     MAX_VERTICES = 100;
-    matriz = new int*[MAX_VERTICES];
+    matriz = new Aresta**[MAX_VERTICES];
     for (int i = 0; i < MAX_VERTICES; i++) {
-        matriz[i] = new int[MAX_VERTICES];
+        matriz[i] = new Aresta*[MAX_VERTICES];
     }
-    // Preenchendo a matriz com zeros
+    // Inicializando matriz
     for (int i = 0; i < MAX_VERTICES; i++) {
         for (int j = 0; j < MAX_VERTICES; j++) {
-            matriz[i][j] = 0; //inicializa a matriz de adjacência
+            matriz[i][j] = nullptr;
         }
     }
     // Alocando vetor de vértices
-    vertices = new int[MAX_VERTICES];
-    // Inicializando vetor de pesos dos vértices
+    vertices = new Vertice*[MAX_VERTICES];
+    // Inicializando vetor
     for (int i = 0; i < MAX_VERTICES; i++) {
-        vertices[i] = 1;
+        vertices[i] = nullptr;
     }
-    // Inicializando outras variáveis
-    ordem = 0;
-    direcionado = false;
 }
 
 GrafoMatriz::GrafoMatriz(int vert, bool dir) : Grafo() {
-    // Alocando matriz dinamicamente
+    // Alocando matriz de arestas
     MAX_VERTICES = 100;
-    matriz = new int*[MAX_VERTICES];
+    matriz = new Aresta**[MAX_VERTICES];
     for (int i = 0; i < MAX_VERTICES; i++) {
-        matriz[i] = new int[MAX_VERTICES];
+        matriz[i] = new Aresta*[MAX_VERTICES];
     }
-    // Preenchendo a matriz com zeros
+    // Inicializando matriz
     for (int i = 0; i < MAX_VERTICES; i++) {
         for (int j = 0; j < MAX_VERTICES; j++) {
-            matriz[i][j] = 0; //inicializa a matriz de adjacência
+            matriz[i][j] = nullptr;
         }
     }
     // Alocando vetor de vértices
-    vertices = new int[MAX_VERTICES];
-    // Inicializando vetor de pesos dos vértices
+    vertices = new Vertice*[MAX_VERTICES];
+    // Inicializando vetor
     for (int i = 0; i < MAX_VERTICES; i++) {
-        vertices[i] = 1;
+        vertices[i] = nullptr;
     }
     // Inicializando outras variáveis
     ordem = vert;
@@ -62,9 +59,9 @@ GrafoMatriz::~GrafoMatriz() {
 
 void GrafoMatriz::aumentarMatriz() {
     // Alocando uma nova matriz com mais 100 vértices
-    int **novaMatriz = new int *[MAX_VERTICES + 100];
+    Aresta*** novaMatriz = new Aresta**[MAX_VERTICES + 100];
     for (int i = 0; i < MAX_VERTICES + 100; i++) {
-        novaMatriz[i] = new int[MAX_VERTICES + 100];
+        novaMatriz[i] = new Aresta*[MAX_VERTICES + 100];
     }
     // Inicializando nova matriz com zeros e copiando valores da antiga matriz
     for (int i = 0; i < MAX_VERTICES + 100; i ++) {
@@ -72,18 +69,18 @@ void GrafoMatriz::aumentarMatriz() {
             if (i < MAX_VERTICES && j < MAX_VERTICES) {
                 novaMatriz[i][j] = matriz[i][j];
             } else {
-                novaMatriz[i][j] = 0;
+                novaMatriz[i][j] = nullptr;
             }
         }
     }
     // Alocando novo vetor de vértices
-    int *novosVertices = new int [MAX_VERTICES + 100];
+    Vertice** novosVertices = new Vertice* [MAX_VERTICES + 100];
     // Inicializando novo vetor de pesos de vértices e copiando valores do antigo vetor
     for (int i = 0; i < MAX_VERTICES + 100; i++) {
         if (i < MAX_VERTICES) {
             novosVertices[i] = vertices [i];
         } else {
-            novosVertices[i] = 1;
+            novosVertices[i] = nullptr;
         }
     }
     // Desalocando memória
