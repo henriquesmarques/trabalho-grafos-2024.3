@@ -12,11 +12,13 @@ protected:
     bool verticesPonderados;
     bool arestasPonderadas;
     int ordem;
+    void auxNConexo(bool *visitados, Vertice *v);
 public:
     /// 2ª Parte do Trabalho
     Grafo();
     virtual ~Grafo();
     bool eh_completo();
+    int n_conexo();
     bool eh_direcionado() const;
     bool vertice_ponderado() const;
     bool aresta_ponderada() const;

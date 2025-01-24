@@ -44,14 +44,14 @@ int main(int argc, char *argv[]) {
         arquivoGrafo = argv[3];
         if (estrutura == "-m")
         {
-            cout << "Teste: grafo -d -m entrou" << "\n";
+            //cout << "Teste: grafo -d -m entrou" << "\n";
             GrafoMatriz g;
             g.carrega_grafo(arquivoGrafo);
             g.imprimeGrafo(arquivoGrafo);
         }
         else
         {
-            cout << "Teste: grafo -d -l entrou" << "\n";
+            //cout << "Teste: grafo -d -l entrou" << "\n";
             GrafoLista g;
             g.carrega_grafo(arquivoGrafo);
             g.imprimeGrafo(arquivoGrafo);
@@ -69,16 +69,16 @@ int main(int argc, char *argv[]) {
 
         if (estrutura == "-m")
         {
-            cout << "Teste: grafo -c -m entrou" << "\n";
+            //cout << "Teste: grafo -c -m entrou" << "\n";
             GrafoMatriz g;
-            g.novo_grafo(arquivoDescricao);
+            //g.novo_grafo(arquivoDescricao);
             g.carrega_grafo(arquivoGrafo);
         }
         else
         {
-            cout << "Teste: grafo -c -l entrou" << "\n";
+            //cout << "Teste: grafo -c -l entrou" << "\n";
             GrafoLista g;
-            g.novo_grafo(arquivoDescricao);
+            //g.novo_grafo(arquivoDescricao);
             g.salvaGrafo(arquivoGrafo);
         }
     }

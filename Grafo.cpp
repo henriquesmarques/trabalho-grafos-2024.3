@@ -32,7 +32,7 @@ void Grafo::carrega_grafo(string nomeArquivo) {
     // Criar vértices
     if (ponderado_nos == 1) {
         float peso;
-        for (int i = 0; i < numVertices; ++i) {
+        for (int i = 0; i < numVertices; i++) {
             arquivo >> peso;
             inserirVertice(i+1, peso);
         }
@@ -103,6 +103,8 @@ void Grafo::imprimeGrafo(string nomeArquivo) {
     {cout<<"Direcionado: "<<"Sim"<<"\n";}
     else{cout<<"Direcionado: "<<"Nao"<<"\n";}
 
+    cout<<"Componentes conexas: "<<n_conexo()<<"\n";
+
     if(vertice_ponderado())
     {cout<<"Vertices ponderados: "<<"Sim"<<"\n";}
     else{cout<<"Vertices ponderados: "<<"Nao"<<"\n";}
@@ -147,4 +149,40 @@ bool Grafo::aresta_ponderada() const {
 
 int Grafo::get_ordem() const {
     return ordem;
+}
+
+int Grafo::n_conexo() {
+    int numVertices = get_ordem();
+    if (numVertices == 0) return 0;
+
+    bool *visitados = new bool[numVertices];
+    for (int i = 0; i < numVertices; ++i) {
+        visitados[i] = false;
+    }
+
+    int componentesConexas = 0;
+    for (int i = 1; i <= get_ordem(); i++) {
+        if (!visitados[getVertice(i)->getId() - 1]) {
+            auxNConexo(visitados, getVertice(i));
+            componentesConexas++;
+        }
+    }
+
+    delete[] visitados;
+    return componentesConexas;
+}
+
+void Grafo::auxNConexo(bool *visitados, Vertice *v) {
+    visitados[v->getId() - 1] = true;
+    for (int i = 0; i < v->getTotalVizinhos(); ++i) {
+        Aresta* a = v->getVizinho(i);
+        Vertice* adj = a->getFim();
+        if (!visitados[adj->getId() - 1]) {
+            auxNConexo(visitados, adj);
+        }
+        adj = a->getInicio();
+        if (!visitados[adj->getId() - 1]) {
+            auxNConexo(visitados, adj);
+        }
+    }
 }

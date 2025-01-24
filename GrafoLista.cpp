@@ -64,8 +64,9 @@ void GrafoLista::inserirVertice(int id, float peso) {
         }
         raizVertice = v;
         ordem++;
+    } else {
+        cout << "Erro: existe um vertice com o mesmo indice." << endl;
     }
-    cout << "Erro: existe um vertice com o mesmo indice." << endl;
 }
 
 void GrafoLista::inserirAresta(int id_inicio, int id_fim, float peso) {
