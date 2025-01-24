@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include "GrafoLista.h"
-#include "GrafoMatriz.h"
+#include "include/GrafoLista.h"
+#include "include/GrafoMatriz.h"
 #include <string>
 
 using namespace std;

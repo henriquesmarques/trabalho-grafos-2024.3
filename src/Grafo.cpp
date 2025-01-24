@@ -1,4 +1,4 @@
-#include "Grafo.h"
+#include "../include/Grafo.h"
 #include <fstream>
 #include <iostream>
 
@@ -15,7 +15,8 @@ Grafo::~Grafo() = default;
 
 void Grafo::carrega_grafo(string nomeArquivo) {
     ifstream arquivo;
-    arquivo.open(nomeArquivo, ios::in);
+    arquivo.open("entradas/"+nomeArquivo, ios::in);
+    //arquivo.open("entradas/Grafo.txt", ios::out);
 
     if (!arquivo.is_open()) {
         cout << "Erro ao abrir o arquivo!" << endl;
@@ -60,7 +61,8 @@ void Grafo::carrega_grafo(string nomeArquivo) {
 void Grafo::salvaGrafo(string nomeArquivo) // para os casos de comando -l
 {
     ofstream arquivoGrafo;
-    arquivoGrafo.open(nomeArquivo, ios::out);
+    arquivoGrafo.open("entradas/"+nomeArquivo, ios::out);
+    //arquivoGrafo.open("entradas/Grafo.txt", ios::out);
 
     if (!arquivoGrafo.is_open()) {
         cout << "Erro ao abrir o arquivo!" << endl;
@@ -185,4 +187,8 @@ void Grafo::auxNConexo(bool *visitados, Vertice *v) {
             auxNConexo(visitados, adj);
         }
     }
+}
+
+int Grafo::get_grau() {
+    return 0;
 }

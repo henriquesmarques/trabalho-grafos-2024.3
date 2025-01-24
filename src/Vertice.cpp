@@ -1,5 +1,5 @@
+#include "../include/Vertice.h"
 #include <iostream>
-#include "Vertice.h"
 
 using namespace std;
 
