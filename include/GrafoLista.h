@@ -14,13 +14,14 @@ public:
     /// 2ª Parte do Trabalho
     GrafoLista();
     ~GrafoLista() override;
+    Vertice* getVertice(int id) override;
+    Aresta* getAresta(int id_inicio, int id_fim) override;
+    Aresta** getVizinhos(int id);
+    /// 3ª Parte do Trabalho
     void inserirVertice(int id, float peso) override;
     void inserirAresta(int id_inicio, int id_fim, float peso) override;
     void removerVertice(int id) override;
     void removerAresta(int id_inicio, int id_fim) override;
-    Vertice* getVertice(int id) override;
-    Aresta* getAresta(int id_inicio, int id_fim) override;
-    Aresta** getVizinhos(int id);
 private:
     Vertice* raizVertice;
     Aresta* raizAresta;
