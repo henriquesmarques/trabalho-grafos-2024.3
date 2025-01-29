@@ -19,7 +19,7 @@ GrafoMatriz::GrafoMatriz() {
 GrafoMatriz::GrafoMatriz(bool dir) {
     MAX_VERTICES = 10;
     if (dir) {
-        MAX_ARESTAS = (MAX_VERTICES+1)*MAX_VERTICES/2-MAX_VERTICES;
+        MAX_ARESTAS = (MAX_VERTICES+1)*MAX_VERTICES/2;
     } else {
         MAX_ARESTAS = MAX_VERTICES*MAX_VERTICES;
     }
@@ -47,7 +47,7 @@ void GrafoMatriz::setDirecao(bool dir) {
     direcionado = dir;
     // Alterando tamanho da matriz
     if (direcionado) {
-        MAX_ARESTAS = (MAX_VERTICES+1)*MAX_VERTICES/2-MAX_VERTICES;
+        MAX_ARESTAS = (MAX_VERTICES+1)*MAX_VERTICES/2;
         auto** novaMatriz = new Aresta*[MAX_ARESTAS];
         for (int i = 0; i < MAX_ARESTAS; i++) {
             novaMatriz[i] = nullptr;
@@ -61,7 +61,7 @@ void GrafoMatriz::aumentarMatriz() {
     MAX_VERTICES = MAX_VERTICES*2;
     int total_arestas = MAX_ARESTAS;
     if (direcionado) {
-        MAX_ARESTAS = (MAX_VERTICES+1)*MAX_VERTICES/2-MAX_VERTICES;
+        MAX_ARESTAS = (MAX_VERTICES+1)*MAX_VERTICES/2;
     } else {
         MAX_ARESTAS = MAX_VERTICES*MAX_VERTICES;
     }
@@ -105,7 +105,7 @@ void GrafoMatriz::aumentarMatriz() {
 
 int GrafoMatriz::detIndice(int i, int j) {
     if (direcionado) {
-        if (i < j && i < MAX_VERTICES && j > i && j < MAX_VERTICES) {
+        if (i <= j && i >= 0 && j < MAX_VERTICES) {
             return (j+1)*j/2+i; // caso especifico para matriz superior
         }
     } else {
