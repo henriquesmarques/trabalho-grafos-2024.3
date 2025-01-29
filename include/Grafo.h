@@ -34,6 +34,7 @@ public:
     virtual void removerAresta(int id_inicio, int id_fim) = 0;
     virtual Vertice* getVertice(int id) = 0;
     virtual Aresta* getAresta(int id_inicio, int id_fim) = 0;
+    virtual void setDirecao(bool dir) = 0;
     // virtual Aresta** getVizinhos(int id) = 0;
 };
 

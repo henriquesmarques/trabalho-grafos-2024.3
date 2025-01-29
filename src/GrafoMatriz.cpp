@@ -2,50 +2,105 @@
 
 GrafoMatriz::GrafoMatriz() {
     MAX_VERTICES = 10;
+    MAX_ARESTAS = MAX_VERTICES*MAX_VERTICES;
     // Alocando matriz de arestas
-    matriz = new Aresta*[MAX_VERTICES];
+    arestas = new Aresta*[MAX_ARESTAS];
     // Alocando vetor de vértices
     vertices = new Vertice*[MAX_VERTICES];
     // Inicializando vetor de vértices e matriz de arestas
-    for (int i = 0; i < MAX_VERTICES; i++) {
-        vertices[i] = nullptr;
-        matriz[i] = nullptr;
+    for (int i = 0; i < MAX_ARESTAS; i++) {
+        if (i < MAX_VERTICES) {
+            vertices[i] = nullptr;
+        }
+        arestas[i] = nullptr;
     }
+}
+
+GrafoMatriz::GrafoMatriz(bool dir) {
+    MAX_VERTICES = 10;
+    if (dir) {
+        MAX_ARESTAS = (MAX_VERTICES+1)*MAX_VERTICES/2-MAX_VERTICES;
+    } else {
+        MAX_ARESTAS = MAX_VERTICES*MAX_VERTICES;
+    }
+    // Alocando matriz de arestas
+    arestas = new Aresta*[MAX_ARESTAS];
+    // Alocando vetor de vértices
+    vertices = new Vertice*[MAX_VERTICES];
+    // Inicializando vetor de vértices e matriz de arestas
+    for (int i = 0; i < MAX_ARESTAS; i++) {
+        if (i < MAX_VERTICES) {
+            vertices[i] = nullptr;
+        }
+        arestas[i] = nullptr;
+    }
+    // Atualizando variáveis
+    direcionado = dir;
 }
 
 GrafoMatriz::~GrafoMatriz() {
-    delete [] matriz;
+    delete [] arestas;
     delete [] vertices;
 }
 
-void GrafoMatriz::aumentarMatriz() {
-    // Alocando uma nova matriz com o dobro de tamanho
-    auto** novaMatriz = new Aresta*[MAX_VERTICES*2];
-    // Inicializando nova matriz e copiando valores da antiga
-    for (int i = 0; i < MAX_VERTICES*2; i ++) {
-        if (i < MAX_VERTICES) {
-            novaMatriz[i] = matriz[i];
-        } else {
+void GrafoMatriz::setDirecao(bool dir) {
+    direcionado = dir;
+    // Alterando tamanho da matriz
+    if (direcionado) {
+        MAX_ARESTAS = (MAX_VERTICES+1)*MAX_VERTICES/2-MAX_VERTICES;
+        auto** novaMatriz = new Aresta*[MAX_ARESTAS];
+        for (int i = 0; i < MAX_ARESTAS; i++) {
             novaMatriz[i] = nullptr;
+        }
+        delete [] arestas;
+        arestas = novaMatriz;
+    }
+}
+
+void GrafoMatriz::aumentarMatriz() {
+    MAX_VERTICES = MAX_VERTICES*2;
+    int total_arestas = MAX_ARESTAS;
+    if (direcionado) {
+        MAX_ARESTAS = (MAX_VERTICES+1)*MAX_VERTICES/2-MAX_VERTICES;
+    } else {
+        MAX_ARESTAS = MAX_VERTICES*MAX_VERTICES;
+    }
+    // Alocando uma nova matriz com o dobro de tamanho
+    auto** novaMatriz = new Aresta*[MAX_ARESTAS];
+    // Inicializando nova matriz
+    for (int i = 0; i < MAX_ARESTAS; i ++) {
+        novaMatriz[i] = nullptr;
+    }
+    // Copiando valores da antiga
+    if (direcionado) {
+        for (int i = 0; i < total_arestas; i++) {
+            for (int j = i; j < total_arestas; j++) {
+                novaMatriz[detIndice(i,j)] = arestas[(j+1)*j/2+i];
+            }
+        }
+    } else {
+        for (int i = 0; i < total_arestas; i++) {
+            for (int j = 0; j < total_arestas; j++) {
+                novaMatriz[detIndice(i,j)] = arestas[MAX_VERTICES/2*i+j]; // nc * i +j
+            }
         }
     }
     // Alocando novo vetor de vértices
-    auto** novosVertices = new Vertice* [MAX_VERTICES*2];
+    auto** novosVertices = new Vertice* [MAX_VERTICES];
     // Inicializando novo vetor de pesos de vértices e copiando valores do antigo
-    for (int i = 0; i < MAX_VERTICES*2; i++) {
-        if (i < MAX_VERTICES) {
+    for (int i = 0; i < MAX_VERTICES; i++) {
+        if (i < MAX_VERTICES/2) {
             novosVertices[i] = vertices[i];
         } else {
             novosVertices[i] = nullptr;
         }
     }
     // Desalocando memória
-    delete [] matriz;
+    delete [] arestas;
     delete [] vertices;
     // Atualizando variáveis
-    matriz = novaMatriz;
+    arestas = novaMatriz;
     vertices = novosVertices;
-    MAX_VERTICES = MAX_VERTICES*2;
 }
 
 int GrafoMatriz::detIndice(int i, int j) {
@@ -67,7 +122,11 @@ Vertice* GrafoMatriz::getVertice(int id) {
 
 Aresta* GrafoMatriz::getAresta(int id_inicio, int id_fim) {
     int k = detIndice(id_inicio-1, id_fim-1);
-    return matriz[k];
+    if (k == -1) {
+        cout << "Erro: indice invalido" << endl;
+        exit(-1);
+    }
+    return arestas[k];
 }
 
 void GrafoMatriz::inserirVertice(int id, float peso) {

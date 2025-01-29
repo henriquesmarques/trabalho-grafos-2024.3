@@ -14,6 +14,7 @@ public:
     Vertice* getVertice(int id) override;
     Aresta* getAresta(int id_inicio, int id_fim) override;
     Aresta** getVizinhos(int id);
+    void setDirecao(bool dir);
     /// 2ª Parte do Trabalho
     void inserirVertice(int id, float peso) override;
     void inserirAresta(int id_inicio, int id_fim, float peso) override;

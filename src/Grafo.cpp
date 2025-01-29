@@ -23,10 +23,10 @@ void Grafo::carrega_grafo(string nomeArquivo) {
         exit(1);
     }
 
-    int numVertices, direcionado, ponderado_nos, ponderado_arestas;
-    arquivo >> numVertices >> direcionado >> ponderado_nos >> ponderado_arestas;
+    int numVertices, direcao, ponderado_nos, ponderado_arestas;
+    arquivo >> numVertices >> direcao >> ponderado_nos >> ponderado_arestas;
 
-    this->direcionado = direcionado;
+    setDirecao(direcao);
     this->verticesPonderados = ponderado_nos;
     this->arestasPonderadas = ponderado_arestas;
 

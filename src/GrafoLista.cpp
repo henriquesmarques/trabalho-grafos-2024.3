@@ -54,6 +54,10 @@ Aresta ** GrafoLista::getVizinhos(int id) {
     exit(1);
 }
 
+void GrafoLista::setDirecao(bool dir) {
+    direcionado = dir;
+}
+
 void GrafoLista::inserirVertice(int id, float peso) {
     if (getVertice(id) == nullptr) {
         auto* v = new Vertice(id, peso);
