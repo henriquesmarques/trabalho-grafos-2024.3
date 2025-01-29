@@ -16,7 +16,7 @@ protected:
 public:
     Grafo();
     virtual ~Grafo();
-    /// 2ª Parte do Trabalho
+    /// 1ª Parte do Trabalho
     int n_conexo();
     int get_grau();
     int get_ordem() const;
@@ -26,7 +26,6 @@ public:
     bool eh_completo();
     void carrega_grafo(string nomeArquivo);
     /// Comunicação com terminal
-    void salvaGrafo(string nomeArquivo);
     void imprimeGrafo(string nomeArquivo);
     /// Funções das classes filhas
     virtual void inserirVertice(int id, float peso) = 0;

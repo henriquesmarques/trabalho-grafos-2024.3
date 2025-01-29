@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
             //cout << "Teste: grafo -c -l entrou" << "\n";
             GrafoLista g;
             //g.novo_grafo(arquivoDescricao);
-            g.salvaGrafo(arquivoGrafo);
+            //g.salvaGrafo(arquivoGrafo);
         }
     }
     else

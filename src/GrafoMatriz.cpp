@@ -1,8 +1,4 @@
 #include "../include/GrafoMatriz.h"
-#include <iostream>
-#include <cstdlib>
-
-using namespace std;
 
 GrafoMatriz::GrafoMatriz() {
     MAX_VERTICES = 10;
@@ -17,21 +13,6 @@ GrafoMatriz::GrafoMatriz() {
     }
 }
 
-GrafoMatriz::GrafoMatriz(bool dir) {
-    MAX_VERTICES = 10;
-    // Alocando matriz de arestas
-    matriz = new Aresta*[MAX_VERTICES];
-    // Alocando vetor de vértices
-    vertices = new Vertice*[MAX_VERTICES];
-    // Inicializando vetor de vértices e matriz de arestas
-    for (int i = 0; i < MAX_VERTICES; i++) {
-        vertices[i] = nullptr;
-        matriz[i] = nullptr;
-    }
-    // Inicializando outras variáveis
-    direcionado = dir;
-}
-
 GrafoMatriz::~GrafoMatriz() {
     delete [] matriz;
     delete [] vertices;
@@ -39,7 +20,7 @@ GrafoMatriz::~GrafoMatriz() {
 
 void GrafoMatriz::aumentarMatriz() {
     // Alocando uma nova matriz com o dobro de tamanho
-    Aresta** novaMatriz = new Aresta*[MAX_VERTICES*2];
+    auto** novaMatriz = new Aresta*[MAX_VERTICES*2];
     // Inicializando nova matriz e copiando valores da antiga
     for (int i = 0; i < MAX_VERTICES*2; i ++) {
         if (i < MAX_VERTICES) {
@@ -49,7 +30,7 @@ void GrafoMatriz::aumentarMatriz() {
         }
     }
     // Alocando novo vetor de vértices
-    Vertice** novosVertices = new Vertice* [MAX_VERTICES*2];
+    auto** novosVertices = new Vertice* [MAX_VERTICES*2];
     // Inicializando novo vetor de pesos de vértices e copiando valores do antigo
     for (int i = 0; i < MAX_VERTICES*2; i++) {
         if (i < MAX_VERTICES) {
@@ -93,6 +74,7 @@ void GrafoMatriz::inserirVertice(int id, float peso) {
     if (ordem + 1 > MAX_VERTICES) {
         aumentarMatriz();
     }
+    //ordem++;
     //...
 }
 
@@ -100,6 +82,8 @@ void GrafoMatriz::inserirAresta(int id_inicio, int id_fim, float peso) {
 }
 
 void GrafoMatriz::removerVertice(int id) {
+    //ordem--;
+    //...
 }
 
 void GrafoMatriz::removerAresta(int id_inicio, int id_fim) {

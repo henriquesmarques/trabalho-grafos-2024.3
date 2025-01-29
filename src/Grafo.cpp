@@ -58,46 +58,10 @@ void Grafo::carrega_grafo(string nomeArquivo) {
     arquivo.close();
 }
 
-void Grafo::salvaGrafo(string nomeArquivo) // para os casos de comando -l
-{
-    ofstream arquivoGrafo;
-    arquivoGrafo.open("entradas/"+nomeArquivo, ios::out);
-    //arquivoGrafo.open("entradas/Grafo.txt", ios::out);
-
-    if (!arquivoGrafo.is_open()) {
-        cout << "Erro ao abrir o arquivo!" << endl;
-        exit(1);
-    }
-    else{
-
-        arquivoGrafo << nomeArquivo << "\n\n";
-        arquivoGrafo << get_ordem() << " "<< eh_direcionado()<< " "<< vertice_ponderado()<<" "<< aresta_ponderada()<< "\n";
-
-        if(vertice_ponderado()){
-
-            for (int i = 0; i < ordem; i++) {
-                arquivoGrafo << getVertice(i+1)->getPeso() << " ";
-            }
-
-        }
-
-        for (int i = 0; i < ordem; i++) {
-            for (int j = 0; j < ordem; j++) {
-                if (getAresta(i+1,j+1) != nullptr) {
-                    if (aresta_ponderada()) {
-                        arquivoGrafo <<  getAresta(i+1,j+1)->getInicio()->getId() << " " <<  getAresta(i+1,j+1)->getFim()->getId() << " " <<  getAresta(i+1,j+1)->getPeso() << "\n";
-                    } else {
-                        arquivoGrafo <<  getAresta(i+1,j+1)->getInicio()->getId() << " " <<  getAresta(i+1,j+1)->getFim()->getId() << "\n";
-                    }
-                }
-            }
-        }
-    }
-    arquivoGrafo.close();
-}
-
 void Grafo::imprimeGrafo(string nomeArquivo) {
     cout<<nomeArquivo<<"\n";
+
+    cout << "Grau: " << get_grau() << endl;
 
     cout<<"Ordem: "<<get_ordem()<<"\n";
 
@@ -105,7 +69,7 @@ void Grafo::imprimeGrafo(string nomeArquivo) {
     {cout<<"Direcionado: "<<"Sim"<<"\n";}
     else{cout<<"Direcionado: "<<"Nao"<<"\n";}
 
-    cout<<"Componentes conexas: "<<n_conexo()<<"\n";
+    //cout<<"Componentes conexas: "<<n_conexo()<<"\n";
 
     if(vertice_ponderado())
     {cout<<"Vertices ponderados: "<<"Sim"<<"\n";}
@@ -121,6 +85,8 @@ void Grafo::imprimeGrafo(string nomeArquivo) {
 }
 
 bool Grafo::eh_completo() {
+    if (get_ordem() == 0)
+        return false;
     ///verifica se todos os nos possuem mesmo grau
     int grau = 0, grauGrafo = 0, aux = 0;
     for (int i = 1; i <= get_ordem(); i++) {

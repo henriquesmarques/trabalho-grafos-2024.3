@@ -1,8 +1,6 @@
 #include "../include/GrafoLista.h"
 #include "../include/Vertice.h"
 #include <iostream>
-#include <fstream>
-#include <cstdlib>
 
 using namespace std;
 
