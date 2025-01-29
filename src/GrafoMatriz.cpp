@@ -2,7 +2,7 @@
 
 GrafoMatriz::GrafoMatriz() {
     MAX_VERTICES = 10;
-    MAX_ARESTAS = MAX_VERTICES*MAX_VERTICES;
+    MAX_ARESTAS = (MAX_VERTICES+1)*MAX_VERTICES/2;
     // Alocando matriz de arestas
     arestas = new Aresta*[MAX_ARESTAS];
     // Alocando vetor de vértices
@@ -18,7 +18,7 @@ GrafoMatriz::GrafoMatriz() {
 
 GrafoMatriz::GrafoMatriz(bool dir) {
     MAX_VERTICES = 10;
-    if (dir) {
+    if (!dir) {
         MAX_ARESTAS = (MAX_VERTICES+1)*MAX_VERTICES/2;
     } else {
         MAX_ARESTAS = MAX_VERTICES*MAX_VERTICES;
@@ -47,7 +47,7 @@ void GrafoMatriz::setDirecao(bool dir) {
     direcionado = dir;
     // Alterando tamanho da matriz
     if (direcionado) {
-        MAX_ARESTAS = (MAX_VERTICES+1)*MAX_VERTICES/2;
+        MAX_ARESTAS = MAX_VERTICES*MAX_VERTICES;
         auto** novaMatriz = new Aresta*[MAX_ARESTAS];
         for (int i = 0; i < MAX_ARESTAS; i++) {
             novaMatriz[i] = nullptr;
@@ -60,7 +60,7 @@ void GrafoMatriz::setDirecao(bool dir) {
 void GrafoMatriz::aumentarMatriz() {
     MAX_VERTICES = MAX_VERTICES*2;
     int total_arestas = MAX_ARESTAS;
-    if (direcionado) {
+    if (!direcionado) {
         MAX_ARESTAS = (MAX_VERTICES+1)*MAX_VERTICES/2;
     } else {
         MAX_ARESTAS = MAX_VERTICES*MAX_VERTICES;
@@ -72,7 +72,7 @@ void GrafoMatriz::aumentarMatriz() {
         novaMatriz[i] = nullptr;
     }
     // Copiando valores da antiga
-    if (direcionado) {
+    if (!direcionado) {
         for (int i = 0; i < total_arestas; i++) {
             for (int j = i; j < total_arestas; j++) {
                 novaMatriz[detIndice(i,j)] = arestas[(j+1)*j/2+i];
@@ -104,9 +104,9 @@ void GrafoMatriz::aumentarMatriz() {
 }
 
 int GrafoMatriz::detIndice(int i, int j) {
-    if (direcionado) {
+    if (!direcionado) {
         if (i <= j && i >= 0 && j < MAX_VERTICES) {
-            return (j+1)*j/2+i; // caso especifico para matriz superior
+            return (j+1)*j/2+i; // caso especifico para matriz triangular superior
         }
     } else {
         if (i >= 0 && i < MAX_VERTICES && j >= 0 && j < MAX_VERTICES) {
