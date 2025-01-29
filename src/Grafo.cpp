@@ -156,5 +156,15 @@ void Grafo::auxNConexo(bool *visitados, Vertice *v) {
 }
 
 int Grafo::get_grau() {
-    return 0;
+    int grauMaximo = 0;
+    int n = getNumeroVertices();
+
+    for (int i = 0; i < n; i++) {
+        int grau = getVizinhos(i).size();  // Número de vizinhos do nó i
+        if(grauMaximo < grau){
+            grauMaximo = grau;
+        }
+    }
+
+    return grauMaximo;  // Retorna o maior grau encontrado
 }
