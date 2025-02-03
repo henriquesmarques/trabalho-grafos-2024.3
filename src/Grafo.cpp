@@ -154,17 +154,35 @@ void Grafo::auxNConexo(bool *visitados, Vertice *v) {
         }
     }
 }
-
-int Grafo::get_grau() {
-    int grauMaximo = 0;
-    int n = getNumeroVertices();
-
-    for (int i = 0; i < n; i++) {
-        int grau = getVizinhos(i).size();  // Número de vizinhos do nó i
-        if(grauMaximo < grau){
-            grauMaximo = grau;
+int GrafoLista::get_grau() {
+    ///informa o grau do grafo para grafosnão direcionados
+    if (!eh_direcionado()) {
+        Vertice *v = raizVertice; //perguntar do henrique
+        int grauGrafo =0;
+        int grau = 0;
+        while (v != nullptr) {
+            //grau = v->totalArestas();
+            grau = getAresta(inicio, fim); //criar uma dessa em grafo matriz
+            if (grau > grauGrafo) {
+                grauGrafo = grau;
+            }
+            //v = v->getProx();
+            v = getVizinho(v);
         }
+        return grauGrafo;
     }
+    else {
+        Vertice *v = raizVertice;
+        int grauGrafo = 0;
+        while (v != nullptr) {
+            //int grauSaida = v->totalArestasSaida();     // Função para calcular grau de saída
+            itn grauSaida = totalArestasSaida(v); //criar uma eh matriz
+            if (grauSaida > grauGrafo) {
+                grauGrafo = grauSaida;
+            }
+            v = getVizinho(v); //criar uma getvizinho em matriz
+        }
+        return grauGrafo;
 
-    return grauMaximo;  // Retorna o maior grau encontrado
+    }
 }
