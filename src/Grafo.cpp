@@ -156,33 +156,25 @@ void Grafo::auxNConexo(bool *visitados, Vertice *v) {
 }
 int GrafoLista::get_grau() {
     ///informa o grau do grafo para grafosnão direcionados
+    int grauGrafo = 0;
     if (!eh_direcionado()) {
-        Vertice *v = raizVertice; //perguntar do henrique
-        int grauGrafo =0;
         int grau = 0;
-        while (v != nullptr) {
-            //grau = v->totalArestas();
-            grau = getAresta(inicio, fim); //criar uma dessa em grafo matriz
-            if (grau > grauGrafo) {
-                grauGrafo = grau;
+            for(int i =0; i< get_ordem(); i++){
+                grau = totalArestas(i);
+                if(grau > grauGrafo){
+                    grauGrafo = grau;
+                }
             }
-            //v = v->getProx();
-            v = getVizinho(v);
         }
         return grauGrafo;
     }
     else {
-        Vertice *v = raizVertice;
-        int grauGrafo = 0;
-        while (v != nullptr) {
-            //int grauSaida = v->totalArestasSaida();     // Função para calcular grau de saída
-            itn grauSaida = totalArestasSaida(v); //criar uma eh matriz
-            if (grauSaida > grauGrafo) {
+        for(int i=0; i<get_ordem(); i++){
+            int grauSaida = totalArestasSaida(i);
+            if(grauSaida > grauGrafo){
                 grauGrafo = grauSaida;
-            }
-            v = getVizinho(v); //criar uma getvizinho em matriz
+            } 
         }
         return grauGrafo;
-
     }
 }

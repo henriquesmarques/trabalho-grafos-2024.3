@@ -97,7 +97,6 @@ void GrafoLista::inserirAresta(int id_inicio, int id_fim, float peso) {
         }
     }
 }
-
 void GrafoLista::removerVertice(int id) {
     Vertice *v = getVertice(id);
     if (v == nullptr) {
