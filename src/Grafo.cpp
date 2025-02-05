@@ -158,3 +158,54 @@ void Grafo::auxNConexo(bool *visitados, Vertice *v) {
 int Grafo::get_grau() {
     return 0;
 }
+
+void Grafo::caminhoMinino(int id_inicio, int id_fim) {
+    Vertice* inicio = getVertice(id_inicio);
+    Vertice* fim = getVertice(id_fim);
+    if (inicio == nullptr || fim == nullptr) {
+        cout << "Erro: Vertices nao encontrados." << endl;
+    }
+
+    // Inicialização de variáveis
+    float max = 100;
+    float dist[ordem];
+    bool visitados[ordem];
+    for (int i = 0; i < ordem; i++) {
+        dist[i] = max;
+        visitados[i] = false;
+    }
+
+    dist[id_inicio-1] = 0;
+
+    for (int count = 0; count < ordem - 1; count++) {
+        int u = minDistance(dist, visitados);
+
+        visitados[u] = true;
+
+        for (int v = 0; v < ordem; v++) {
+            if (!visitados[v] && getAresta(u+1,v+1) != nullptr
+                && dist[u] != max
+                && dist[u] + getAresta(u+1,v+1)->getPeso() < dist[v]) {
+                dist[v] = dist[u] + getAresta(u+1,v+1)->getPeso();
+            }
+        }
+    }
+
+    // Impressão
+    cout << "Caminho mínimo de " << id_inicio << " até " << id_fim << ": " << dist[id_fim-1] << endl;
+}
+
+int Grafo::minDistance(float dist[], bool visitados[]) {
+
+    float min = 100;
+    int min_index = 0;
+
+    for (int i = 0; i < ordem; i++) {
+        if (visitados[i] == false && dist[i] <= min) {
+            min = dist[i];
+            min_index = i;
+        }
+    }
+
+    return min_index;
+}
