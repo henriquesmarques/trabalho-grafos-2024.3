@@ -10,7 +10,7 @@ Trabalho de Teoria dos Grafos - UFJF - 2024.3
 
 ## Acesso
 ### Compilar:
-- g++ -o main.exe include/*.h src/*.cpp main.cpp -std=c++2a -Wall
+- `g++ -o main.exe include/*.h src/*.cpp main.cpp -std=c++17 -Wall`
 ### Executar:
 - ./main.exe -d -l Grafo.txt
 - ./main.exe -d -m Grafo.txt
