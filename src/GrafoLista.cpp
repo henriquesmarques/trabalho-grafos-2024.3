@@ -37,8 +37,8 @@ Vertice* GrafoLista::getVertice(int id) {
 
 Aresta* GrafoLista::getAresta(int id_inicio, int id_fim) {
     Vertice* v = getVertice(id_inicio);
-    //if (v == nullptr)
-        //return nullptr;
+    if (v == nullptr)
+        return nullptr;
     for (int i = 0; i < v->getTotalVizinhos(); i++) {
         if (v->getVizinho(i)->getFim()->getId() == id_fim) {
             return v->getVizinho(i);
