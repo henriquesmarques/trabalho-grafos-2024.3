@@ -37,6 +37,8 @@ Vertice* GrafoLista::getVertice(int id) {
 
 Aresta* GrafoLista::getAresta(int id_inicio, int id_fim) {
     Vertice* v = getVertice(id_inicio);
+    //if (v == nullptr)
+        //return nullptr;
     for (int i = 0; i < v->getTotalVizinhos(); i++) {
         if (v->getVizinho(i)->getFim()->getId() == id_fim) {
             return v->getVizinho(i);
@@ -99,16 +101,19 @@ void GrafoLista::inserirAresta(int id_inicio, int id_fim, float peso) {
 }
 
 void GrafoLista::removerVertice(int id) {
+    imprimirArestas();
     Vertice *v = getVertice(id);
-    if (v == nullptr) {
-        cout << "Erro: o vertice nao foi encontrado." << endl;
-    } else {
-        // Remover arestas do vetor de arestas do vértice
-        for (int i = v->getTotalVizinhos()-1; i >= 0; i--) {
-            removerAresta(v->getVizinho(i)->getInicio()->getId(), v->getVizinho(i)->getFim()->getId());
+    if (v==nullptr) {
+        cout<<"Erro: vertice nao encontrado."<<endl;
+    }
+    else {
+        /// Remover arestas do vetor de arestas do vértice
+        while (v->getTotalVizinhos() > 0) {
+            Aresta *a = v->getVizinho(0);
+            removerAresta(a->getInicio()->getId(), a->getFim()->getId());
         }
 
-        // Remover vértice da lista de vértices do Grafo
+        /// Remover vértice da lista de vértices do Grafo
         if (raizVertice == v) {
             raizVertice = v->getProx();
         } else {
@@ -118,31 +123,38 @@ void GrafoLista::removerVertice(int id) {
             }
             ant->setProx(v->getProx());
         }
-
-        ordem--;
         delete v;
+        ordem--;
+        for (int i=id; i<=ordem; i++) {
+            getVertice(i+1)->setId(i);
+        }
     }
 }
 
 void GrafoLista::removerAresta(int id_inicio, int id_fim) {
     Aresta *a = getAresta(id_inicio, id_fim);
-    /// Remove aresta dos Vetores
-    Vertice* v = a->getInicio();
-    v->removerVizinho(a);
-    v = a->getFim();
-    v->removerVizinho(a);
-
-    /// Remove aresta da lista de arestas do Grafo
-    if (raizAresta == a) {
-        raizAresta = a->getProx();
-    } else {
-        Aresta* ant = raizAresta;
-        while (ant->getProx() != a) {
-            ant = ant->getProx();
-        }
-        ant->setProx(a->getProx());
+    if (a == nullptr) {
+        cout << "Erro: aresta nao encontrada." << endl;
     }
-    delete a;
+    else {
+        /// Remove aresta dos Vetores
+        Vertice* v = a->getInicio();
+        v->removerVizinho(a);
+        v = a->getFim();
+        v->removerVizinho(a);
+        cout<<"nada2"<<endl;
+        /// Remove aresta da lista de arestas do Grafo
+        if (raizAresta == a) {
+            raizAresta = a->getProx();
+        } else {
+            Aresta* ant = raizAresta;
+            while (ant->getProx() != a) {
+                ant = ant->getProx();
+            }
+            ant->setProx(a->getProx());
+        }
+        delete a;
+    }
 }
 
 void GrafoLista::imprimirVertices() {

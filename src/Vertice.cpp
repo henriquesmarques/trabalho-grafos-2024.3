@@ -41,6 +41,9 @@ Vertice * Vertice::getProx() {
     return prox;
 }
 
+void Vertice::setId(int id) {
+    this->id = id;
+}
 int Vertice::getId() {
     return id;
 }
