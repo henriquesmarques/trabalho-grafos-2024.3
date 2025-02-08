@@ -180,28 +180,30 @@ void GrafoMatriz::removerVertice(int id) {
 
 void GrafoMatriz::removerAresta(int id_inicio, int id_fim) {
 
-    if (id_inicio >= MAX_VERTICES || id_fim >= MAX_VERTICES || id_inicio < 0 || id_fim < 0) {
-        cout << "Erro: Índices inválidos para remoção de aresta." << endl;
-        return;
-    }
-
-    int index = detIndice(id_inicio, id_fim);
-    
-    if (arestas[index] != nullptr) {
-        delete arestas[index];
-        arestas[index] = nullptr;
-        cout << "Aresta entre vértices " << id_inicio << " e " << id_fim << " removida com sucesso!" << std::endl;
-        
-        if (!direcionado) {
-            int indexSymmetric = detIndice(id_fim, id_inicio);
-            if (arestas[indexSymmetric] != nullptr) {
-                delete arestas[indexSymmetric];
-                arestas[indexSymmetric] = nullptr;
-                cout << "Aresta simétrica entre vértices " << id_fim << " e " << id_inicio << " também removida." << std::endl;
-            }
+    Aresta *a = getAresta(id_inicio, id_fim);
+    if (a == nullptr) {
+        cout << "Erro: aresta nao encontrada." << endl;
+    } else {
+        Vertice* v = a->getInicio();
+        if (v != nullptr) {
+            v->removerVizinho(a);
         }
 
-    } else {
-        cout << "Erro: Aresta entre os vértices " << id_inicio << " e " << id_fim << " não encontrada." << std::endl;
+        v = a->getFim();
+        if (v != nullptr) {
+            v->removerVizinho(a);
+        }
+
+        int indice = detIndice(id_inicio, id_fim);
+        arestas[indice] = nullptr;
+        delete a;
+
+        if (!direcionado) {
+            int indice_simetrico = detIndice(id_fim, id_inicio);
+            delete arestas[indice_simetrico];
+            arestas[indice_simetrico] = nullptr;
+        }
+
+        cout << "Aresta removida entre: " << id_inicio << " e " << id_fim << endl;
     }
 }
