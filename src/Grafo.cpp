@@ -155,26 +155,26 @@ void Grafo::auxNConexo(bool *visitados, Vertice *v) {
     }
 }
 int GrafoLista::get_grau() {
-    ///informa o grau do grafo para grafosnão direcionados
+    ///informa o grau do grafo para grafos não direcionados
     int grauGrafo = 0;
     if (!eh_direcionado()) {
         int grau = 0;
-            for(int i =0; i< get_ordem(); i++){
-                grau = totalArestas(i);
-                if(grau > grauGrafo){
-                    grauGrafo = grau;
-                }
-            }
+        for(int i = 1; i <= get_ordem(); i++){
+            Vertice *v = getVertice(i);
+            grau = v-> getTotalVizinhos();
+            if(grau > grauGrafo)
+                grauGrafo = grau;
         }
         return grauGrafo;
     }
-    else {
-        for(int i=0; i<get_ordem(); i++){
-            int grauSaida = totalArestasSaida(i);
-            if(grauSaida > grauGrafo){
+    ///informa o grau do grafo para grafos direcionados
+    else{
+        for(int i = 1; i <= get_ordem(); i++){
+            Vertice *v = getVertice(i);
+            int grauSaida = v->totalArestasSaida();
+            if(grauSaida > grauGrafo)
                 grauGrafo = grauSaida;
-            } 
         }
         return grauGrafo;
-    }
+    }
 }
