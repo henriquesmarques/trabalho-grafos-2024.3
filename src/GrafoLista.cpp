@@ -108,19 +108,16 @@ void GrafoLista::inserirAresta(int id_inicio, int id_fim, float peso) {
 }
 
 void GrafoLista::removerVertice(int id) {
-    imprimirArestas();
     Vertice *v = getVertice(id);
-    if (v==nullptr) {
-        cout<<"Erro: vertice nao encontrado."<<endl;
-    }
-    else {
-        /// Remover arestas do vetor de arestas do vértice
-        while (v->getTotalVizinhos() > 0) {
-            Aresta *a = v->getVizinho(0);
-            removerAresta(a->getInicio()->getId(), a->getFim()->getId());
+    if (v == nullptr) {
+        cout << "Erro: o vertice nao foi encontrado." << endl;
+    } else {
+        // Remover arestas do vetor de arestas do vértice
+        for (int i = v->getTotalVizinhos()-1; i >= 0; i--) {
+            removerAresta(v->getVizinho(i)->getInicio()->getId(), v->getVizinho(i)->getFim()->getId());
         }
 
-        /// Remover vértice da lista de vértices do Grafo
+        // Remover vértice da lista de vértices do Grafo
         if (raizVertice == v) {
             raizVertice = v->getProx();
         } else {
@@ -130,8 +127,9 @@ void GrafoLista::removerVertice(int id) {
             }
             ant->setProx(v->getProx());
         }
-        delete v;
+
         ordem--;
+        delete v;
         for (int i=id; i<=ordem; i++) {
             getVertice(i+1)->setId(i);
         }
