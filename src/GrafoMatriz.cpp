@@ -170,7 +170,7 @@ int GrafoMatriz::detIndiceRemove(int i, int j){
             return MAX_VERTICES * i + j;
     }
 }
-void GrafoMatriz::removerVertice(int id){
+/*void GrafoMatriz::removerVertice(int id){
     //imprimirArestas();
     Vertice *v = getVertice(id);
     if (v==nullptr) {
@@ -199,13 +199,53 @@ void GrafoMatriz::removerVertice(int id){
         
         
         //removendo o vertice do vetor de vertice
-        for(int i=id; i< ordem; i++){
+        /*for(int i=id; i< ordem; i++){
             vertices[i] = vertices[i+1];
             getVertice(i+1)->setId(i);
         }
         delete v;
         ordem --;
     }
+}*/
+void GrafoMatriz::removerVertice(int id) {
+    Vertice *v = getVertice(id);
+    if (v == nullptr) {
+        cout << "Erro: o vertice nao foi encontrado." << endl;
+    } else {
+        // Remover arestas do vetor de arestas do vértice
+        for (int i = v->getTotalVizinhos()-1; i >= 0; i--) {
+            removerAresta(v->getVizinho(i)->getInicio()->getId(), v->getVizinho(i)->getFim()->getId());
+        }
+
+        // Remover vértice da lista de vértices do Grafo
+        vertices[id-1] = nullptr;
+
+        // Organizando vértices
+        for(int i = id; i < MAX_VERTICES-1; i++) {
+            vertices[i] = vertices[i+1];
+            vertices[i]->setId(id);
+        }
+        // Organizando arestas
+        Vertice *p = getVertice(id+1);
+        if (p != nullptr) {
+            if (direcionado) {
+                for(int i = id; i < MAX_VERTICES-1; i++) {;
+                    for(int j = id; i < MAX_VERTICES-1; i++) {
+                        arestas[detIndice(i,j)] = arestas[detIndice(i+1, j)];
+                    }
+                }
+            } else {
+                for(int i = id; i < MAX_VERTICES-1; i++) {;
+                    for(int j = i; i < MAX_VERTICES-1; i++) {
+                        arestas[detIndice(i,j)] = arestas[detIndice(i+1, j)];
+                    }
+                }
+            }
+        }
+
+        ordem--;
+        delete v;
+    }
 }
 
 void GrafoMatriz::removerAresta(int id_inicio, int id_fim) {
