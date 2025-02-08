@@ -27,9 +27,8 @@ GrafoLista::~GrafoLista() {
 Vertice* GrafoLista::getVertice(int id) {
     Vertice* v = raizVertice;
     while (v != nullptr) {
-        if (v->getId() == id) {
+        if (v->getId() == id)
             return v;
-        }
         v = v->getProx();
     }
     return nullptr;
@@ -37,11 +36,19 @@ Vertice* GrafoLista::getVertice(int id) {
 
 Aresta* GrafoLista::getAresta(int id_inicio, int id_fim) {
     Vertice* v = getVertice(id_inicio);
-    if (v == nullptr)
-        return nullptr;
     for (int i = 0; i < v->getTotalVizinhos(); i++) {
         if (v->getVizinho(i)->getFim()->getId() == id_fim) {
             return v->getVizinho(i);
+        }
+    }
+    if (!eh_direcionado()) { // Verifica na direção oposta apenas para grafos não direcionados
+        v = getVertice(id_fim);
+        if (v != nullptr) {
+            for (int i = 0; i < v->getTotalVizinhos(); i++) {
+                if (v->getVizinho(i)->getFim()->getId() == id_inicio) {
+                    return v->getVizinho(i);
+                }
+            }
         }
     }
     return nullptr;
@@ -142,7 +149,6 @@ void GrafoLista::removerAresta(int id_inicio, int id_fim) {
         v->removerVizinho(a);
         v = a->getFim();
         v->removerVizinho(a);
-        cout<<"nada2"<<endl;
         /// Remove aresta da lista de arestas do Grafo
         if (raizAresta == a) {
             raizAresta = a->getProx();
