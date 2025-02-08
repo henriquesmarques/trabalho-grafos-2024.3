@@ -55,6 +55,7 @@ int main(int argc, char *argv[]) {
             GrafoLista g;
             g.carrega_grafo(arquivoGrafo);
             g.imprimeGrafo(arquivoGrafo);
+            g.caminhoMinino(1,5);
         }
     }
     else if (opcao == "-c")
@@ -89,4 +90,3 @@ int main(int argc, char *argv[]) {
     }
     return 0;
 }
-
