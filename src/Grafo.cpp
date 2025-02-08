@@ -216,7 +216,7 @@ void Grafo::caminhoMinino(int id_inicio, int id_fim) {
         }
         ///caso para grafos não direcionados
         else {
-            for (int count = 0; count < ordem - 1; count++) {
+            for (int m = 0; m < ordem - 1; m++) {
                 int u = minDistance(dist, visitados);
                 visitados[u] = true;
                 for (int v = 0; v < ordem; v++) {
@@ -228,22 +228,24 @@ void Grafo::caminhoMinino(int id_inicio, int id_fim) {
                 }
 
             }
+        }
             // Impressão
-            cout << "Maior menor distancia:(" << id_inicio << "-" << id_fim << ") " << dist[id_fim-1] << endl;
-            ///restaurar pesos
-            if (aresta_ponderada()) {
-                Vertice *aux = inicio;
-                while (aux!= nullptr) {
-                    Aresta **a = aux->getVetorVizinhos();
-                    for (int i=0; i<aux->getTotalVizinhos(); i++) {
-                        a[i]->setPeso(a[i]->getPeso() - neg);
-                    }
-                    aux = aux->getProx();
-                }
+    cout << "Maior menor distancia:(" << id_inicio << "-" << id_fim << ") " << dist[id_fim-1] << endl;
+    ///restaurar pesos
+    if (aresta_ponderada()) {
+        Vertice *aux = inicio;
+        while (aux!= nullptr) {
+            Aresta **a = aux->getVetorVizinhos();
+            for (int i=0; i<aux->getTotalVizinhos(); i++) {
+                a[i]->setPeso(a[i]->getPeso() - neg);
             }
+            aux = aux->getProx();
+        }
         }
     }
 }
+
+
 
 int Grafo::minDistance(float dist[], bool visitados[]) {
         float min = 100;
