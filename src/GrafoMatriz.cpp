@@ -150,12 +150,40 @@ void GrafoMatriz::inserirVertice(int id, float peso) {
     if (ordem + 1 > MAX_VERTICES) {
         aumentarMatriz();
     }
-    //ordem++;
-    //...
+    if (getVertice(id) == nullptr) {
+        auto* v = new Vertice(id, peso);
+        vertices[id-1] = v;
+        ordem++;
+    } else {
+        cout << "Erro: existe um vertice com o mesmo indice." << endl;
+    }
 }
 
 void GrafoMatriz::inserirAresta(int id_inicio, int id_fim, float peso) {
+    if (id_inicio == id_fim) {
+        cout << "Erro: nao e possivel inserir laco." << endl;
+    } else if (getAresta(id_inicio, id_fim) != nullptr) {
+        cout << "Erro: nao e possivel inserir aresta multipla." << endl;
+    } else {
+        Vertice* inicio = getVertice(id_inicio);
+        Vertice* fim = getVertice(id_fim);
+        if (inicio == nullptr || fim == nullptr) {
+            cout << "Erro: o vertice nao foi encontrado." << endl;
+        } else {
+            // Criando aresta
+            auto* a = new Aresta(inicio, fim, peso);
+
+            // Adiciona aresta no vetor de vizinhos do vértice
+            inicio->inserirVizinho(a);
+            fim->inserirVizinho(a);
+
+            // Adicionando aresta na lista de arestas
+            int k = detIndice(id_inicio-1, id_fim-1);
+            arestas[k] = a;
+        }
+    }
 }
+
 void GrafoMatriz::removerVertice(int id){
     if (novosVertices[id] == 0) {
         cout << "Erro: vértice não encontrado." << std::endl;
