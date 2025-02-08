@@ -228,18 +228,17 @@ void Grafo::caminhoMinino(int id_inicio, int id_fim) {
                 }
 
             }
-            // Impressão
-            cout << "Maior menor distancia:(" << id_inicio << "-" << id_fim << ") " << dist[id_fim-1] << endl;
-            ///restaurar pesos
-            if (aresta_ponderada()) {
-                Vertice *aux = inicio;
-                while (aux!= nullptr) {
-                    Aresta **a = aux->getVetorVizinhos();
-                    for (int i=0; i<aux->getTotalVizinhos(); i++) {
-                        a[i]->setPeso(a[i]->getPeso() - neg);
-                    }
-                    aux = aux->getProx();
-                }
+        }
+        // Impressão
+        cout << "Maior menor distancia:(" << id_inicio << "-" << id_fim << ") " << dist[id_fim-1] << endl;
+        ///restaurar pesos
+        if (aresta_ponderada()) {
+            Vertice *aux = inicio;
+            while (aux!= nullptr) {
+                Aresta **a = aux->getVetorVizinhos();
+                for (int i=0; i<aux->getTotalVizinhos(); i++)
+                    a[i]->setPeso(a[i]->getPeso() - neg);
+                aux = aux->getProx();
             }
         }
     }
