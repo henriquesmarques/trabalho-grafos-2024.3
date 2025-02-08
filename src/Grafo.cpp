@@ -229,9 +229,12 @@ void Grafo::caminhoMinino(int id_inicio, int id_fim) {
 
             }
         }
-            // Impressão
-    cout << "Maior menor distancia:(" << id_inicio << "-" << id_fim << ") " << dist[id_fim-1] << endl;
-    ///restaurar pesos
+
+        // Impressão
+        if (dist[id_fim-1] == 100)
+            cout<<"Nao existe caminho entre os vertices."<<endl;
+        else
+            cout << "Maior menor distancia:(" << id_inicio << "-" << id_fim << ") " << dist[id_fim-1] << endl;///restaurar pesos
     if (aresta_ponderada()) {
         Vertice *aux = inicio;
         while (aux!= nullptr) {
