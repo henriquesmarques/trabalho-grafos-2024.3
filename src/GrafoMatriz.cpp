@@ -102,24 +102,6 @@ void GrafoMatriz::aumentarMatriz() {
     arestas = novaMatriz;
     vertices = novosVertices;
 }
-int GrafoMatriz::totalArestas(int v){
-    int arestas = 0;
-    for(int i = 0; i < MAX_ARESTAS; i++){
-        if(novaMatriz[v][i]){
-            arestas++;
-        }
-    }
-    return arestas;
-}
-int GrafoMatriz::totalArestasSaida(int v){
-    int arestas = 0;
-    for(int i=0; i < MAX_VERTICES; i++){
-        if(novaMatriz[i][v]){
-            arestas++
-        }
-    }
-    return arestas;
-}
 int GrafoMatriz::detIndice(int i, int j) {
     if (direcionado) {
         if (i < j && i < MAX_VERTICES && j > i && j < MAX_VERTICES) {
@@ -210,7 +192,7 @@ void GrafoMatriz::removerVertice(int id){
 
     ordem--;
 }
-void GrafoMatriz::removerVertice(int id) {
+/*void GrafoMatriz::removerVertice(int id) {
     if(v == 0){
         cout << "Vertice não encontrado";
     }else{
@@ -228,7 +210,7 @@ void GrafoMatriz::removerVertice(int id) {
         novosVertices[i] = novosVertices[i+1];
     }
     ordem--;
-}
+}*/
 
 void GrafoMatriz::removerAresta(int id_inicio, int id_fim) {
 }

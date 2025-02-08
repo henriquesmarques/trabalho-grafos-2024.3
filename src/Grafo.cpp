@@ -154,7 +154,7 @@ void Grafo::auxNConexo(bool *visitados, Vertice *v) {
         }
     }
 }
-int GrafoLista::get_grau() {
+int Grafo::get_grau() {
     ///informa o grau do grafo para grafos não direcionados
     int grauGrafo = 0;
     if (!eh_direcionado()) {
