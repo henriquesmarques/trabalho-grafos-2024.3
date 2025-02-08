@@ -156,57 +156,26 @@ void GrafoMatriz::inserirVertice(int id, float peso) {
 
 void GrafoMatriz::inserirAresta(int id_inicio, int id_fim, float peso) {
 }
-
-void GrafoLista::removerVertice(int id) {
-    imprimirArestas();
-    Vertice *v = getVertice(id);
-    if (v==nullptr) {
-        cout<<"Erro: vertice nao encontrado."<<endl;
-    }
-    else {
-        /// Remover arestas do vetor de arestas do vértice
-        while (v->getTotalVizinhos() > 0) {
-            Aresta *a = v->getVizinho(0);
-            removerAresta(a->getInicio()->getId(), a->getFim()->getId());
-        }
-
-        /// Remover vértice da lista de vértices do Grafo
-        if (raizVertice == v) {
-            raizVertice = v->getProx();
-        } else {
-            Vertice* ant = raizVertice;
-            while (ant->getProx() != v) {
-                ant = ant->getProx();
-            }
-            ant->setProx(v->getProx());
-        }
-        delete v;
-        ordem--;
-        for (int i=id; i<=ordem; i++) {
-            getVertice(i+1)->setId(i);
-        }
-    }
-}
 void GrafoMatriz::removerVertice(int id){
     if (novosVertices[id] == 0) {
         cout << "Erro: vértice não encontrado." << std::endl;
     }
 
-    for (int i = id; i < getOrdem(); i++) {
+    for (int i = id; i < get_ordem(); i++) {
         // Desloca linhas para cima
         for (int j = 0; j < numVertices; j++) {
             novaMatriz[i][j] = novaMatriz[i + 1][j];
         }
     }
 
-    for (int j = id; j < getOrdem(); j++) {
+    for (int j = id; j < get_ordem(); j++) {
         //desloca as colunas para a esquerda
         for (int i = 0; i < numVertices; i++) {
             novaMatriz[i][j] = novaMatriz[i][j + 1];
         }
     }
 
-    for (int i = id; i < getOrdem(); i++) {
+    for (int i = id; i < get_ordem(); i++) {
         novosVertices[i] = novosVertices[i + 1];
         novosVertices[i]->setId(i);
     }
