@@ -257,4 +257,3 @@ int Grafo::minDistance(float dist[], bool visitados[]) {
         }
         return min_index;
 }
-
