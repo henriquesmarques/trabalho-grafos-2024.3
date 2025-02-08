@@ -165,68 +165,48 @@ void GrafoMatriz::inserirAresta(int id_inicio, int id_fim, float peso) {
         }
     }
 }
+int GrafoMatriz::detIndiceRemove(int i, int j){
+    if (i >= 0 && i < MAX_VERTICES && j >= 0 && j < MAX_VERTICES) {
+            return MAX_VERTICES * i + j;
+    }
+}
 void GrafoMatriz::removerVertice(int id){
-    imprimirArestas();
+    //imprimirArestas();
     Vertice *v = getVertice(id);
     if (v==nullptr) {
         cout<<"Erro: vertice nao encontrado."<<endl;
     }
     else {
-        for (int i = id; i < numVertices - 1; i++) {
-            // Desloca linhas para cima
-            for (int j = 0; j < numVertices; j++) {
-                novaMatriz[i][j] = novaMatriz[i + 1][j];
-            }
-        }
-
-        for (int j = id; j < numVertices - 1; j++) {
-            // Desloca colunas para a esquerda
-            for (int i = 0; i < numVertices; i++) {
-                novaMatriz[i][j] = novaMatriz[i][j + 1];
-            }
-        }
-        /// Remover arestas do vetor de arestas do vértice
+        /// Remover arestas do vetor de arestas
         while (v->getTotalVizinhos() > 0) {
             Aresta *a = v->getVizinho(0);
-            removerAresta(a->getInicio()->getId(), a->getFim()->getId());
+            int inicio = a->getInicio()->getId();
+            int fim = a->getFim()->getId();
+            arestas[(inicio,fim)] = nullptr; //
+            v->removerVizinho(a);
         }
-
-        /// Remover vértice da lista de vértices do Grafo
-        if (raizVertice == v) {
-            raizVertice = v->getProx();
-        } else {
-            Vertice* ant = raizVertice;
-            while (ant->getProx() != v) {
-                ant = ant->getProx();
+        //deslocando a matriz para remover o vertice
+        /*for (int i = id; i < ordem; i++) {
+            for (int j = 0; j < ordem; j++) {
+                arestas[detIndice(i, j)] = arestas[detIndice(i + 1, j)]; // Mover linha para cima
             }
-            ant->setProx(v->getProx());
         }
-        delete v;
-        ordem--;
-        for (int i=id; i<=ordem; i++) {
+        for (int j = id; j < ordem; j++) {
+            for (int i = 0; i < ordem; i++) {
+                arestas[detIndice(i, j)] = arestas[detIndice(i, j + 1)]; // Mover coluna para a esquerda
+            }
+        }*/
+        
+        
+        //removendo o vertice do vetor de vertice
+        for(int i=id; i< ordem; i++){
+            vertices[i] = vertices[i+1];
             getVertice(i+1)->setId(i);
         }
+        delete v;
+        ordem --;
     }
 }
-/*void GrafoMatriz::removerVertice(int id) {
-    if(v == 0){
-        cout << "Vertice não encontrado";
-    }else{
-        for(int i = 0; i<getOrdem(); i++{
-            if(novaMatriz[i][v]){
-                removerAresta(i, v)
-            }
-            if(novaMatriz[v][i])~{
-                removerAresta(v,i);
-            }
-        }
-    }
-    novosVertices[id] = 0;
-    for(int i = id; i<getOrdem; i++){
-        novosVertices[i] = novosVertices[i+1];
-    }
-    ordem--;
-}*/
 
 void GrafoMatriz::removerAresta(int id_inicio, int id_fim) {
 }
