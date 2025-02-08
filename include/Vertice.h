@@ -14,6 +14,7 @@ public:
     void setProx(Vertice* v);
     Vertice* getProx();
     int getId();
+    void setId(int id);
     void inserirVizinho(Aresta* a);
     void removerVizinho(Aresta* a);
     Aresta* getVizinho(int id);
