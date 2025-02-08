@@ -2,12 +2,15 @@
 Trabalho de Teoria dos Grafos - UFJF - 2024.3
 
 ## Integrantes:
+- Gabriel Sales - 201965133AB
 - Henrique Marques - 202465158A
 - Karine Gomes - 202465053A
 - Luana Lauschner - 202265062AC
+- Vítor Fernandes - 202065096AB
 
 ## Acesso
-- g++ -o main.exe main.cpp Grafo.cpp GrafoLista.cpp Grafo_Lista.cpp GrafoMatriz.cpp Vertice.cpp Aresta.cpp -std=c++17 -Wall
-- g++ -o main.exe *.cpp -std=c++2a -Wall
+### Compilar:
+- `g++ -o main.exe include/*.h src/*.cpp main.cpp -std=c++17 -Wall`
+### Executar:
 - ./main.exe -d -l Grafo.txt
-- ./main.exe -c -l Descricao.txt Grafo.txt
+- ./main.exe -d -m Grafo.txt
