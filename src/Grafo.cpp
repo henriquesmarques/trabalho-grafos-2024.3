@@ -157,28 +157,7 @@ void Grafo::auxNConexo(bool *visitados, Vertice *v) {
 }
 
 int Grafo::get_grau() {
-    ///informa o grau do grafo para grafos não direcionados
-    int grauGrafo = 0;
-    if (!eh_direcionado()) {
-        int grau = 0;
-        for(int i = 1; i <= get_ordem(); i++){
-            Vertice *v = getVertice(i);
-            grau = v-> getTotalVizinhos();
-            if(grau > grauGrafo)
-                grauGrafo = grau;
-        }
-        return grauGrafo;
-    }
-    ///informa o grau do grafo para grafos direcionados
-    else{
-        for(int i = 1; i <= get_ordem(); i++){
-            Vertice *v = getVertice(i);
-            int grauSaida = v->totalArestasSaida();
-            if(grauSaida > grauGrafo)
-                grauGrafo = grauSaida;
-        }
-        return grauGrafo;
-    }
+    return 0;
 }
 
 void Grafo::caminhoMinino(int id_inicio, int id_fim) {
