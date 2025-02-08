@@ -225,6 +225,7 @@ void GrafoMatriz::removerVertice(int id) {
             vertices[i] = vertices[i+1];
             vertices[i]->setId(id);
         }
+
         // Organizando arestas
         Vertice *p = getVertice(id+1);
         if (p != nullptr) {
@@ -244,9 +245,14 @@ void GrafoMatriz::removerVertice(int id) {
         }
 
         ordem--;
-        delete v;
-    }
+        delete v;
+    }
+            for(int i =0; i<numVertices; i++){
+                cout << "Vertices " << vertices[i];
+            }
+            cout << endl;
+            for(int i=0; i<MAX_ARESTAS ; i++){
+                cout << "arestas " << arestas[i];
+            }
 }
 
-void GrafoMatriz::removerAresta(int id_inicio, int id_fim) {
-}
