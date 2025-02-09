@@ -208,12 +208,13 @@ void GrafoMatriz::inserirAresta(int id_inicio, int id_fim, float peso) {
     }
 }*/
 void GrafoMatriz::removerVertice(int id) {
+    cout << "Antes da Remover Vertice: " << endl
     for(int i =0; i<numVertices; i++){
             cout << "Vertices " << vertices[i];
         }
     cout << endl;
     for(int i=0; i<MAX_ARESTAS ; i++){
-        cout << "arestas " << arestas[i];
+        cout << "Arestas " << arestas[i];
     }
     Vertice *v = getVertice(id);
     if (v == nullptr) {
@@ -237,6 +238,7 @@ void GrafoMatriz::removerVertice(int id) {
         Vertice *p = getVertice(id+1);
         if (p != nullptr) {
             if (direcionado) {
+               //precisa adicionar aqui uma variacao de tipo, se na linha tal +linha tal 
                 for(int i = id; i < MAX_VERTICES-1; i++) {;
                     for(int j = id; i < MAX_VERTICES-1; i++) {
                         arestas[detIndice(i,j)] = arestas[detIndice(i+1, j)];
@@ -245,7 +247,12 @@ void GrafoMatriz::removerVertice(int id) {
             } else {
                 for(int i = id; i < MAX_VERTICES-1; i++) {;
                     for(int j = i; i < MAX_VERTICES-1; i++) {
-                        arestas[detIndice(i,j)] = arestas[detIndice(i+1, j)];
+                        arestas[detIndice(i,j)] = arestas[detIndice(i+1, j)]; //Mover a coluna para cima
+                    }
+                }
+                for (int j = id; j < ordem; j++) {
+                    for (int i = 0; i < ordem; i++) {
+                        arestas[detIndice(i, j)] = arestas[detIndice(i, j + 1)]; // Mover coluna para a esquerda
                     }
                 }
             }
@@ -254,6 +261,8 @@ void GrafoMatriz::removerVertice(int id) {
         ordem--;
         delete v;
     }
+
+    cout << "Depois da Remover Vertice: " << endl;
         for(int i =0; i<numVertices; i++){
             cout << "Vertices " << vertices[i];
         }
