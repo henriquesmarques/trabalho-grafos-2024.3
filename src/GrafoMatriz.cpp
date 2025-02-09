@@ -105,7 +105,7 @@ void GrafoMatriz::aumentarMatriz() {
 int GrafoMatriz::detIndice(int i, int j) {
     if (!direcionado) {
         if (i <= j && i >= 0 && j < MAX_VERTICES) {
-            return (j+1)*j/2+i; // caso especifico para matriz triangular superior
+            return; // caso especifico para matriz triangular superior
         }
     } else {
         if (i >= 0 && i < MAX_VERTICES && j >= 0 && j < MAX_VERTICES) {
@@ -239,19 +239,30 @@ void GrafoMatriz::removerVertice(int id) {
         if (p != nullptr) {
             if (direcionado) {
                //precisa adicionar aqui uma variacao de tipo, se na linha tal +linha tal 
-                for(int i = id; i < MAX_VERTICES-1; i++) {;
+                /*for(int i = id; i < MAX_VERTICES-1; i++) {;
                     for(int j = id; i < MAX_VERTICES-1; i++) {
                         arestas[detIndice(i,j)] = arestas[detIndice(i+1, j)];
                     }
-                }
-            } else {
+                }*/
                 for(int i = id; i < MAX_VERTICES-1; i++) {;
                     for(int j = i; i < MAX_VERTICES-1; i++) {
+                        arestas[detIndice(i,j)] = arestas[MAX_VERTICES-i]; //Mover a coluna para cima
+                    }
+                }
+                for(int i=0; i< id;i++){
+                    for(int j=id; j<MAX_VERTICES-1; j++){
+                        arestas[detIndice(i,j)] = arestas[detIndice(i, j+1)]; //Mover a linha a esquerda
+                    }
+                }
+
+            } else {
+                for(int i = id; i < MAX_VERTICES-1; i++) {;
+                    for(int j = 0; i < MAX_VERTICES-1; i++) {
                         arestas[detIndice(i,j)] = arestas[detIndice(i+1, j)]; //Mover a coluna para cima
                     }
                 }
-                for (int j = id; j < ordem; j++) {
-                    for (int i = 0; i < ordem; i++) {
+                for (int j = id; j < MAX_VERTICES-1; j++) {
+                    for (int i = 0; i < MAX_VERTICES-1; i++) {
                         arestas[detIndice(i, j)] = arestas[detIndice(i, j + 1)]; // Mover coluna para a esquerda
                     }
                 }
