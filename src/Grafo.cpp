@@ -1,6 +1,7 @@
 #include "../include/Grafo.h"
 #include <fstream>
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -177,4 +178,106 @@ int Grafo::get_grau() {
         }
         return grauGrafo;
     }
+}
+void Grafo::caminhoMinino(int id_inicio, int id_fim) {
+    Vertice* inicio = getVertice(id_inicio);
+    Vertice* fim = getVertice(id_fim);
+    ///Verifica se os vertices existem
+    if (inicio == nullptr || fim == nullptr) {
+        cout << "Erro: Vertices nao encontrados." << endl;
+    }
+    else {
+        ///Verifica se as arestas possuem peso e verifica se tem algum peso negativo
+        float neg = 0;
+        if (arestasPonderadas == true) {
+            Vertice *aux = inicio;
+            while (aux != nullptr) {
+                ///verifica qual aresta possui o menor peso
+                Aresta **a = aux->getVetorVizinhos();
+                for (int i=0; i<aux->getTotalVizinhos(); i++) {
+                    if (a[i]->getPeso() < neg)
+                        neg = a[i]->getPeso();
+                }
+                aux= aux->getProx();
+            }
+            if (neg < 0) {
+                neg = abs(neg)+1;
+                aux = inicio;
+                while (aux!= nullptr) {
+                    Aresta **a = aux->getVetorVizinhos();
+                    for (int i=0; i<aux->getTotalVizinhos(); i++)
+                        a[i]->setPeso(a[i]->getPeso() + neg);
+                    aux = aux->getProx();
+                }
+            }
+        }
+
+        // Inicialização de variáveis
+        float max = 100;
+        float dist[ordem];
+        bool visitados[ordem];
+        for (int i = 0; i < ordem; i++) {
+            dist[i] = max;
+            visitados[i] = false;
+        }
+        dist[id_inicio-1] = 0;
+        ///caso para grafos direcionados
+        if (eh_direcionado()) {
+            for (int count = 0; count < ordem - 1; count++) {
+                int u = minDistance(dist, visitados);
+                visitados[u] = true;
+                for (int v = 0; v < ordem; v++) {
+                    if (!visitados[v] && getAresta(u+1,v+1) != nullptr
+                    && dist[u] != max && dist[u] + getAresta(u+1,v+1)->getPeso() < dist[v])
+                        dist[v] = dist[u] + getAresta(u+1,v+1)->getPeso();
+                }
+            }
+        }
+        ///caso para grafos não direcionados
+        else {
+            for (int m = 0; m < ordem - 1; m++) {
+                int u = minDistance(dist, visitados);
+                visitados[u] = true;
+                for (int v = 0; v < ordem; v++) {
+                    if ((!visitados[v] && getAresta(u+1,v+1) != nullptr
+                    && dist[u] != max && dist[u] + getAresta(u+1,v+1)->getPeso() < dist[v]) ||(
+                    !visitados[u] && getAresta(v+1,u+1) != nullptr && dist[v] != max && dist[v] + getAresta(v+1,u+1)->getPeso()<dist[u])) {
+                        dist[v] = dist[u] + getAresta(u+1,v+1)->getPeso();
+                    }
+                }
+
+            }
+        }
+
+        // Impressão
+        if (dist[id_fim-1] == 100)
+            cout<<"Nao existe caminho entre os vertices."<<endl;
+        else
+            cout << "Maior menor distancia:(" << id_inicio << "-" << id_fim << ") " << dist[id_fim-1] << endl;///restaurar pesos
+    if (aresta_ponderada()) {
+        Vertice *aux = inicio;
+        while (aux!= nullptr) {
+            Aresta **a = aux->getVetorVizinhos();
+            for (int i=0; i<aux->getTotalVizinhos(); i++) {
+                a[i]->setPeso(a[i]->getPeso() - neg);
+            }
+            aux = aux->getProx();
+        }
+        }
+    }
+}
+
+
+
+int Grafo::minDistance(float dist[], bool visitados[]) {
+        float min = 100;
+        int min_index = 0;
+
+        for (int i = 0; i < ordem; i++) {
+            if (visitados[i] == false && dist[i] <= min) {
+                min = dist[i];
+                min_index = i;
+            }
+        }
+        return min_index;
 }

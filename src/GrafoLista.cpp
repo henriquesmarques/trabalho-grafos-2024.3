@@ -27,9 +27,8 @@ GrafoLista::~GrafoLista() {
 Vertice* GrafoLista::getVertice(int id) {
     Vertice* v = raizVertice;
     while (v != nullptr) {
-        if (v->getId() == id) {
+        if (v->getId() == id)
             return v;
-        }
         v = v->getProx();
     }
     return nullptr;
@@ -40,6 +39,16 @@ Aresta* GrafoLista::getAresta(int id_inicio, int id_fim) {
     for (int i = 0; i < v->getTotalVizinhos(); i++) {
         if (v->getVizinho(i)->getFim()->getId() == id_fim) {
             return v->getVizinho(i);
+        }
+    }
+    if (!eh_direcionado()) { // Verifica na direção oposta apenas para grafos não direcionados
+        v = getVertice(id_fim);
+        if (v != nullptr) {
+            for (int i = 0; i < v->getTotalVizinhos(); i++) {
+                if (v->getVizinho(i)->getFim()->getId() == id_inicio) {
+                    return v->getVizinho(i);
+                }
+            }
         }
     }
     return nullptr;
@@ -120,28 +129,35 @@ void GrafoLista::removerVertice(int id) {
 
         ordem--;
         delete v;
+        for (int i=id; i<=ordem; i++) {
+            getVertice(i+1)->setId(i);
+        }
     }
 }
 
 void GrafoLista::removerAresta(int id_inicio, int id_fim) {
     Aresta *a = getAresta(id_inicio, id_fim);
-    /// Remove aresta dos Vetores
-    Vertice* v = a->getInicio();
-    v->removerVizinho(a);
-    v = a->getFim();
-    v->removerVizinho(a);
-
-    /// Remove aresta da lista de arestas do Grafo
-    if (raizAresta == a) {
-        raizAresta = a->getProx();
-    } else {
-        Aresta* ant = raizAresta;
-        while (ant->getProx() != a) {
-            ant = ant->getProx();
-        }
-        ant->setProx(a->getProx());
+    if (a == nullptr) {
+        cout << "Erro: aresta nao encontrada." << endl;
     }
-    delete a;
+    else {
+        /// Remove aresta dos Vetores
+        Vertice* v = a->getInicio();
+        v->removerVizinho(a);
+        v = a->getFim();
+        v->removerVizinho(a);
+        /// Remove aresta da lista de arestas do Grafo
+        if (raizAresta == a) {
+            raizAresta = a->getProx();
+        } else {
+            Aresta* ant = raizAresta;
+            while (ant->getProx() != a) {
+                ant = ant->getProx();
+            }
+            ant->setProx(a->getProx());
+        }
+        delete a;
+    }
 }
 
 void GrafoLista::imprimirVertices() {
