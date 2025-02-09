@@ -238,21 +238,19 @@ void GrafoMatriz::removerVertice(int id) {
         Vertice *p = getVertice(id+1);
         if (p != nullptr) {
             if (direcionado) {
-               //precisa adicionar aqui uma variacao de tipo, se na linha tal +linha tal 
                 /*for(int i = id; i < MAX_VERTICES-1; i++) {;
                     for(int j = id; i < MAX_VERTICES-1; i++) {
                         arestas[detIndice(i,j)] = arestas[detIndice(i+1, j)];
                     }
                 }*/
-                for(int i = id; i < MAX_VERTICES-1; i++) {;
-                    for(int j = i; i < MAX_VERTICES-1; i++) {
-                        arestas[detIndice(i,j)] = arestas[MAX_VERTICES-i]; //Mover a coluna para cima
+                
+                for(int i = id; i < MAX_VERTICES-1; i++) {
+                    for(int j = i+1; i < MAX_VERTICES-1; i++) {
+                        arestas[detIndice(i,j)] = arestas[detIndice(i,j)+MAX_VERTICES-1-i]; //Mover a linha para cima
                     }
                 }
-                for(int i=0; i< id;i++){
-                    for(int j=id; j<MAX_VERTICES-1; j++){
-                        arestas[detIndice(i,j)] = arestas[detIndice(i, j+1)]; //Mover a linha a esquerda
-                    }
+                for(int i=id; i<MAX_ARESTAS; i++){
+                    arestas[i] = arestas[i+1]; //Mover a coluna entao mover todos a partir do primeiro da coluna
                 }
 
             } else {
