@@ -165,11 +165,6 @@ void GrafoMatriz::inserirAresta(int id_inicio, int id_fim, float peso) {
         }
     }
 }
-int GrafoMatriz::detIndiceRemove(int i, int j){
-    if (i >= 0 && i < MAX_VERTICES && j >= 0 && j < MAX_VERTICES) {
-            return MAX_VERTICES * i + j;
-    }
-}
 /*void GrafoMatriz::removerVertice(int id){
     //imprimirArestas();
     Vertice *v = getVertice(id);
@@ -208,6 +203,13 @@ int GrafoMatriz::detIndiceRemove(int i, int j){
     }
 }*/
 void GrafoMatriz::removerVertice(int id) {
+    for(int i =0; i<numVertices; i++){
+            cout << "Vertices " << vertices[i];
+        }
+    cout << endl;
+    for(int i=0; i<MAX_ARESTAS ; i++){
+        cout << "arestas " << arestas[i];
+    }
     Vertice *v = getVertice(id);
     if (v == nullptr) {
         cout << "Erro: o vertice nao foi encontrado." << endl;
@@ -247,12 +249,12 @@ void GrafoMatriz::removerVertice(int id) {
         ordem--;
         delete v;
     }
-            for(int i =0; i<numVertices; i++){
-                cout << "Vertices " << vertices[i];
-            }
-            cout << endl;
-            for(int i=0; i<MAX_ARESTAS ; i++){
-                cout << "arestas " << arestas[i];
-            }
+        for(int i =0; i<numVertices; i++){
+            cout << "Vertices " << vertices[i];
+        }
+        cout << endl;
+        for(int i=0; i<MAX_ARESTAS ; i++){
+            cout << "arestas " << arestas[i];
+        }
 }
 

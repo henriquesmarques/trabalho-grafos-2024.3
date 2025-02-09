@@ -28,7 +28,6 @@ private:
     Vertice **vertices; // Vetor de vértices
     void aumentarMatriz(); // Aumenta a matriz de adjacência quando ultrapassado MAX_VERTICES
     int detIndice(int i, int j); // Calcula a posição na matriz linear
-    int detIndiceRemove(int i, int j); // Retorna o indice se for direcionado para funcionar no removeVertice
 };
 
 #endif
