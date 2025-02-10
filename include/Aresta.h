@@ -17,11 +17,15 @@ public:
     Vertice* getFim();
     void setProx(Aresta* a);
     Aresta* getProx();
+    void setVisitado(bool v);
+    bool getVisitado();
+
 private:
     float peso;
     Vertice* inicio;
     Vertice* fim;
     Aresta* prox;
+    bool visitado;
 };
 
 #endif //ARESTA_H
