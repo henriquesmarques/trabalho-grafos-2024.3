@@ -13,7 +13,7 @@ protected:
     bool arestasPonderadas;
     int ordem;
     void auxNConexo(bool *visitados, Vertice *v);
-    int minDistance(float dist[], bool visitados[]);
+    int minDistance(float dist[], bool visitados[], int num_aresta[]);
 public:
     Grafo();
     virtual ~Grafo();

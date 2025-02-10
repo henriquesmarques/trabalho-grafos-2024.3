@@ -221,15 +221,17 @@ void Grafo::caminhoMinino(int id_inicio, int id_fim) {
         float max = 100;
         float dist[ordem];
         bool visitados[ordem];
+        int num_aresta[ordem];
         for (int i = 0; i < ordem; i++) {
             dist[i] = max;
             visitados[i] = false;
+            num_aresta[i]=0;
         }
         dist[id_inicio-1] = 0;
         ///caso para grafos direcionados
         if (eh_direcionado()) {
             for (int count = 0; count < ordem - 1; count++) {
-                int u = minDistance(dist, visitados);
+                int u = minDistance(dist, visitados, num_aresta);
                 visitados[u] = true;
                 for (int v = 0; v < ordem; v++) {
                     if (!visitados[v] && getAresta(u+1,v+1) != nullptr
@@ -241,7 +243,7 @@ void Grafo::caminhoMinino(int id_inicio, int id_fim) {
         ///caso para grafos não direcionados
         else {
             for (int m = 0; m < ordem - 1; m++) {
-                int u = minDistance(dist, visitados);
+                int u = minDistance(dist, visitados, num_aresta);
                 visitados[u] = true;
                 for (int v = 0; v < ordem; v++) {
                     if ((!visitados[v] && getAresta(u+1,v+1) != nullptr
@@ -256,10 +258,12 @@ void Grafo::caminhoMinino(int id_inicio, int id_fim) {
         // Impressão
         if (dist[id_fim-1] == 100)
             cout<<"Nao existe caminho entre os vertices."<<endl;
+        //else if(aresta_ponderada())
+        //    cout << "Maior menor distancia:(" << id_inicio << "-" << id_fim << ") " << dist[id_fim-1]-(num_aresta[id_fim]*neg) << endl;
         else
-            cout << "Maior menor distancia:(" << id_inicio << "-" << id_fim << ") " << dist[id_fim-1] << endl;
+            cout<< "Maior menor distancia:(" << id_inicio << "-" << id_fim << ") " << dist[id_fim-1] << endl;
 
-        ///restaurar pesos
+        // Restaurar os pesos
         if (aresta_ponderada()) {
             for(int i = 1; i <= get_ordem(); i++) {
                 Vertice *v = getVertice(i);
@@ -276,7 +280,7 @@ void Grafo::caminhoMinino(int id_inicio, int id_fim) {
     }
 }
 
-int Grafo::minDistance(float dist[], bool visitados[]) {
+int Grafo::minDistance(float dist[], bool visitados[], int num_aresta[]) {
         float min = 100;
         int min_index = 0;
 
@@ -284,6 +288,7 @@ int Grafo::minDistance(float dist[], bool visitados[]) {
             if (visitados[i] == false && dist[i] <= min) {
                 min = dist[i];
                 min_index = i;
+                num_aresta[i] += 1;
             }
         }
         return min_index;

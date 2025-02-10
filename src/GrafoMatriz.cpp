@@ -215,7 +215,7 @@ void GrafoMatriz::removerVertice(int id) {
                 vertices[i]->setId(i+1);
             }
         }
-        imprimirArestas();
+        //imprimirArestas();
         // Organizando matriz de arestas
         if (direcionado) {
             for(int i = id-1; i < MAX_VERTICES-1; i++) {;
@@ -230,7 +230,7 @@ void GrafoMatriz::removerVertice(int id) {
                 }
             }
         }
-        imprimirArestas();
+        //imprimirArestas();
 
         ordem--;
         delete v;
