@@ -197,7 +197,6 @@ void Grafo::caminhoMinino(int id_inicio, int id_fim) {
                 }
             }
         }
-        cout<<"neg: "<<neg<<endl;;
         // Inicialização de variáveis
         float max = 100;
         float dist[ordem];
