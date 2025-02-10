@@ -245,7 +245,7 @@ void GrafoMatriz::removerVertice(int id) {
                 }*/
                 
                 for(int i = id; i < MAX_VERTICES-1; i++) {
-                    for(int j = i+1; i < MAX_VERTICES-1; i++) {
+                    for(int j = i+1; j < MAX_VERTICES-1; j++) {
                         arestas[detIndice(i,j)] = arestas[detIndice(i,j)+MAX_VERTICES-1-i]; //Mover a linha para cima
                     }
                 }
@@ -272,12 +272,12 @@ void GrafoMatriz::removerVertice(int id) {
     }
 
     cout << "Depois da Remover Vertice: " << endl;
-        for(int i =0; i<numVertices; i++){
-            cout << "Vertices " << vertices[i];
-        }
-        cout << endl;
-        for(int i=0; i<MAX_ARESTAS ; i++){
-            cout << "arestas " << arestas[i];
-        }
+    for(int i =0; i<numVertices; i++){
+        cout << "Vertices " << vertices[i];
+    }
+    cout << endl;
+    for(int i=0; i<MAX_ARESTAS ; i++){
+        cout << "arestas " << arestas[i];
+    }
 }
 
