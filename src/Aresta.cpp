@@ -51,3 +51,11 @@ void Aresta::setProx(Aresta *a) {
 Aresta* Aresta::getProx() {
     return prox;
 }
+
+void Aresta::setVisitado(bool v) {
+    visitado = v;
+}
+
+bool Aresta::getVisitado() {
+    return visitado;
+}
