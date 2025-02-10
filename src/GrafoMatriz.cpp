@@ -39,7 +39,17 @@ GrafoMatriz::GrafoMatriz(bool dir) {
 }
 
 GrafoMatriz::~GrafoMatriz() {
+    for (int i = 0; i < MAX_ARESTAS; i++) {
+        if (arestas[i] != nullptr) {
+            delete arestas[i];
+        }
+    }
     delete [] arestas;
+    for (int i = 0; i < MAX_VERTICES; i++) {
+        if (vertices[i] != nullptr) {
+            delete vertices[i];
+        }
+    }
     delete [] vertices;
 }
 
