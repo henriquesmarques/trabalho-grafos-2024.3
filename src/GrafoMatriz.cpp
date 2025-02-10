@@ -243,27 +243,5 @@ void GrafoMatriz::removerVertice(int id) {
         cout << "arestas: " << arestas[i] << " ";
     }
 }
-void GrafoMatriz::removerAresta(int id_inicio, int id_fim) {
-    if (verificaIndice(id_inicio) && verificaIndice(id_fim)) {
-        Aresta *a = getAresta(id_inicio, id_fim);
-        if (a == nullptr) {
-            cout << "Erro: aresta nao encontrada." << endl;
-        }
-        else {
-            cout << "Removendo aresta: " << a->getInicio()->getId() << " -> " << a->getFim()->getId() << endl;
-            /// Remove aresta dos Vetores
-            Vertice* v = a->getInicio();
-            v->removerVizinho(a);
-            v = a->getFim();
-            v->removerVizinho(a);
 
-            /// Remove aresta da matriz
-            arestas[detIndice(id_inicio-1, id_fim-1)] = nullptr;
-
-            delete a;
-        }
-    } else {
-        cout << "Erro: indice invalido." << endl;
-    }
-}
 
