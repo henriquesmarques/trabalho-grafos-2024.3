@@ -164,35 +164,40 @@ void Grafo::caminhoMinino(int id_inicio, int id_fim) {
     Vertice* inicio = getVertice(id_inicio);
     Vertice* fim = getVertice(id_fim);
     ///Verifica se os vertices existem
-    if (inicio == nullptr || fim == nullptr) {
+    if (inicio == nullptr || fim == nullptr)
         cout << "Erro: Vertices nao encontrados." << endl;
-    }
+
     else {
         ///Verifica se as arestas possuem peso e verifica se tem algum peso negativo
         float neg = 0;
-        if (arestasPonderadas == true) {
-            Vertice *aux = inicio;
-            while (aux != nullptr) {
-                ///verifica qual aresta possui o menor peso
-                Aresta **a = aux->getVetorVizinhos();
-                for (int i=0; i<aux->getTotalVizinhos(); i++) {
-                    if (a[i]->getPeso() < neg)
-                        neg = a[i]->getPeso();
+        if (aresta_ponderada()) {
+            ///verifica se existe algum peso negativo
+            for(int i = 1; i <= get_ordem(); i++) {
+                Vertice *v = getVertice(i);
+                Aresta **a = v->getVetorVizinhos();
+                for (int j = 0; j < v->getTotalVizinhos(); j++) {
+                    if (a[j]->getPeso() < neg)
+                        neg = a[j]->getPeso();
                 }
-                aux= aux->getProx();
             }
-            if (neg < 0) {
-                neg = abs(neg)+1;
-                aux = inicio;
-                while (aux!= nullptr) {
-                    Aresta **a = aux->getVetorVizinhos();
-                    for (int i=0; i<aux->getTotalVizinhos(); i++)
-                        a[i]->setPeso(a[i]->getPeso() + neg);
-                    aux = aux->getProx();
+            ///passa o valor absoluto do menor peso negativo para a variavel neg
+            neg = abs(neg)+1;
+            ///caso exista peso negativo, é adicionado o valor absoluto do menor peso negativo
+            if (neg > 1) {
+                for(int i = 1; i <= get_ordem(); i++) {
+                    Vertice *v = getVertice(i);
+                    Aresta **a = v->getVetorVizinhos();
+                    for (int j = 0; j < v->getTotalVizinhos(); j++){
+                        ///se a aresta ainda não foi visitada, é adicionado o valor absoluto do menor peso negativo
+                        if(!a[j]->getVisitado()){
+                            a[j]->setPeso(a[j]->getPeso() + neg);
+                            a[j]->setVisitado(true);
+                        }
+                    }
                 }
             }
         }
-
+        cout<<"neg: "<<neg<<endl;;
         // Inicialização de variáveis
         float max = 100;
         float dist[ordem];
@@ -226,7 +231,6 @@ void Grafo::caminhoMinino(int id_inicio, int id_fim) {
                         dist[v] = dist[u] + getAresta(u+1,v+1)->getPeso();
                     }
                 }
-
             }
         }
 
@@ -234,21 +238,24 @@ void Grafo::caminhoMinino(int id_inicio, int id_fim) {
         if (dist[id_fim-1] == 100)
             cout<<"Nao existe caminho entre os vertices."<<endl;
         else
-            cout << "Maior menor distancia:(" << id_inicio << "-" << id_fim << ") " << dist[id_fim-1] << endl;///restaurar pesos
-    if (aresta_ponderada()) {
-        Vertice *aux = inicio;
-        while (aux!= nullptr) {
-            Aresta **a = aux->getVetorVizinhos();
-            for (int i=0; i<aux->getTotalVizinhos(); i++) {
-                a[i]->setPeso(a[i]->getPeso() - neg);
+            cout << "Maior menor distancia:(" << id_inicio << "-" << id_fim << ") " << dist[id_fim-1] << endl;
+
+        ///restaurar pesos
+        if (aresta_ponderada()) {
+            for(int i = 1; i <= get_ordem(); i++) {
+                Vertice *v = getVertice(i);
+                Aresta **a = v->getVetorVizinhos();
+                for (int j = 0; j < v->getTotalVizinhos(); j++){
+                    ///se a aresta ainda não foi visitada, é adicionado o valor absoluto do menor peso negativo
+                    if(a[j]->getVisitado()){
+                        a[j]->setPeso(a[j]->getPeso() - neg);
+                        a[j]->setVisitado(false);
+                    }
+                }
             }
-            aux = aux->getProx();
-        }
         }
     }
 }
-
-
 
 int Grafo::minDistance(float dist[], bool visitados[]) {
         float min = 100;
