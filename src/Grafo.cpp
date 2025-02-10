@@ -59,8 +59,7 @@ void Grafo::carrega_grafo(string nomeArquivo) {
     arquivo.close();
 }
 
-void Grafo::imprimeGrafo(string nomeArquivo) {
-    cout<<nomeArquivo<<"\n";
+void Grafo::imprimeGrafo() {
 
     cout << "Grau: " << get_grau() << endl;
 

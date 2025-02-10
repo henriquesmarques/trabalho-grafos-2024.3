@@ -127,21 +127,29 @@ int GrafoMatriz::detIndice(int i, int j) {
 }
 
 Vertice* GrafoMatriz::getVertice(int id) {
-    return vertices[id-1];
+    if (id > 0 && id <= MAX_VERTICES) {
+        return vertices[id-1];
+    }
+    cout << "Erro: indice invalido." << endl;
+    exit(1);
 }
 
 Aresta* GrafoMatriz::getAresta(int id_inicio, int id_fim) {
-    if (!direcionado && id_inicio > id_fim) {
-        int aux = id_inicio;
-        id_inicio = id_fim;
-        id_fim = aux;
+    if (id_fim > 0 && id_inicio > 0 && id_fim <= MAX_VERTICES && id_inicio <= MAX_VERTICES) {
+        if (!direcionado && id_inicio > id_fim) {
+            int aux = id_inicio;
+            id_inicio = id_fim;
+            id_fim = aux;
+        }
+        int k = detIndice(id_inicio-1, id_fim-1);
+        if (k == -1) {
+            cout << "Erro: indice invalido" << endl;
+            exit(-1);
+        }
+        return arestas[k];
     }
-    int k = detIndice(id_inicio-1, id_fim-1);
-    if (k == -1) {
-        cout << "Erro: indice invalido" << endl;
-        exit(-1);
-    }
-    return arestas[k];
+    cout << "Erro: indice invalido." << endl;
+    exit(1);
 }
 
 void GrafoMatriz::inserirVertice(int id, float peso) {
@@ -185,6 +193,9 @@ void GrafoMatriz::inserirAresta(int id_inicio, int id_fim, float peso) {
 void GrafoMatriz::removerVertice(int id) {
     //ordem--;
     //...
+
+
+    cout << "Excluindo no " << id << "..." << endl;
 }
 
 

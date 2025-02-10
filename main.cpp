@@ -19,10 +19,10 @@ int main(int argc, char *argv[]) {
     //cout << "Valor armazenado em opcao: " << opcao << endl;
     string estrutura = argv[2];
     //cout << "Valor armazenado em estrutura: " << estrutura << endl;
-    string arquivoDescricao, arquivoGrafo;
+    string arquivoGrafo;
 
     // Validação dos argumentos
-    if (opcao != "-c" && opcao != "-d")
+    if (opcao != "-d")
     {
         cout << "Erro: opção inválida" << "\n";
         return 1;
@@ -44,44 +44,27 @@ int main(int argc, char *argv[]) {
         arquivoGrafo = argv[3];
         if (estrutura == "-m")
         {
-            //cout << "Teste: grafo -d -m entrou" << "\n";
             GrafoMatriz g;
+            cout << arquivoGrafo << endl << endl;
             g.carrega_grafo(arquivoGrafo);
-            g.imprimeGrafo(arquivoGrafo);
+            g.removerVertice(1);
+            // cout << "Excluindo primeira aresta do nó de id 2..." << endl;
+            // g.removerAresta();
+            cout << endl;
+            g.imprimeGrafo();
             g.caminhoMinino(1,3);
         }
         else
         {
-            //cout << "Teste: grafo -d -l entrou" << "\n";
             GrafoLista g;
+            cout << arquivoGrafo << endl << endl;
             g.carrega_grafo(arquivoGrafo);
-            g.imprimeGrafo(arquivoGrafo);
+            g.removerVertice(1);
+            // cout << "Excluindo primeira aresta do nó de id 2..." << endl;
+            // g.removerAresta();
+            cout << endl;
+            g.imprimeGrafo();
             g.caminhoMinino(1,3);
-        }
-    }
-    else if (opcao == "-c")
-    {
-        if (argc != 5)
-        {
-            cout << "Erro: -c requer 5 argumentos" << "\n";
-            return 1;
-        }
-        arquivoDescricao = argv[3]; // arquivo passado para leitura
-        arquivoGrafo = argv[4];     // arquivo passado para escrita
-
-        if (estrutura == "-m")
-        {
-            //cout << "Teste: grafo -c -m entrou" << "\n";
-            GrafoMatriz g;
-            //g.novo_grafo(arquivoDescricao);
-            g.carrega_grafo(arquivoGrafo);
-        }
-        else
-        {
-            //cout << "Teste: grafo -c -l entrou" << "\n";
-            GrafoLista g;
-            //g.novo_grafo(arquivoDescricao);
-            //g.salvaGrafo(arquivoGrafo);
         }
     }
     else
@@ -89,5 +72,6 @@ int main(int argc, char *argv[]) {
         cout << "Erro inesperado";
         return 1;
     }
+
     return 0;
 }

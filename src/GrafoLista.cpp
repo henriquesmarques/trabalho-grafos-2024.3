@@ -130,9 +130,13 @@ void GrafoLista::removerVertice(int id) {
 
         ordem--;
         delete v;
+
+        // Organizando índices
         for (int i=id; i<=ordem; i++) {
             getVertice(i+1)->setId(i);
         }
+
+        cout << "Excluindo no " << id << "..." << endl;
     }
 }
 
