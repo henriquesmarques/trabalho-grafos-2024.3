@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
             g.carrega_grafo(arquivoGrafo);
             g.removerVertice(1);
             // cout << "Excluindo primeira aresta do nó de id 2..." << endl;
-            // g.removerAresta();
+            // g.removerAresta(1,2);
             cout << endl;
             g.imprimeGrafo();
             g.caminhoMinino(1,3);
