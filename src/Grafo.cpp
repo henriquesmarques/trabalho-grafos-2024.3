@@ -177,7 +177,7 @@ int Grafo::get_grau() {
                 grauGrafo = grauSaida;
         }
         return grauGrafo;
-    }
+    }
 }
 void Grafo::caminhoMinino(int id_inicio, int id_fim) {
     Vertice* inicio = getVertice(id_inicio);

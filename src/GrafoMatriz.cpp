@@ -105,7 +105,7 @@ void GrafoMatriz::aumentarMatriz() {
 int GrafoMatriz::detIndice(int i, int j) {
     if (!direcionado) {
         if (i <= j && i >= 0 && j < MAX_VERTICES) {
-            return; // caso especifico para matriz triangular superior
+            return (j+1)*j/2+i; // caso especifico para matriz triangular superior
         }
     } else {
         if (i >= 0 && i < MAX_VERTICES && j >= 0 && j < MAX_VERTICES) {
@@ -170,51 +170,14 @@ void GrafoMatriz::inserirAresta(int id_inicio, int id_fim, float peso) {
         }
     }
 }
-/*void GrafoMatriz::removerVertice(int id){
-    //imprimirArestas();
-    Vertice *v = getVertice(id);
-    if (v==nullptr) {
-        cout<<"Erro: vertice nao encontrado."<<endl;
-    }
-    else {
-        /// Remover arestas do vetor de arestas
-        while (v->getTotalVizinhos() > 0) {
-            Aresta *a = v->getVizinho(0);
-            int inicio = a->getInicio()->getId();
-            int fim = a->getFim()->getId();
-            arestas[(inicio,fim)] = nullptr; //
-            v->removerVizinho(a);
-        }
-        //deslocando a matriz para remover o vertice
-        /*for (int i = id; i < ordem; i++) {
-            for (int j = 0; j < ordem; j++) {
-                arestas[detIndice(i, j)] = arestas[detIndice(i + 1, j)]; // Mover linha para cima
-            }
-        }
-        for (int j = id; j < ordem; j++) {
-            for (int i = 0; i < ordem; i++) {
-                arestas[detIndice(i, j)] = arestas[detIndice(i, j + 1)]; // Mover coluna para a esquerda
-            }
-        }*/
-        
-        
-        //removendo o vertice do vetor de vertice
-        /*for(int i=id; i< ordem; i++){
-            vertices[i] = vertices[i+1];
-            getVertice(i+1)->setId(i);
-        }
-        delete v;
-        ordem --;
-    }
-}*/
 void GrafoMatriz::removerVertice(int id) {
-    cout << "Antes da Remover Vertice: " << endl
-    for(int i =0; i<numVertices; i++){
-            cout << "Vertices " << vertices[i];
+    cout << "Antes da Remover Vertice: " << endl;
+    for(int i = 0; i < MAX_VERTICES; i++){
+            cout << "Vertices: " << vertices[i] << " ";
         }
     cout << endl;
     for(int i=0; i<MAX_ARESTAS ; i++){
-        cout << "Arestas " << arestas[i];
+        cout << "Aresta: " << arestas[i] << " ";
     }
     Vertice *v = getVertice(id);
     if (v == nullptr) {
@@ -272,12 +235,35 @@ void GrafoMatriz::removerVertice(int id) {
     }
 
     cout << "Depois da Remover Vertice: " << endl;
-    for(int i =0; i<numVertices; i++){
-        cout << "Vertices " << vertices[i];
+    for(int i =0; i<MAX_VERTICES; i++){
+        cout << "Vertice:  " << vertices[i] << " ";
     }
     cout << endl;
     for(int i=0; i<MAX_ARESTAS ; i++){
-        cout << "arestas " << arestas[i];
+        cout << "arestas: " << arestas[i] << " ";
+    }
+}
+void GrafoMatriz::removerAresta(int id_inicio, int id_fim) {
+    if (verificaIndice(id_inicio) && verificaIndice(id_fim)) {
+        Aresta *a = getAresta(id_inicio, id_fim);
+        if (a == nullptr) {
+            cout << "Erro: aresta nao encontrada." << endl;
+        }
+        else {
+            cout << "Removendo aresta: " << a->getInicio()->getId() << " -> " << a->getFim()->getId() << endl;
+            /// Remove aresta dos Vetores
+            Vertice* v = a->getInicio();
+            v->removerVizinho(a);
+            v = a->getFim();
+            v->removerVizinho(a);
+
+            /// Remove aresta da matriz
+            arestas[detIndice(id_inicio-1, id_fim-1)] = nullptr;
+
+            delete a;
+        }
+    } else {
+        cout << "Erro: indice invalido." << endl;
     }
 }
 

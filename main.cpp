@@ -48,7 +48,8 @@ int main(int argc, char *argv[]) {
             GrafoMatriz g;
             g.carrega_grafo(arquivoGrafo);
             g.imprimeGrafo(arquivoGrafo);
-            g.caminhoMinino(1,3);
+            //g.caminhoMinino(1,3);
+            g.removerAresta(1,2);
         }
         else
         {
