@@ -189,14 +189,46 @@ void GrafoMatriz::inserirAresta(int id_inicio, int id_fim, float peso) {
         }
     }
 }
-
 void GrafoMatriz::removerVertice(int id) {
-    //ordem--;
-    //...
+    Vertice *v = getVertice(id);
+    if (v == nullptr) {
+        cout << "Erro: o vertice nao foi encontrado." << endl;
+    } else {
+        // Remover arestas do vetor de arestas do vértice
+        for (int i = v->getTotalVizinhos()-1; i >= 0; i--) {
+            removerAresta(v->getVizinho(i)->getInicio()->getId(), v->getVizinho(i)->getFim()->getId());
+        }
 
+        // Removendo vértice e organizando o vetor
+        for(int i = id-1; i < MAX_VERTICES-1; i++) {
+            vertices[i] = vertices[i+1];
+            if (vertices[i] != nullptr) {
+                vertices[i]->setId(i+1);
+            }
+        }
+        imprimirArestas();
+        // Organizando matriz de arestas
+        if (direcionado) {
+            for(int i = id-1; i < MAX_VERTICES-1; i++) {;
+                for(int j = id-1; j < MAX_VERTICES-1; j++) {
+                    arestas[detIndice(i,j)] = arestas[detIndice(i+1, j+1)];
+                }
+            }
+        } else {
+            for(int i = id-1; i < MAX_VERTICES-1; i++) {;
+                for(int j = i; j < MAX_VERTICES-1; j++) {
+                    arestas[detIndice(i,j)] = arestas[detIndice(i+1, j+1)];
+                }
+            }
+        }
+        imprimirArestas();
 
-    cout << "Excluindo no " << id << "..." << endl;
+        ordem--;
+        delete v;
+        cout << "Excluindo no " << id << "..." << endl;
+    }
 }
+
 
 
 void GrafoMatriz::removerAresta(int id_inicio, int id_fim) {
