@@ -52,10 +52,7 @@ int main(int argc, char *argv[]) {
             //g.removerAresta(1,2);
             cout << endl;
             g.imprimeGrafo();
-            g.caminhoMinino(1,3);
-            g.imprimirArestas();
-            cout << endl;
-            g.imprimirVertices();
+            g.caminhoMinino();
         }
         else
         {
@@ -67,10 +64,7 @@ int main(int argc, char *argv[]) {
             // g.removerAresta();
             cout << endl;
             g.imprimeGrafo();
-            g.caminhoMinino(1,3);
-            g.imprimirArestas();
-            cout << endl;
-            g.imprimirVertices();
+            g.caminhoMinino();
         }
     }
     else
