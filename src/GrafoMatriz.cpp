@@ -200,7 +200,7 @@ void GrafoMatriz::removerVertice(int id) {
                     vertices[i]->setId(i+1);
                 }
             }
-            //imprimirArestas();
+
             // Organizando matriz de arestas
             if (direcionado) {
                 for(int i = id-1; i < MAX_VERTICES-1; i++) {;
@@ -234,7 +234,6 @@ void GrafoMatriz::removerAresta(int id_inicio, int id_fim) {
             cout << "Erro: aresta nao encontrada." << endl;
         }
         else {
-            cout << "Removendo aresta: " << a->getInicio()->getId() << " -> " << a->getFim()->getId() << endl;
             /// Remove aresta dos Vetores
             Vertice* v = a->getInicio();
             v->removerVizinho(a);

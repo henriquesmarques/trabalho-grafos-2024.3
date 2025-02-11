@@ -47,9 +47,14 @@ int main(int argc, char *argv[]) {
             GrafoMatriz g;
             cout << arquivoGrafo << endl << endl;
             g.carrega_grafo(arquivoGrafo);
-            //g.removerVertice(1);
-            // cout << "Excluindo primeira aresta do nó de id 2..." << endl;
-            //g.removerAresta(1,2);
+            g.removerVertice(1);
+
+            if (g.getVertice(2)->getTotalVizinhos() != 0) {
+                Aresta* a = g.getVertice(2)->getVizinho(1);
+                cout << "Excluindo primeira aresta do nó 2..." << endl;
+                g.removerAresta(a->getInicio()->getId(),a->getFim()->getId());
+            }
+
             cout << endl;
             g.imprimeGrafo();
             g.caminhoMinino();
@@ -59,9 +64,14 @@ int main(int argc, char *argv[]) {
             GrafoLista g;
             cout << arquivoGrafo << endl << endl;
             g.carrega_grafo(arquivoGrafo);
-            ///g.removerVertice(1);
-            // cout << "Excluindo primeira aresta do nó de id 2..." << endl;
-            // g.removerAresta();
+            g.removerVertice(1);
+
+            if (g.getVertice(2)->getTotalVizinhos() != 0) {
+                Aresta* a = g.getVertice(2)->getVizinho(1);
+                cout << "Excluindo primeira aresta do nó 2..." << endl;
+                g.removerAresta(a->getInicio()->getId(),a->getFim()->getId());
+            }
+
             cout << endl;
             g.imprimeGrafo();
             g.caminhoMinino();

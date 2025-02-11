@@ -265,9 +265,9 @@ void Grafo::caminhoMinino() {
         }
         // Impressão
         if(neg > 1)
-            cout<< "Maior menor distancia:(" << menor_caminho[1] << "-" << menor_caminho[2] << ") " << menor_caminho[0]-(menor_caminho[3]*neg) << endl;
+            cout<< "Maior menor distancia: (" << menor_caminho[1] << "-" << menor_caminho[2] << ") " << menor_caminho[0]-(menor_caminho[3]*neg) << endl;
         else
-        cout<< "Maior menor distancia:(" << menor_caminho[1] << "-" << menor_caminho[2] << ") " << menor_caminho[0] << endl;
+        cout<< "Maior menor distancia: (" << menor_caminho[1] << "-" << menor_caminho[2] << ") " << menor_caminho[0] << endl;
 
         // Restaurar os pesos
         if (neg > 1) {
