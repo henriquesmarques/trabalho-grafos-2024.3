@@ -239,7 +239,7 @@ void Grafo::caminhoMinino() {
                     if (!visitados[v] && uv != nullptr
                     && dist[u] != INF && dist[u] + uv->getPeso() < dist[v]){
                         dist[v] = dist[u] + uv->getPeso();
-                        num_aresta[v] += 1}}}}
+                        num_aresta[v] += 1;}}}}
 
         ///caso para grafos não direcionados
         else {
