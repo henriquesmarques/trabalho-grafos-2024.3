@@ -20,11 +20,12 @@ public:
     void inserirAresta(int id_inicio, int id_fim, float peso) override;
     void removerVertice(int id) override;
     void removerAresta(int id_inicio, int id_fim) override;
+    void imprimirVertices();
+    void imprimirArestas();
 private:
     Vertice* raizVertice;
     Aresta* raizAresta;
-    void imprimirVertices();
-    void imprimirArestas();
+
 };
 
 #endif //GRAFO_LISTA_H

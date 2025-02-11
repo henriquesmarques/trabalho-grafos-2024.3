@@ -181,6 +181,11 @@ void GrafoMatriz::inserirAresta(int id_inicio, int id_fim, float peso) {
             if (inicio == nullptr || fim == nullptr) {
                 cout << "Erro: o vertice nao foi encontrado." << endl;
             } else {
+                if (id_inicio > id_fim) {
+                    int aux = id_inicio;
+                    id_inicio = id_fim;
+                    id_fim = aux;
+                }
                 // Criando aresta
                 auto* a = new Aresta(inicio, fim, peso);
 
