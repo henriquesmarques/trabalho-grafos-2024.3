@@ -14,7 +14,7 @@ protected:
     int ordem;
     void auxNConexo(bool *visitados, Vertice *v);
     //2ª Parte do Trabalho
-    int minDistance(float dist[], bool visitados[], int num_aresta[]);
+    int minDistance(float dist[], bool visitados[]);
 public:
     Grafo();
     virtual ~Grafo();
