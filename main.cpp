@@ -47,34 +47,34 @@ int main(int argc, char *argv[]) {
             GrafoMatriz g;
             cout << arquivoGrafo << endl << endl;
             g.carrega_grafo(arquivoGrafo);
-            g.removerVertice(1);
+            // g.removerVertice(1);
 
-            if (g.getVertice(2)->getTotalVizinhos() != 0) {
-                Aresta* a = g.getVertice(2)->getVizinho(1);
-                cout << "Excluindo primeira aresta do nó 2..." << endl;
-                g.removerAresta(a->getInicio()->getId(),a->getFim()->getId());
-            }
+            // if (g.getVertice(2)->getTotalVizinhos() != 0) {
+            //     Aresta* a = g.getVertice(2)->getVizinho(1);
+            //     cout << "Excluindo primeira aresta do nó 2..." << endl;
+            //     g.removerAresta(a->getInicio()->getId(),a->getFim()->getId());
+            // }
 
-            cout << endl;
+            // cout << endl;
             g.imprimeGrafo();
-            g.caminhoMinino();
+            // g.caminhoMinino();
         }
         else
         {
             GrafoLista g;
             cout << arquivoGrafo << endl << endl;
             g.carrega_grafo(arquivoGrafo);
-            g.removerVertice(1);
-
-            if (g.getVertice(2)->getTotalVizinhos() != 0) {
-                Aresta* a = g.getVertice(2)->getVizinho(1);
-                cout << "Excluindo primeira aresta do nó 2..." << endl;
-                g.removerAresta(a->getInicio()->getId(),a->getFim()->getId());
-            }
-
-            cout << endl;
+            // g.removerVertice(1);
+            //
+            // if (g.getVertice(2)->getTotalVizinhos() != 0) {
+            //     Aresta* a = g.getVertice(2)->getVizinho(1);
+            //     cout << "Excluindo primeira aresta do nó 2..." << endl;
+            //     g.removerAresta(a->getInicio()->getId(),a->getFim()->getId());
+            // }
+            //
+            // cout << endl;
             g.imprimeGrafo();
-            g.caminhoMinino();
+            // g.caminhoMinino();
         }
     }
     else
