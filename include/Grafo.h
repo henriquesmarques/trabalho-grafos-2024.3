@@ -13,6 +13,7 @@ protected:
     bool arestasPonderadas;
     int ordem;
     void auxNConexo(bool *visitados, Vertice *v);
+    //2ª Parte do Trabalho
     int minDistance(float dist[], bool visitados[], int num_aresta[]);
 public:
     Grafo();
@@ -37,7 +38,7 @@ public:
     virtual Aresta* getAresta(int id_inicio, int id_fim) = 0;
     virtual void setDirecao(bool dir) = 0;
     /// 2ª Parte do Trabalho
-    void caminhoMinino(int id_inicio, int id_fim);
+    void caminhoMinino();
 };
 
 #endif
