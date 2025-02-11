@@ -11,7 +11,6 @@ class GrafoMatriz : public Grafo {
 public:
     /// 1ª Parte do Trabalho
     GrafoMatriz();
-    GrafoMatriz(bool dir);
     ~GrafoMatriz() override;
     void setDirecao(bool dir) override;
     Vertice* getVertice(int id) override;

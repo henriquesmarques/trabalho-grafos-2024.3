@@ -13,7 +13,6 @@ public:
     ~GrafoLista() override;
     Vertice* getVertice(int id) override;
     Aresta* getAresta(int id_inicio, int id_fim) override;
-    Aresta** getVizinhos(int id);
     void setDirecao(bool dir);
     /// 2ª Parte do Trabalho
     void inserirVertice(int id, float peso) override;
@@ -25,7 +24,7 @@ public:
 private:
     Vertice* raizVertice;
     Aresta* raizAresta;
-
+    bool verificaIndice(int id);
 };
 
 #endif //GRAFO_LISTA_H

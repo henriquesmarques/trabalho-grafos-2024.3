@@ -25,41 +25,40 @@ GrafoLista::~GrafoLista() {
 }
 
 Vertice* GrafoLista::getVertice(int id) {
-    Vertice* v = raizVertice;
-    while (v != nullptr) {
-        if (v->getId() == id)
-            return v;
-        v = v->getProx();
+    if (verificaIndice(id)) {
+        Vertice* v = raizVertice;
+        while (v != nullptr) {
+            if (v->getId() == id)
+                return v;
+            v = v->getProx();
+        }
+        return nullptr;
     }
-    return nullptr;
+    cout << "Erro: indice invalido." << endl;
+    exit(1);
 }
 
 Aresta* GrafoLista::getAresta(int id_inicio, int id_fim) {
-    Vertice* v = getVertice(id_inicio);
-    for (int i = 0; i < v->getTotalVizinhos(); i++) {
-        if (v->getVizinho(i)->getFim()->getId() == id_fim) {
-            return v->getVizinho(i);
+    if (verificaIndice(id_inicio) && verificaIndice(id_fim)) {
+        Vertice* v = getVertice(id_inicio);
+        for (int i = 0; i < v->getTotalVizinhos(); i++) {
+            if (v->getVizinho(i)->getFim()->getId() == id_fim) {
+                return v->getVizinho(i);
+            }
         }
-    }
-    if (!eh_direcionado()) { // Verifica na direção oposta apenas para grafos não direcionados
-        v = getVertice(id_fim);
-        if (v != nullptr) {
-            for (int i = 0; i < v->getTotalVizinhos(); i++) {
-                if (v->getVizinho(i)->getFim()->getId() == id_inicio) {
-                    return v->getVizinho(i);
+        if (!eh_direcionado()) { // Verifica na direção oposta apenas para grafos não direcionados
+            v = getVertice(id_fim);
+            if (v != nullptr) {
+                for (int i = 0; i < v->getTotalVizinhos(); i++) {
+                    if (v->getVizinho(i)->getFim()->getId() == id_inicio) {
+                        return v->getVizinho(i);
+                    }
                 }
             }
         }
+        return nullptr;
     }
-    return nullptr;
-}
-
-Aresta ** GrafoLista::getVizinhos(int id) {
-    Vertice* v = getVertice(id);
-    if (v != nullptr) {
-        return v->getVetorVizinhos();
-    }
-    cout << "Erro: indice invalido no getVizinhos()." << endl;
+    cout << "Erro: indice invalido." << endl;
     exit(1);
 }
 
@@ -68,100 +67,116 @@ void GrafoLista::setDirecao(bool dir) {
 }
 
 void GrafoLista::inserirVertice(int id, float peso) {
-    if (getVertice(id) == nullptr) {
-        auto* v = new Vertice(id, peso);
-        if (raizVertice != nullptr) {
-            v->setProx(raizVertice);
+    if (verificaIndice(id)) {
+        if (getVertice(id) == nullptr) {
+            auto* v = new Vertice(id, peso);
+            if (raizVertice != nullptr) {
+                v->setProx(raizVertice);
+            }
+            raizVertice = v;
+            ordem++;
+        } else {
+            cout << "Erro: existe um vertice com o mesmo indice." << endl;
         }
-        raizVertice = v;
-        ordem++;
     } else {
-        cout << "Erro: existe um vertice com o mesmo indice." << endl;
+        cout << "Erro: indice invalido." << endl;
     }
 }
 
 void GrafoLista::inserirAresta(int id_inicio, int id_fim, float peso) {
-    if (id_inicio == id_fim) {
-        cout << "Erro: não e possivel inserir laco." << endl;
-    } else if (getAresta(id_inicio, id_fim) != nullptr) {
-        cout << "Erro: não e possivel inserir aresta multipla." << endl;
-    } else {
-        Vertice* inicio = getVertice(id_inicio);
-        Vertice* fim = getVertice(id_fim);
-        if (inicio == nullptr || fim == nullptr) {
-            cout << "Erro: o vertice nao foi encontrado." << endl;
+    if (verificaIndice(id_inicio) && verificaIndice(id_fim)) {
+        if (id_inicio == id_fim) {
+            cout << "Erro: não e possivel inserir laco." << endl;
+        } else if (getAresta(id_inicio, id_fim) != nullptr) {
+            cout << "Erro: não e possivel inserir aresta multipla." << endl;
         } else {
-            // Criando aresta
-            auto* a = new Aresta(inicio, fim, peso);
+            Vertice* inicio = getVertice(id_inicio);
+            Vertice* fim = getVertice(id_fim);
+            if (inicio == nullptr || fim == nullptr) {
+                cout << "Erro: o vertice nao foi encontrado." << endl;
+            } else {
+                // Criando aresta
+                auto* a = new Aresta(inicio, fim, peso);
 
-            // Adiciona aresta no vetor de vizinhos do vértice
-            inicio->inserirVizinho(a);
-            fim->inserirVizinho(a);
+                // Adiciona aresta no vetor de vizinhos do vértice
+                inicio->inserirVizinho(a);
+                fim->inserirVizinho(a);
 
-            // Adicionando aresta na lista de arestas
-            if (raizAresta != nullptr) {
-                a->setProx(raizAresta);
+                // Adicionando aresta na lista de arestas
+                if (raizAresta != nullptr) {
+                    a->setProx(raizAresta);
+                }
+                raizAresta = a;
             }
-            raizAresta = a;
         }
+    } else {
+        cout << "Erro: indice invalido." << endl;
     }
 }
 
 void GrafoLista::removerVertice(int id) {
-    Vertice *v = getVertice(id);
-    if (v == nullptr) {
-        cout << "Erro: o vertice nao foi encontrado." << endl;
-    } else {
-        // Remover arestas do vetor de arestas do vértice
-        for (int i = v->getTotalVizinhos()-1; i >= 0; i--) {
-            removerAresta(v->getVizinho(i)->getInicio()->getId(), v->getVizinho(i)->getFim()->getId());
-        }
-
-        // Remover vértice da lista de vértices do Grafo
-        if (raizVertice == v) {
-            raizVertice = v->getProx();
+    if (verificaIndice(id)) {
+        Vertice *v = getVertice(id);
+        if (v == nullptr) {
+            cout << "Erro: o vertice nao foi encontrado." << endl;
         } else {
-            Vertice* ant = raizVertice;
-            while (ant->getProx() != v) {
-                ant = ant->getProx();
+            // Remover arestas do vetor de arestas do vértice
+            for (int i = v->getTotalVizinhos()-1; i >= 0; i--) {
+                removerAresta(v->getVizinho(i)->getInicio()->getId(), v->getVizinho(i)->getFim()->getId());
             }
-            ant->setProx(v->getProx());
+
+            // Remover vértice da lista de vértices do Grafo
+            if (raizVertice == v) {
+                raizVertice = v->getProx();
+            } else {
+                Vertice* ant = raizVertice;
+                while (ant->getProx() != v) {
+                    ant = ant->getProx();
+                }
+                ant->setProx(v->getProx());
+            }
+
+            ordem--;
+            delete v;
+
+            // Organizando índices
+            for (int i=id; i<=ordem; i++) {
+                getVertice(i+1)->setId(i);
+            }
+
+            cout << "Excluindo no " << id << "..." << endl;
         }
-
-        ordem--;
-        delete v;
-
-        // Organizando índices
-        for (int i=id; i<=ordem; i++) {
-            getVertice(i+1)->setId(i);
-        }
-
-        cout << "Excluindo no " << id << "..." << endl;
+    } else {
+        cout << "Erro: indice invalido." << endl;
     }
 }
 
 void GrafoLista::removerAresta(int id_inicio, int id_fim) {
-    Aresta *a = getAresta(id_inicio, id_fim);
-    if (a == nullptr) {
-        cout << "Erro: aresta nao encontrada." << endl;
-    }
-    else {
-        /// Remove aresta dos Vetores
-        Vertice* v = a->getInicio();
-        v->removerVizinho(a);
-        v = a->getFim();
-        v->removerVizinho(a);
-        /// Remove aresta da lista de arestas do Grafo
-        if (raizAresta == a) {
-            raizAresta = a->getProx();
-        } else {
-            Aresta* ant = raizAresta;
-            while (ant->getProx() != a) {
-                ant = ant->getProx();
-            }
-            ant->setProx(a->getProx());
+    if (verificaIndice(id_inicio) && verificaIndice(id_fim)) {
+        Aresta *a = getAresta(id_inicio, id_fim);
+        if (a == nullptr) {
+            cout << "Erro: aresta nao encontrada." << endl;
         }
-        delete a;
+        else {
+            /// Remove aresta dos Vetores
+            Vertice* v = a->getInicio();
+            v->removerVizinho(a);
+            v = a->getFim();
+            v->removerVizinho(a);
+            /// Remove aresta da lista de arestas do Grafo
+            if (raizAresta == a) {
+                raizAresta = a->getProx();
+            } else {
+                Aresta* ant = raizAresta;
+                while (ant->getProx() != a) {
+                    ant = ant->getProx();
+                }
+                ant->setProx(a->getProx());
+            }
+            delete a;
+        }
+    } else {
+        cout << "Erro: indice invalido." << endl;
     }
 }
 
@@ -182,4 +197,11 @@ void GrafoLista::imprimirArestas() {
         cout << a->getInicio()->getId() << " -> " << a->getFim()->getId() << " Peso: " << a->getPeso() << endl;
         a = a->getProx();
     }
+}
+
+bool GrafoLista::verificaIndice(int id) {
+    if (id > 0 && id <= ordem) {
+        return true;
+    }
+    return false;
 }

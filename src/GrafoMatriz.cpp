@@ -16,28 +16,6 @@ GrafoMatriz::GrafoMatriz() {
     }
 }
 
-GrafoMatriz::GrafoMatriz(bool dir) {
-    MAX_VERTICES = 10;
-    if (!dir) {
-        MAX_ARESTAS = (MAX_VERTICES+1)*MAX_VERTICES/2;
-    } else {
-        MAX_ARESTAS = MAX_VERTICES*MAX_VERTICES;
-    }
-    // Alocando matriz de arestas
-    arestas = new Aresta*[MAX_ARESTAS];
-    // Alocando vetor de vértices
-    vertices = new Vertice*[MAX_VERTICES];
-    // Inicializando vetor de vértices e matriz de arestas
-    for (int i = 0; i < MAX_ARESTAS; i++) {
-        if (i < MAX_VERTICES) {
-            vertices[i] = nullptr;
-        }
-        arestas[i] = nullptr;
-    }
-    // Atualizando variáveis
-    direcionado = dir;
-}
-
 GrafoMatriz::~GrafoMatriz() {
     for (int i = 0; i < MAX_ARESTAS; i++) {
         if (arestas[i] != nullptr) {
@@ -181,6 +159,7 @@ void GrafoMatriz::inserirAresta(int id_inicio, int id_fim, float peso) {
             if (inicio == nullptr || fim == nullptr) {
                 cout << "Erro: o vertice nao foi encontrado." << endl;
             } else {
+                // Verifica se não está inserindo abaixo da diagonal principal
                 if (id_inicio > id_fim) {
                     int aux = id_inicio;
                     id_inicio = id_fim;
@@ -204,42 +183,46 @@ void GrafoMatriz::inserirAresta(int id_inicio, int id_fim, float peso) {
 }
 
 void GrafoMatriz::removerVertice(int id) {
-    Vertice *v = getVertice(id);
-    if (v == nullptr) {
-        cout << "Erro: o vertice nao foi encontrado." << endl;
-    } else {
-        // Remover arestas do vetor de arestas do vértice
-        for (int i = v->getTotalVizinhos()-1; i >= 0; i--) {
-            removerAresta(v->getVizinho(i)->getInicio()->getId(), v->getVizinho(i)->getFim()->getId());
-        }
-
-        // Removendo vértice e organizando o vetor
-        for(int i = id-1; i < MAX_VERTICES-1; i++) {
-            vertices[i] = vertices[i+1];
-            if (vertices[i] != nullptr) {
-                vertices[i]->setId(i+1);
-            }
-        }
-        //imprimirArestas();
-        // Organizando matriz de arestas
-        if (direcionado) {
-            for(int i = id-1; i < MAX_VERTICES-1; i++) {;
-                for(int j = id-1; j < MAX_VERTICES-1; j++) {
-                    arestas[detIndice(i,j)] = arestas[detIndice(i+1, j+1)];
-                }
-            }
+    if (verificaIndice(id)) {
+        Vertice *v = getVertice(id);
+        if (v == nullptr) {
+            cout << "Erro: o vertice nao foi encontrado." << endl;
         } else {
-            for(int i = id-1; i < MAX_VERTICES-1; i++) {;
-                for(int j = i; j < MAX_VERTICES-1; j++) {
-                    arestas[detIndice(i,j)] = arestas[detIndice(i+1, j+1)];
+            // Remover arestas do vetor de arestas do vértice
+            for (int i = v->getTotalVizinhos()-1; i >= 0; i--) {
+                removerAresta(v->getVizinho(i)->getInicio()->getId(), v->getVizinho(i)->getFim()->getId());
+            }
+
+            // Removendo vértice e organizando o vetor
+            for(int i = id-1; i < MAX_VERTICES-1; i++) {
+                vertices[i] = vertices[i+1];
+                if (vertices[i] != nullptr) {
+                    vertices[i]->setId(i+1);
                 }
             }
-        }
-        //imprimirArestas();
+            //imprimirArestas();
+            // Organizando matriz de arestas
+            if (direcionado) {
+                for(int i = id-1; i < MAX_VERTICES-1; i++) {;
+                    for(int j = id-1; j < MAX_VERTICES-1; j++) {
+                        arestas[detIndice(i,j)] = arestas[detIndice(i+1, j+1)];
+                    }
+                }
+            } else {
+                for(int i = id-1; i < MAX_VERTICES-1; i++) {;
+                    for(int j = i; j < MAX_VERTICES-1; j++) {
+                        arestas[detIndice(i,j)] = arestas[detIndice(i+1, j+1)];
+                    }
+                }
+            }
+            //imprimirArestas();
 
-        ordem--;
-        delete v;
-        cout << "Excluindo no " << id << "..." << endl;
+            ordem--;
+            delete v;
+            cout << "Excluindo no " << id << "..." << endl;
+        }
+    } else {
+        cout << "Erro: indice invalido." << endl;
     }
 }
 
