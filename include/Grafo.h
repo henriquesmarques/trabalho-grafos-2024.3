@@ -39,13 +39,6 @@ public:
     virtual void setDirecao(bool dir) = 0;
     /// 2ª Parte do Trabalho
     void caminhoMinino();
-    /// 3ª Parte do Trabalho
-    void colorirVerticesRandomizado();
-    int* sortearValores(int intervalo, int quantidade);
-    void ordenarVetor(int arr[], int n);
-    int menor_valor_ausente(int arr[], int tamanho);
-    virtual void imprimirVertices() = 0;
-    void gulosoColoracaoVertice();
 };
 
 #endif
