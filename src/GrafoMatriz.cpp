@@ -294,7 +294,10 @@ void GrafoMatriz::imprimirVertices() {
     for (int i = 1; i <= MAX_VERTICES; i++) {
         Vertice* v = getVertice(i);
         if (v != nullptr) {
-            cout << "(" << v->getId() << "): " << v->getCor() << endl;
+            cout << v->getId() << " ";
+        } else {
+            cout << "0 ";
         }
     }
+    cout << endl;
 }
