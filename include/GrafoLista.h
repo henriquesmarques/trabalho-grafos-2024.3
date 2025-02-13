@@ -19,7 +19,7 @@ public:
     void inserirAresta(int id_inicio, int id_fim, float peso) override;
     void removerVertice(int id) override;
     void removerAresta(int id_inicio, int id_fim) override;
-    void imprimirVertices() override;
+    void imprimirVertices();
     void imprimirArestas();
 private:
     Vertice* raizVertice;
