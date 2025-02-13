@@ -160,9 +160,10 @@ void GrafoLista::imprimirVertices() {
     cout << "Lista de vertices: " << endl;
     Vertice* v = raizVertice;
     while (v != nullptr) {
-        cout << "(" << v->getId() << "): " << v->getCor() << endl;
+        cout << v->getId() << " ";
         v = v->getProx();
     }
+    cout << endl;
 }
 
 void GrafoLista::imprimirArestas() {
