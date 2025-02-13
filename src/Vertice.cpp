@@ -10,6 +10,7 @@ Vertice::Vertice(int _id) {
     n = 0;
     tam = 10;
     vizinhos = new Aresta*[tam];
+    cor = 0;
 }
 
 Vertice::Vertice(int _id, float _peso) {
@@ -19,6 +20,7 @@ Vertice::Vertice(int _id, float _peso) {
     n = 0;
     tam = 10;
     vizinhos = new Aresta*[tam];
+    cor = 0;
 }
 
 Vertice::~Vertice() {
@@ -132,4 +134,26 @@ int Vertice::totalArestasSaida() {
         }
     }
     return total;
+}
+
+int Vertice::getCor() {
+    return cor;
+}
+
+void Vertice::setCor(int i) {
+    cor = i;
+}
+
+Vertice ** Vertice::getVerticesVizinhos() {
+    Vertice** vizinhos = new Vertice*[getTotalVizinhos()];
+
+    for (int i = 0; i < getTotalVizinhos(); i++) {
+        if (getVizinho(i)->getInicio()->getId() != id) {
+            vizinhos[i] = getVizinho(i)->getInicio();
+        } else {
+            vizinhos[i] = getVizinho(i)->getFim();
+        }
+    }
+
+    return vizinhos;
 }

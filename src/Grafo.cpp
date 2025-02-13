@@ -2,6 +2,8 @@
 #include <fstream>
 #include <iostream>
 #include <cmath>
+#include <ctime>
+#define INF 1e9
 
 using namespace std;
 
@@ -59,8 +61,7 @@ void Grafo::carrega_grafo(string nomeArquivo) {
     arquivo.close();
 }
 
-void Grafo::imprimeGrafo(string nomeArquivo) {
-    cout<<nomeArquivo<<"\n";
+void Grafo::imprimeGrafo() {
 
     cout << "Grau: " << get_grau() << endl;
 
@@ -157,97 +158,138 @@ void Grafo::auxNConexo(bool *visitados, Vertice *v) {
 }
 
 int Grafo::get_grau() {
-    return 0;
+    ///informa o grau do grafo para grafos não direcionados
+    int grauGrafo = 0;
+    if (!eh_direcionado()) {
+        int grau = 0;
+        for(int i = 1; i <= get_ordem(); i++){
+            Vertice *v = getVertice(i);
+            grau = v-> getTotalVizinhos();
+            if(grau > grauGrafo)
+                grauGrafo = grau;
+        }
+        return grauGrafo;
+    }
+    ///informa o grau do grafo para grafos direcionados
+    else{
+        for(int i = 1; i <= get_ordem(); i++){
+            Vertice *v = getVertice(i);
+            int grauSaida = v->totalArestasSaida();
+            if(grauSaida > grauGrafo)
+                grauGrafo = grauSaida;
+        }
+        return grauGrafo;
+    }
 }
 
-void Grafo::caminhoMinino(int id_inicio, int id_fim) {
-    Vertice* inicio = getVertice(id_inicio);
-    Vertice* fim = getVertice(id_fim);
-    ///Verifica se os vertices existem
-    if (inicio == nullptr || fim == nullptr) {
-        cout << "Erro: Vertices nao encontrados." << endl;
-    }
+void Grafo::caminhoMinino() {
+    if (get_ordem() == 0)
+        cout << "Não existem caminhos" << endl;
     else {
         ///Verifica se as arestas possuem peso e verifica se tem algum peso negativo
         float neg = 0;
-        if (arestasPonderadas == true) {
-            Vertice *aux = inicio;
-            while (aux != nullptr) {
-                ///verifica qual aresta possui o menor peso
-                Aresta **a = aux->getVetorVizinhos();
-                for (int i=0; i<aux->getTotalVizinhos(); i++) {
-                    if (a[i]->getPeso() < neg)
-                        neg = a[i]->getPeso();
+        if (aresta_ponderada()) {
+            ///verifica se existe algum peso negativo
+            for(int i = 1; i <= get_ordem(); i++) {
+                Vertice *v = getVertice(i);
+                Aresta **a = v->getVetorVizinhos();
+                for (int j = 0; j < v->getTotalVizinhos(); j++) {
+                    if (a[j]->getPeso() < neg)
+                        neg = a[j]->getPeso();
                 }
-                aux= aux->getProx();
             }
-            if (neg < 0) {
-                neg = abs(neg)+1;
-                aux = inicio;
-                while (aux!= nullptr) {
-                    Aresta **a = aux->getVetorVizinhos();
-                    for (int i=0; i<aux->getTotalVizinhos(); i++)
-                        a[i]->setPeso(a[i]->getPeso() + neg);
-                    aux = aux->getProx();
+            ///passa o valor absoluto do menor peso negativo para a variavel neg
+            neg = abs(neg)+1;
+            ///caso exista peso negativo, é adicionado o valor absoluto do menor peso negativo
+            if (neg > 1) {
+                for(int i = 1; i <= get_ordem(); i++) {
+                    Vertice *v = getVertice(i);
+                    Aresta **a = v->getVetorVizinhos();
+                    for (int j = 0; j < v->getTotalVizinhos(); j++){
+                        ///se a aresta ainda não foi visitada, é adicionado o valor absoluto do menor peso negativo
+                        if(!a[j]->getVisitado()){
+                            a[j]->setPeso(a[j]->getPeso() + neg);
+                            a[j]->setVisitado(true);
+                        }
+                    }
                 }
             }
         }
+        ///inicialização das variaveis
+        float menor_caminho[4] = {0, 0, 0, 0};
 
-        // Inicialização de variáveis
-        float max = 100;
+        for(int n = 1; n <= ordem; n++){
         float dist[ordem];
         bool visitados[ordem];
+        int num_aresta[ordem];
         for (int i = 0; i < ordem; i++) {
-            dist[i] = max;
+            dist[i] = INF;
             visitados[i] = false;
-        }
-        dist[id_inicio-1] = 0;
+            num_aresta[i]=0;}
+
+        ///indica o no de origem
+        dist[n] = 0;
         ///caso para grafos direcionados
         if (eh_direcionado()) {
-            for (int count = 0; count < ordem - 1; count++) {
+            for (int k = 0; k < ordem - 1; k++) {
                 int u = minDistance(dist, visitados);
+                if(u == -1)break;
                 visitados[u] = true;
                 for (int v = 0; v < ordem; v++) {
-                    if (!visitados[v] && getAresta(u+1,v+1) != nullptr
-                    && dist[u] != max && dist[u] + getAresta(u+1,v+1)->getPeso() < dist[v])
-                        dist[v] = dist[u] + getAresta(u+1,v+1)->getPeso();
-                }
-            }
-        }
+                    Aresta* uv = getAresta(u+1,v+1);
+                    if (!visitados[v] && uv != nullptr
+                    && dist[u] != INF && dist[u] + uv->getPeso() < dist[v]){
+                        dist[v] = dist[u] + uv->getPeso();
+                        num_aresta[v] += 1;}}}}
+
         ///caso para grafos não direcionados
         else {
-            for (int count = 0; count < ordem - 1; count++) {
+            for (int m = 0; m < ordem - 1; m++) {
                 int u = minDistance(dist, visitados);
                 visitados[u] = true;
                 for (int v = 0; v < ordem; v++) {
-                    if ((!visitados[v] && getAresta(u+1,v+1) != nullptr
-                    && dist[u] != max && dist[u] + getAresta(u+1,v+1)->getPeso() < dist[v]) ||(
-                    !visitados[u] && getAresta(v+1,u+1) != nullptr && dist[v] != max && dist[v] + getAresta(v+1,u+1)->getPeso()<dist[u])) {
-                        dist[v] = dist[u] + getAresta(u+1,v+1)->getPeso();
+                    Aresta* uv = getAresta(u+1,v+1);
+                    Aresta* vu = getAresta(v+1,u+1);
+                    if (!visitados[v] && uv != nullptr
+                    && dist[u] != INF && dist[u] + uv ->getPeso() < dist[v]){
+                        dist[v] = dist[u] + uv->getPeso();
+                        num_aresta[v] += 1;
                     }
-                }
-
-            }
-            // Impressão
-            cout << "Maior menor distancia:(" << id_inicio << "-" << id_fim << ") " << dist[id_fim-1] << endl;
-            ///restaurar pesos
-            if (aresta_ponderada()) {
-                Vertice *aux = inicio;
-                while (aux!= nullptr) {
-                    Aresta **a = aux->getVetorVizinhos();
-                    for (int i=0; i<aux->getTotalVizinhos(); i++) {
-                        a[i]->setPeso(a[i]->getPeso() - neg);
-                    }
-                    aux = aux->getProx();
-                }
-            }
+                    else if(!visitados[u] && vu != nullptr && dist[v] != INF && dist[v] + vu->getPeso()<dist[u]){
+                        dist[v] = dist[u] + vu->getPeso();
+                        num_aresta[v] += 1;}
+        }}}
+        ///verifica o maior menor caminho
+        for (int j = 0; j < ordem; j++) {
+            if (dist[j] != INF && dist[j] > menor_caminho[0]) {
+                menor_caminho[0] = dist[j];  // Peso do menor caminho
+                menor_caminho[1] = n+1;       // Vértice inicial
+                menor_caminho[2] = j + +1;   // Vértice final
+                menor_caminho[3] = num_aresta[j]; // Número de arestas
+            }}
         }
+        // Impressão
+        if(neg > 1)
+            cout<< "Maior menor distancia: (" << menor_caminho[1] << "-" << menor_caminho[2] << ") " << menor_caminho[0]-(menor_caminho[3]*neg) << endl;
+        else
+        cout<< "Maior menor distancia: (" << menor_caminho[1] << "-" << menor_caminho[2] << ") " << menor_caminho[0] << endl;
+
+        // Restaurar os pesos
+        if (neg > 1) {
+            for(int i = 1; i <= get_ordem(); i++) {
+                Vertice *v = getVertice(i);
+                Aresta **a = v->getVetorVizinhos();
+                for (int j = 0; j < v->getTotalVizinhos(); j++){
+                    ///se a aresta ainda não foi visitada, é adicionado o valor absoluto do menor peso negativo
+                    if(a[j]->getVisitado()){
+                        a[j]->setPeso(a[j]->getPeso() - neg);
+                        a[j]->setVisitado(false);}}}}
     }
 }
 
 int Grafo::minDistance(float dist[], bool visitados[]) {
-        float min = 100;
-        int min_index = 0;
+        float min = INF;
+        int min_index = -1;
 
         for (int i = 0; i < ordem; i++) {
             if (visitados[i] == false && dist[i] <= min) {
@@ -256,4 +298,144 @@ int Grafo::minDistance(float dist[], bool visitados[]) {
             }
         }
         return min_index;
+}
+/// Outra maneira de implementar seria criando um vetor do tamanho de todos os vizinhos de um vértice
+/// armazenar as cores de todos seus vizinhos e fazer uma comparação entre todas as posições para
+/// encontrar o menor valor a ser adicionado no próximo vértice
+
+void Grafo::colorirVerticesRandomizado() {
+    /// Algoritmo de sorteio
+    int *sorteados = sortearValores(get_ordem(), get_ordem());
+
+    /// Início do código de coloração
+    for (int i = 0; i < get_ordem(); i++) {
+        /// Pega o primeiro vértice que foi sorteados aleatoriamente
+        Vertice *v = getVertice(sorteados[i]);
+
+        /// Inicializa um vetor para todos os vizinhos do vértice
+        Vertice** verticesVizinhos = v->getVerticesVizinhos();
+        int n = v->getTotalVizinhos();
+
+        int coresVizinhas[n];
+
+        for (int j = 0; j < n; j++) {
+            coresVizinhas[j] = verticesVizinhos[j]->getCor();
+        }
+        delete[] verticesVizinhos;
+
+        int cor = menor_valor_ausente(coresVizinhas, n);
+
+        /// Atribui a menor cor encontrada para o vértice
+        v->setCor(cor);
+    }
+
+    imprimirVertices();
+    delete[] sorteados;
+}
+
+int* Grafo::sortearValores(int intervalo, int quantidade) {
+    // Intervalo de 1 até ordem
+    // Quantidade de números a serem sorteados
+
+    /// Verifica se a quantidade de números a serem sorteados é maior que o intervalo
+    if (quantidade > intervalo) {
+        cout << "Erro: A quantidade de numeros a serem sorteados e maior que o intervalo.";
+        exit(1);
+    }
+
+    /// Aloca memória para um array com todos os números do intervalo
+    int* numeros = new int[intervalo];
+    for (int i = 0; i < intervalo; ++i) {
+        numeros[i] = i + 1;
+    }
+
+    /// Inicializa o gerador de números aleatórios com a hora atual
+    srand(time(0));
+
+    /// Embaralha o array aleatoriamente usando o algoritmo de Fisher-Yates
+    for (int i = intervalo - 1; i > 0; --i) {
+        int j = rand() % (i + 1);
+        swap(numeros[i], numeros[j]);
+    }
+
+    /// Retorna um vetor com os números sorteados
+    return numeros;
+}
+
+void Grafo::ordenarVetor(int arr[], int n) {
+    /// Algoritmo Bubble Sort
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                // Troca arr[j] e arr[j + 1]
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+int Grafo::menor_valor_ausente(int arr[], int tamanho) {
+    // 1. Verificar se o array está vazio
+    if (tamanho == 0) {
+        return 1; // Se estiver vazio, o menor valor ausente é 1
+    }
+
+    // 2. Ordenar o array em ordem crescente (usando algoritmo da biblioteca algorithm)
+    ordenarVetor(arr, tamanho);
+
+    // 3. Verificar se o menor valor é maior que 1
+    if (arr[0] > 1) {
+        return 1; // Se for, o menor valor ausente é 1
+    }
+
+    // 4. Iterar pelo array procurando por lacunas
+    for (int i = 0; i < tamanho - 1; ++i) {
+        if (arr[i + 1] - arr[i] > 1) {
+            return arr[i] + 1; // Encontramos uma lacuna, o valor ausente é o seguinte
+        }
+    }
+
+    // 5. Se não houver lacunas, o menor valor ausente é o seguinte ao maior valor
+    return arr[tamanho - 1] + 1;
+}
+
+void Grafo::gulosoColoracaoVertice(){
+    if (get_ordem() == 0)
+        cout << "Não existem vertices" << endl;
+    ///caso o grafo possua grau 0, todos podem ser coloridos com a mesma cor
+    else if(get_grau() == 0){
+        for(int i=0; i<ordem; i++){
+            Vertice *v = getVertice(i);
+            v->setCor(1);
+        }
+    }
+    else{
+        //Marca o primeiro vertice com a menor cor
+        Vertice *v = getVertice(1);
+        v->setCor(1);
+        ///começa a colorir os vertices a partir do segundo
+        for(int i = 2; i<=ordem; i++){
+            v = getVertice(i);
+            int viz = v->getTotalVizinhos();
+
+            /// Inicializa um vetor para todos os vizinhos do vértice
+            Vertice** verticesVizinhos = v->getVerticesVizinhos();
+            ///inicializa um vetor com as cores dos vizinhos
+            int cores_vizinhas[viz];
+            //preenche o vetor com as cores dos vizinhos
+            for(int j=0; j<viz; j++)
+                cores_vizinhas[j] = verticesVizinhos[j]->getCor();
+
+
+            /// Ordena o vetor das cores dos vizinhos
+            ordenarVetor(cores_vizinhas, viz);
+            /// Atribui a menor cor possível ao vértice
+            int cor = menor_valor_ausente(cores_vizinhas, viz);
+            /// Atribui a cor ao vértice sorteado
+            v->setCor(cor);
+        }
+    }
+    imprimirVertices();
 }

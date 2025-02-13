@@ -8,6 +8,7 @@ Aresta::Aresta() {
     fim = nullptr;
     inicio = nullptr;
     prox = nullptr;
+    visitado = false;
 }
 
 Aresta::Aresta(Vertice *_inicio, Vertice *_fim, float _peso) {
@@ -15,6 +16,7 @@ Aresta::Aresta(Vertice *_inicio, Vertice *_fim, float _peso) {
     fim = _fim;
     inicio = _inicio;
     prox = nullptr;
+    visitado = false;
 }
 
 Aresta::~Aresta() {
@@ -50,4 +52,12 @@ void Aresta::setProx(Aresta *a) {
 
 Aresta* Aresta::getProx() {
     return prox;
+}
+
+void Aresta::setVisitado(bool v) {
+    visitado = v;
+}
+
+bool Aresta::getVisitado() {
+    return visitado;
 }

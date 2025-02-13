@@ -16,30 +16,18 @@ GrafoMatriz::GrafoMatriz() {
     }
 }
 
-GrafoMatriz::GrafoMatriz(bool dir) {
-    MAX_VERTICES = 10;
-    if (!dir) {
-        MAX_ARESTAS = (MAX_VERTICES+1)*MAX_VERTICES/2;
-    } else {
-        MAX_ARESTAS = MAX_VERTICES*MAX_VERTICES;
-    }
-    // Alocando matriz de arestas
-    arestas = new Aresta*[MAX_ARESTAS];
-    // Alocando vetor de vértices
-    vertices = new Vertice*[MAX_VERTICES];
-    // Inicializando vetor de vértices e matriz de arestas
-    for (int i = 0; i < MAX_ARESTAS; i++) {
-        if (i < MAX_VERTICES) {
-            vertices[i] = nullptr;
-        }
-        arestas[i] = nullptr;
-    }
-    // Atualizando variáveis
-    direcionado = dir;
-}
-
 GrafoMatriz::~GrafoMatriz() {
+    for (int i = 0; i < MAX_ARESTAS; i++) {
+        if (arestas[i] != nullptr) {
+            delete arestas[i];
+        }
+    }
     delete [] arestas;
+    for (int i = 0; i < MAX_VERTICES; i++) {
+        if (vertices[i] != nullptr) {
+            delete vertices[i];
+        }
+    }
     delete [] vertices;
 }
 
@@ -117,65 +105,196 @@ int GrafoMatriz::detIndice(int i, int j) {
 }
 
 Vertice* GrafoMatriz::getVertice(int id) {
-    return vertices[id-1];
+    if (verificaIndice(id)) {
+        return vertices[id-1];
+    }
+    cout << "Erro: indice invalido." << endl;
+    exit(1);
 }
 
 Aresta* GrafoMatriz::getAresta(int id_inicio, int id_fim) {
-    if (!direcionado && id_inicio > id_fim) {
-        int aux = id_inicio;
-        id_inicio = id_fim;
-        id_fim = aux;
+    if (verificaIndice(id_inicio) && verificaIndice(id_fim)) {
+        if (!direcionado && id_inicio > id_fim) {
+            int aux = id_inicio;
+            id_inicio = id_fim;
+            id_fim = aux;
+        }
+        int k = detIndice(id_inicio-1, id_fim-1);
+        if (k == -1) {
+            cout << "Erro: indice invalido" << endl;
+            exit(-1);
+        }
+        return arestas[k];
     }
-    int k = detIndice(id_inicio-1, id_fim-1);
-    if (k == -1) {
-        cout << "Erro: indice invalido" << endl;
-        exit(-1);
-    }
-    return arestas[k];
+    cout << "Erro: indice invalido." << endl;
+    exit(1);
 }
 
 void GrafoMatriz::inserirVertice(int id, float peso) {
-    if (ordem + 1 > MAX_VERTICES) {
-        aumentarMatriz();
-    }
-    if (getVertice(id) == nullptr) {
-        auto* v = new Vertice(id, peso);
-        vertices[id-1] = v;
-        ordem++;
+    if (verificaIndice(id)) {
+        if (ordem + 1 > MAX_VERTICES) {
+            aumentarMatriz();
+        }
+        if (getVertice(id) == nullptr) {
+            auto* v = new Vertice(id, peso);
+            vertices[id-1] = v;
+            ordem++;
+        } else {
+            cout << "Erro: existe um vertice com o mesmo indice." << endl;
+        }
     } else {
-        cout << "Erro: existe um vertice com o mesmo indice." << endl;
+        cout << "Erro: indice invalido." << endl;
     }
 }
 
 void GrafoMatriz::inserirAresta(int id_inicio, int id_fim, float peso) {
-    if (id_inicio == id_fim) {
-        cout << "Erro: nao e possivel inserir laco." << endl;
-    } else if (getAresta(id_inicio, id_fim) != nullptr) {
-        cout << "Erro: nao e possivel inserir aresta multipla." << endl;
-    } else {
-        Vertice* inicio = getVertice(id_inicio);
-        Vertice* fim = getVertice(id_fim);
-        if (inicio == nullptr || fim == nullptr) {
-            cout << "Erro: o vertice nao foi encontrado." << endl;
+    if (verificaIndice(id_inicio) && verificaIndice(id_fim)) {
+        if (id_inicio == id_fim) {
+            cout << "Erro: nao e possivel inserir laco." << endl;
+        } else if (getAresta(id_inicio, id_fim) != nullptr) {
+            cout << "Erro: nao e possivel inserir aresta multipla." << endl;
         } else {
-            // Criando aresta
-            auto* a = new Aresta(inicio, fim, peso);
+            Vertice* inicio = getVertice(id_inicio);
+            Vertice* fim = getVertice(id_fim);
+            if (inicio == nullptr || fim == nullptr) {
+                cout << "Erro: o vertice nao foi encontrado." << endl;
+            } else {
+                // Verifica se não está inserindo abaixo da diagonal principal
+                if (id_inicio > id_fim) {
+                    int aux = id_inicio;
+                    id_inicio = id_fim;
+                    id_fim = aux;
+                }
+                // Criando aresta
+                auto* a = new Aresta(inicio, fim, peso);
 
-            // Adiciona aresta no vetor de vizinhos do vértice
-            inicio->inserirVizinho(a);
-            fim->inserirVizinho(a);
+                // Adiciona aresta no vetor de vizinhos do vértice
+                inicio->inserirVizinho(a);
+                fim->inserirVizinho(a);
 
-            // Adicionando aresta na lista de arestas
-            int k = detIndice(id_inicio-1, id_fim-1);
-            arestas[k] = a;
+                // Adicionando aresta na lista de arestas
+                int k = detIndice(id_inicio-1, id_fim-1);
+                arestas[k] = a;
+            }
         }
+    } else {
+        cout << "Erro: indice invalido." << endl;
     }
 }
 
 void GrafoMatriz::removerVertice(int id) {
-    //ordem--;
-    //...
+    if (verificaIndice(id)) {
+        Vertice *v = getVertice(id);
+        if (v == nullptr) {
+            cout << "Erro: o vertice nao foi encontrado." << endl;
+        } else {
+            // Remover arestas do vetor de arestas do vértice
+            for (int i = v->getTotalVizinhos()-1; i >= 0; i--) {
+                removerAresta(v->getVizinho(i)->getInicio()->getId(), v->getVizinho(i)->getFim()->getId());
+            }
+
+            // Removendo vértice e organizando o vetor
+            for(int i = id-1; i < MAX_VERTICES-1; i++) {
+                vertices[i] = vertices[i+1];
+                if (vertices[i] != nullptr) {
+                    vertices[i]->setId(i+1);
+                }
+            }
+
+            // Organizando matriz de arestas
+            if (direcionado) {
+                for(int i = id-1; i < MAX_VERTICES-1; i++) {;
+                    for(int j = id-1; j < MAX_VERTICES-1; j++) {
+                        arestas[detIndice(i,j)] = arestas[detIndice(i+1, j+1)];
+                    }
+                }
+            } else {
+                for(int i = id-1; i < MAX_VERTICES-1; i++) {;
+                    for(int j = i; j < MAX_VERTICES-1; j++) {
+                        arestas[detIndice(i,j)] = arestas[detIndice(i+1, j+1)];
+                    }
+                }
+            }
+            //imprimirArestas();
+
+            ordem--;
+            delete v;
+            cout << "Excluindo no " << id << "..." << endl;
+        }
+    } else {
+        cout << "Erro: indice invalido." << endl;
+    }
 }
 
+
 void GrafoMatriz::removerAresta(int id_inicio, int id_fim) {
+    if (verificaIndice(id_inicio) && verificaIndice(id_fim)) {
+        Aresta *a = getAresta(id_inicio, id_fim);
+        if (a == nullptr) {
+            cout << "Erro: aresta nao encontrada." << endl;
+        }
+        else {
+            /// Remove aresta dos Vetores
+            Vertice* v = a->getInicio();
+            v->removerVizinho(a);
+            v = a->getFim();
+            v->removerVizinho(a);
+
+            /// Remove aresta da matriz
+            arestas[detIndice(id_inicio-1, id_fim-1)] = nullptr;
+
+            delete a;
+        }
+    } else {
+        cout << "Erro: indice invalido." << endl;
+    }
+}
+
+bool GrafoMatriz::verificaIndice(int id) {
+    if (id > 0 && id <= MAX_VERTICES) {
+        return true;
+    }
+    return false;
+}
+
+void GrafoMatriz::imprimirArestas() {
+    if (direcionado) {
+        for (int i = 1; i <= MAX_VERTICES; i++) {
+            for (int j = 1; j <= MAX_VERTICES; j++) {
+                Aresta* a = getAresta(i,j);
+                if (a != nullptr) {
+                    // cout << "(" << i << ", " << j << ") ";
+                    // cout << a->getInicio()->getId() << " -> " << a->getFim()->getId() << endl;
+                    cout << a->getPeso() << " ";
+                } else {
+                    cout << "0 ";
+                }
+            }
+            cout << endl;
+        }
+        cout << endl;
+    } else {
+        for (int i = 1; i <= MAX_VERTICES; i++) {
+            for (int j = i; j <= MAX_VERTICES; j++) {
+                Aresta* a = getAresta(i,j);
+                if (a != nullptr) {
+                    // cout << "(" << i << ", " << j << ") ";
+                    // cout << a->getInicio()->getId() << " -> " << a->getFim()->getId() << endl;
+                    cout << a->getPeso() << " ";
+                } else {
+                    cout << "0 ";
+                }
+            }
+            cout << endl;
+        }
+    }
+}
+
+void GrafoMatriz::imprimirVertices() {
+    for (int i = 1; i <= MAX_VERTICES; i++) {
+        Vertice* v = getVertice(i);
+        if (v != nullptr) {
+            cout << "(" << v->getId() << "): " << v->getCor() << endl;
+        }
+    }
 }

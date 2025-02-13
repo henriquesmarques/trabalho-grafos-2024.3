@@ -54,15 +54,6 @@ Aresta* GrafoLista::getAresta(int id_inicio, int id_fim) {
     return nullptr;
 }
 
-Aresta ** GrafoLista::getVizinhos(int id) {
-    Vertice* v = getVertice(id);
-    if (v != nullptr) {
-        return v->getVetorVizinhos();
-    }
-    cout << "Erro: indice invalido no getVizinhos()." << endl;
-    exit(1);
-}
-
 void GrafoLista::setDirecao(bool dir) {
     direcionado = dir;
 }
@@ -130,9 +121,13 @@ void GrafoLista::removerVertice(int id) {
 
         ordem--;
         delete v;
+
+        // Organizando índices
         for (int i=id; i<=ordem; i++) {
             getVertice(i+1)->setId(i);
         }
+
+        cout << "Excluindo no " << id << "..." << endl;
     }
 }
 
@@ -165,10 +160,9 @@ void GrafoLista::imprimirVertices() {
     cout << "Lista de vertices: " << endl;
     Vertice* v = raizVertice;
     while (v != nullptr) {
-        cout << v->getId() << " ";
+        cout << "(" << v->getId() << "): " << v->getCor() << endl;
         v = v->getProx();
     }
-    cout << endl;
 }
 
 void GrafoLista::imprimirArestas() {
