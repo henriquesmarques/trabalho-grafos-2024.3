@@ -20,6 +20,7 @@ Aresta::Aresta(Vertice *_inicio, Vertice *_fim, float _peso) {
 }
 
 Aresta::~Aresta() {
+    
 }
 
 void Aresta::setPeso(float val) {
