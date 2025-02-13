@@ -13,6 +13,8 @@ protected:
     bool arestasPonderadas;
     int ordem;
     void auxNConexo(bool *visitados, Vertice *v);
+    //2ª Parte do Trabalho
+    int minDistance(float dist[], bool visitados[]);
 public:
     Grafo();
     virtual ~Grafo();
@@ -25,8 +27,8 @@ public:
     bool aresta_ponderada() const;
     bool eh_completo();
     void carrega_grafo(string nomeArquivo);
-    /// Comunicação com terminal
-    void imprimeGrafo(string nomeArquivo);
+    /// Impressão do Grafo
+    void imprimeGrafo();
     /// Funções das classes filhas
     virtual void inserirVertice(int id, float peso) = 0;
     virtual void inserirAresta(int id_inicio, int id_fim, float peso) = 0;
@@ -36,8 +38,14 @@ public:
     virtual Aresta* getAresta(int id_inicio, int id_fim) = 0;
     virtual void setDirecao(bool dir) = 0;
     /// 2ª Parte do Trabalho
-    void caminhoMinino(int id_inicio, int id_fim);
-    int minDistance(float dist[], bool visitados[]);
+    void caminhoMinino();
+    /// 3ª Parte do Trabalho
+    void colorirVerticesRandomizado();
+    int* sortearValores(int intervalo, int quantidade);
+    void ordenarVetor(int arr[], int n);
+    int menor_valor_ausente(int arr[], int tamanho);
+    virtual void imprimirVertices() = 0;
+    void gulosoColoracaoVertice();
 };
 
 #endif

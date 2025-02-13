@@ -11,7 +11,6 @@ class GrafoMatriz : public Grafo {
 public:
     /// 1ª Parte do Trabalho
     GrafoMatriz();
-    GrafoMatriz(bool dir);
     ~GrafoMatriz() override;
     void setDirecao(bool dir) override;
     Vertice* getVertice(int id) override;
@@ -21,6 +20,8 @@ public:
     void inserirAresta(int id_inicio, int id_fim, float peso) override;
     void removerVertice(int id) override;
     void removerAresta(int id_inicio, int id_fim) override;
+    void imprimirArestas();
+    void imprimirVertices() override;
 private:
     int MAX_VERTICES;
     int MAX_ARESTAS;
@@ -28,6 +29,7 @@ private:
     Vertice **vertices; // Vetor de vértices
     void aumentarMatriz(); // Aumenta a matriz de adjacência quando ultrapassado MAX_VERTICES
     int detIndice(int i, int j); // Calcula a posição na matriz linear
+    bool verificaIndice(int id); // Verifica se o indice pertence ao grafo
 };
 
 #endif
